@@ -1,0 +1,111 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections.Generic;
+using SpaceRaft.Models;
+using SpaceRaft.Sprites;
+
+public class Camera
+{
+		public float Zoom { get; set; }
+		public Vector2 Position;
+		public Rectangle Bounds { get; protected set; }
+		public Rectangle VisibleArea { get; protected set; }
+		public Matrix Transform { get; protected set; }
+
+		public Input input;
+
+		protected KeyboardState _currentKey;
+		protected KeyboardState _previousKey;
+
+		private float currentMouseWheelValue, previousMouseWheelValue, zoom, previousZoom;
+
+		public Camera( Viewport viewport )
+		{
+				Bounds = viewport.Bounds;
+				Zoom = 1f;
+				Position = Vector2.Zero;
+		}
+
+
+		private void UpdateVisibleArea()
+		{
+				var inverseViewMatrix = Matrix.Invert( Transform );
+
+				var tl = Vector2.Transform( Vector2.Zero, inverseViewMatrix );
+				var tr = Vector2.Transform( new Vector2( Bounds.X, 0 ), inverseViewMatrix );
+				var bl = Vector2.Transform( new Vector2( 0, Bounds.Y ), inverseViewMatrix );
+				var br = Vector2.Transform( new Vector2( Bounds.Width, Bounds.Height ), inverseViewMatrix );
+
+				var min = new Vector2(
+						MathHelper.Min( tl.X, MathHelper.Min( tr.X, MathHelper.Min( bl.X, br.X ) ) ),
+						MathHelper.Min( tl.Y, MathHelper.Min( tr.Y, MathHelper.Min( bl.Y, br.Y ) ) ) );
+				var max = new Vector2(
+						MathHelper.Max( tl.X, MathHelper.Max( tr.X, MathHelper.Max( bl.X, br.X ) ) ),
+						MathHelper.Max( tl.Y, MathHelper.Max( tr.Y, MathHelper.Max( bl.Y, br.Y ) ) ) );
+				VisibleArea = new Rectangle( (int)min.X, (int)min.Y, (int)(max.X - min.X), (int)(max.Y - min.Y) );
+		}
+
+		private void FollowAstro(Astro target)
+		{
+				var position = Matrix.CreateTranslation(
+						-target.Position.X - (target.Rectangle.Width / 2),
+						-target.Position.Y - (target.Rectangle.Height / 2),
+						0 );
+
+				var offset = Matrix.CreateTranslation(
+						Bounds.Width / 2,
+						Bounds.Height / 2,
+						0 );
+
+				Transform = position * Matrix.CreateScale( Zoom ) * offset;
+				UpdateVisibleArea();
+		}
+
+		public void MoveCamera( Vector2 movePosition )
+		{
+				Vector2 newPosition = Position + movePosition;
+				Position = newPosition;
+		}
+
+		public void AdjustZoom( float zoomAmount )
+		{
+				Zoom += zoomAmount;
+				if (Zoom < 1f)
+				{
+						Zoom = 1f;
+				}
+				if (Zoom > 3f)
+				{
+						Zoom = 3f;
+				}
+		}
+
+		public void UpdateCamera( Viewport bounds, Astro astro)
+		{
+				Bounds = bounds.Bounds;
+				FollowAstro(astro);
+
+				previousMouseWheelValue = currentMouseWheelValue;
+				currentMouseWheelValue = Mouse.GetState().ScrollWheelValue;
+
+				if (currentMouseWheelValue > previousMouseWheelValue)
+				{
+						AdjustZoom( .05f );
+				}
+
+				if (currentMouseWheelValue < previousMouseWheelValue)
+				{
+						AdjustZoom( -.1f );
+				}
+
+				previousZoom = zoom;
+				zoom = Zoom;
+				if (previousZoom != zoom)
+				{
+						//change ui stuff
+
+				}
+		}
+}

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32602.291
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceRaft", "SpaceRaft\SpaceRaft.csproj", "{548C6B3E-1C32-4B5C-A2E5-CD4A47134A0E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{548C6B3E-1C32-4B5C-A2E5-CD4A47134A0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{548C6B3E-1C32-4B5C-A2E5-CD4A47134A0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{548C6B3E-1C32-4B5C-A2E5-CD4A47134A0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{548C6B3E-1C32-4B5C-A2E5-CD4A47134A0E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {56149367-55BD-47B6-9514-86C7E8BF78BF}
+	EndGlobalSection
+EndGlobal
