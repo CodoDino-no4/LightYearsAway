@@ -28,7 +28,7 @@ namespace SpaceRaft.Sprites
 						MoveWithCamera();
 				}
 
-				public void MoveWithCamera()
+				public Vector2 MoveWithCamera()
 				{
 						_previousKey = _currentKey;
 						_currentKey = Keyboard.GetState();
@@ -46,6 +46,8 @@ namespace SpaceRaft.Sprites
 
 						if (_currentKey.IsKeyDown( Keys.Right ))
 								Position.X += direction.X * LinearVelocity;
+
+						return Position;
 				}
 
 				//track elapsed time since last frame, add since the game started

@@ -56,13 +56,24 @@ namespace SpaceRaft.Sprites
 
         }
 
-        public virtual void Draw(SpriteBatch spriteBatch)
+				// Static sprites
+        public virtual void Draw(SpriteBatch spriteBatch, Vector2 position)
         {
             if (_texture != null)
             {
-                spriteBatch.Draw(_texture, Position, null, Color.White, rotation, Origin, 1, SpriteEffects.None, 0);
+                spriteBatch.Draw(_texture, position, null, Color.White, rotation, Origin, 1, SpriteEffects.None, 0);
 
 						}
         }
+
+				// Variable position sprites
+				public virtual void Draw( SpriteBatch spriteBatch )
+				{
+						if (_texture != null)
+						{
+								spriteBatch.Draw( _texture, Position, null, Color.White, rotation, Origin, 1, SpriteEffects.None, 0 );
+
+						}
+				}
 		}
 }

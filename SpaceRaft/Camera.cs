@@ -9,6 +9,7 @@ using SpaceRaft.Sprites;
 public class Camera
 {
 		public float Zoom { get; set; }
+
 		public Vector2 Position;
 		public Rectangle Bounds { get; protected set; }
 		public Rectangle VisibleArea { get; protected set; }
@@ -24,7 +25,7 @@ public class Camera
 		public Camera( Viewport viewport )
 		{
 				Bounds = viewport.Bounds;
-				Zoom = 1f;
+				Zoom = 2f;
 				Position = Vector2.Zero;
 		}
 
@@ -44,29 +45,32 @@ public class Camera
 				var max = new Vector2(
 						MathHelper.Max( tl.X, MathHelper.Max( tr.X, MathHelper.Max( bl.X, br.X ) ) ),
 						MathHelper.Max( tl.Y, MathHelper.Max( tr.Y, MathHelper.Max( bl.Y, br.Y ) ) ) );
+
 				VisibleArea = new Rectangle( (int)min.X, (int)min.Y, (int)(max.X - min.X), (int)(max.Y - min.Y) );
+
 		}
 
-		private void FollowAstro(Astro target)
+		public void FollowPosition(Vector2 target)
 		{
 				var position = Matrix.CreateTranslation(
-						-target.Position.X - (target.Rectangle.Width / 2),
-						-target.Position.Y - (target.Rectangle.Height / 2),
-						0 );
+					-target.X,
+					-target.Y,
+					0 );
 
-				var offset = Matrix.CreateTranslation(
-						Bounds.Width / 2,
-						Bounds.Height / 2,
-						0 );
+				var offset = Matrix.CreateTranslation( Bounds.Width /2, Bounds.Height /2, 0 );
 
-				Transform = position * Matrix.CreateScale( Zoom ) * offset;
-				UpdateVisibleArea();
+						Transform = position * Matrix.CreateScale( Zoom ) * offset;
+						UpdateVisibleArea();
 		}
 
-		public void MoveCamera( Vector2 movePosition )
+		public Vector2 MoveCamera( Vector2 movePosition )
 		{
-				Vector2 newPosition = Position + movePosition;
-				Position = newPosition;
+
+
+				return movePosition;
+
+				//Vector2 newPosition = Position + movePosition;
+				//Position = newPosition;
 		}
 
 		public void AdjustZoom( float zoomAmount )
@@ -82,17 +86,28 @@ public class Camera
 				}
 		}
 
-		public void UpdateCamera( Viewport bounds, Astro astro)
+		public Vector2 UpdateCamera( Viewport bounds, Vector2 target)
 		{
 				Bounds = bounds.Bounds;
-				FollowAstro(astro);
 
-				previousMouseWheelValue = currentMouseWheelValue;
+				FollowPosition(target);
+
+				if (Keyboard.GetState().IsKeyDown( Keys.W ))
+						target.Y-=3f;
+				if (Keyboard.GetState().IsKeyDown( Keys.S ))
+						target.Y+=3f;
+
+				if (Keyboard.GetState().IsKeyDown( Keys.A ))
+						target.X-=3f;
+				if (Keyboard.GetState().IsKeyDown( Keys.D ))
+						target.X+=3f;
+
+				previousMouseWheelValue= currentMouseWheelValue;
 				currentMouseWheelValue = Mouse.GetState().ScrollWheelValue;
 
 				if (currentMouseWheelValue > previousMouseWheelValue)
 				{
-						AdjustZoom( .05f );
+						AdjustZoom( .1f );
 				}
 
 				if (currentMouseWheelValue < previousMouseWheelValue)
@@ -107,5 +122,7 @@ public class Camera
 						//change ui stuff
 
 				}
+
+				return target;
 		}
 }
