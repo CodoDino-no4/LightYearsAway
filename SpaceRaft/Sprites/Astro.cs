@@ -5,46 +5,52 @@ using System;
 
 namespace SpaceRaft.Sprites
 {
-    public class Astro : Sprite
-    {
-        public bool hasDied = false;
-        public int health { get; set; }
-        public bool isDead
-        {
-            get
-            {
-                return health <= 0;
-            }
-        }
+		public class Astro: Sprite
+		{
+				public bool hasDied = false;
+				public int health
+				{
+						get; set;
+				}
+				public bool isDead
+				{
+						get
+						{
+								return health<=0;
+						}
+				}
 
-        public Astro(Texture2D texture) : base(texture) 				{
+				public Astro(Texture2D texture) : base(texture)
+				{
 
-						state = "Idle";
-        }
+						state="Idle";
+						Rotation=1f;
+				}
 
-        public override void Update(GameTime gameTime) 				{
+				public override void Update(GameTime gameTime)
+				{
 
 						MoveWithCamera();
 				}
 
 				public Vector2 MoveWithCamera()
 				{
-						_previousKey = _currentKey;
-						_currentKey = Keyboard.GetState();
+						_previousKey=_currentKey;
+						_currentKey=Keyboard.GetState();
 
-						var direction = new Vector2( (float)Math.Cos( rotation ), (float)Math.Cos( rotation ) );
+						var direction = new Vector2((float) Math.Cos(rotation), (float) Math.Sin(rotation));
 
-						if (_currentKey.IsKeyDown( Keys.Up ))
-								Position.Y -= direction.Y * LinearVelocity;
+						if (_currentKey.IsKeyDown(Keys.Up))
+								Position.Y-=direction.Y*LinearVelocity;
 
-						if (_currentKey.IsKeyDown( Keys.Down ))
-								Position.Y += direction.Y * LinearVelocity;
+						if (_currentKey.IsKeyDown(Keys.Down))
+								Position.Y+=direction.Y*LinearVelocity;
 
-						if (_currentKey.IsKeyDown( Keys.Left ))
-								Position.X -= direction.X * LinearVelocity;
+						if (_currentKey.IsKeyDown(Keys.Left))
+								Position.X-=direction.X*LinearVelocity;
 
-						if (_currentKey.IsKeyDown( Keys.Right ))
-								Position.X += direction.X * LinearVelocity;
+						if (_currentKey.IsKeyDown(Keys.Right))
+								Position.X+=direction.X*LinearVelocity;
 
 						return Position;
 				}

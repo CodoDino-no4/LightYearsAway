@@ -12,6 +12,7 @@ namespace SpaceRaft
     {
 				GraphicsDeviceManager graphics;
 				SpriteBatch spriteBatch;
+				 private RenderTarget2D renderTarget;
 
 				public static int ScreenWidth;
 				public static int ScreenHeight;
@@ -59,8 +60,8 @@ namespace SpaceRaft
 						spriteBatch=new SpriteBatch( GraphicsDevice );
 
 						// BG content
-						BG=Content.Load<Texture2D>( "BG1-square-BG-320px" );
-						FG=Content.Load<Texture2D>( "BG1-square-FG-320px" );
+						BG=Content.Load<Texture2D>( "BG1-square-BG-large" );
+						FG=Content.Load<Texture2D>( "BG1-square-FG-large" );
 
 						// Background sprites
 						background=new List<Sprite>()
@@ -107,6 +108,10 @@ namespace SpaceRaft
 						// Update the camera based on the new position
 						camera.UpdateCamera( graphics.GraphicsDevice.Viewport, _playerPosition );
 
+						// Update Junk sprites
+						foreach (var sprite in spaceJunk)
+								sprite.Update(gameTime);
+
 						base.Update( gameTime );
 				}
 
@@ -120,10 +125,10 @@ namespace SpaceRaft
 						spaceJunk=new List<Sprite>()
 						{
 								new Junk(junk1)
-								{ Position = new Vector2(40, 40)},								new Junk(junk2)
+								{ Position = new Vector2(200, 40)},								new Junk(junk2)
 								{ Position = new Vector2(-40, -40)},								new Junk(junk3)
 								{ Position = new Vector2(40, 0)},								new Junk(junk4)
-								{ Position = new Vector2(0, 50)},								new Junk(junk5)
+								{ Position = new Vector2(0, 100)},								new Junk(junk5)
 								{ Position = new Vector2(40, 90)}
 						};
 

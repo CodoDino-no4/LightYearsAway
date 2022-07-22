@@ -12,14 +12,31 @@ using SpaceRaft.Models;
 
 namespace SpaceRaft.Sprites
 {
-		class Junk : Sprite
+		class Junk: Sprite
 		{
-				public Junk( Texture2D texture ) : base( texture )
-				{						//Rotation				}
-
-				public override void Update( GameTime gameTime)
+				private float speed;
+				private Random rand;
+				public Junk(Texture2D texture) : base(texture)
 				{
-						rotation += rotation * RotationVelocity;
+						rand=new Random();
+						RotationVelocity=rand.Next(2, 7);						speed=rand.Next(0, 5);
+				}
+
+				public override void Update(GameTime gameTime)
+				{
+						JunkMovement();
+				}
+
+				public void JunkMovement()
+				{
+						Rotation-=MathHelper.ToRadians(RotationVelocity);
+
+						if (Position.X<=30||Position.Y<=30)
+						{
+								Position.X+=speed;
+								Position.Y+=speed;
+
+						}
 				}
 		}
 }
