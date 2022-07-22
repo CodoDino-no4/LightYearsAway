@@ -12,8 +12,8 @@ namespace SpaceRaft.Sprites
     public class Sprite
     {
         public Texture2D _texture;
-
-        public Vector2 Origin;
+				// Centre of sprite
+        public Vector2 Origin;
         public Vector2 Position;
         public Vector2 Velocity;
         protected float rotation;
@@ -31,8 +31,7 @@ namespace SpaceRaft.Sprites
 
         public Sprite(Texture2D texture)
         {
-            _texture = texture;
-        }
+            _texture = texture;						Origin = new Vector2( texture.Width/2, texture.Height/2 );				}
 
         public Rectangle Rectangle
         {

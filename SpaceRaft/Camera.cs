@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using SpaceRaft.Models;
 using SpaceRaft.Sprites;
+using System.Diagnostics;
 
 public class Camera
 {
@@ -66,14 +67,14 @@ public class Camera
 		public Vector2 MoveCamera( Vector2 movePosition )
 		{
 				if (Keyboard.GetState().IsKeyDown( Keys.W ))
-						movePosition.Y-=3f;
+						movePosition.Y -= 3f;
 				if (Keyboard.GetState().IsKeyDown( Keys.S ))
-						movePosition.Y+=3f;
+						movePosition.Y += 3f;
 
 				if (Keyboard.GetState().IsKeyDown( Keys.A ))
-						movePosition.X-=3f;
+						movePosition.X -= 3f;
 				if (Keyboard.GetState().IsKeyDown( Keys.D ))
-						movePosition.X+=3f;
+						movePosition.X += 3f;
 
 				return movePosition;
 		}
@@ -115,6 +116,7 @@ public class Camera
 				if (previousZoom != zoom)
 				{
 						//change ui stuff
+						//Debug.WriteLine( "Zoomy");
 
 				}
 		}

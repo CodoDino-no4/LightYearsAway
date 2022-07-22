@@ -17,13 +17,12 @@ namespace SpaceRaft.Sprites
             }
         }
 
-        public Astro(Texture2D texture) : base(texture) {
+        public Astro(Texture2D texture) : base(texture) 				{
 
-            Origin = new Vector2(texture.Width / 2, texture.Height / 2);
 						state = "Idle";
         }
 
-        public override void Update(GameTime gameTime) {
+        public override void Update(GameTime gameTime) 				{
 
 						MoveWithCamera();
 				}

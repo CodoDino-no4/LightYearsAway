@@ -18,9 +18,9 @@ namespace SpaceRaft
 
 				public Astro astro;
 				private List<Sprite> background;
-				public List<Sprite> sprites;
+				public List<Sprite> spaceJunk;
 
-				Texture2D BG, FG, astroIdleTexture, junkAll;
+				Texture2D BG, FG;				Texture2D astroIdleTexture;				Texture2D junk1, junk2, junk3, junk4, junk5;
 
 				//for game state calculation
 				double TotalSeconds = 0.0;
@@ -75,40 +75,28 @@ namespace SpaceRaft
 						astroIdleTexture=Content.Load<Texture2D>( "Astro-Idle" );
 
 						// Player Astro sprite
-						astro=new Astro( astroIdleTexture );
-
-						//Other sprites content
-						junkAll=Content.Load<Texture2D>( "space_junk_all_frames" );
-						//sprite2 = Content.Load<Texture2D>( "sprite" );
-
-						// Other sprites
-						sprites=new List<Sprite>()
-						{
-								// will hold sprites like spacejunk etc.
-								new Sprite(junkAll)
-						};
+						astro=new Astro( astroIdleTexture );
+						LoadJunk();
 				}
 				protected override void Draw( GameTime gameTime )
 				{
-					GraphicsDevice.Clear( Color.CornflowerBlue );
+						GraphicsDevice.Clear( Color.SlateGray );
 
-					spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, transformMatrix: camera.Transform );
+						spriteBatch.Begin( SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, transformMatrix: camera.Transform );						
+						// Background
+						foreach (var sprite in background)
+							sprite.Draw( spriteBatch, _playerPosition );
 
-					// Background
-					foreach (var sprite in background)
-						sprite.Draw( spriteBatch, _playerPosition );
+						// Astro
+						astro.Draw( spriteBatch, _playerPosition );
 
-					// Astro
-					astro.Draw( spriteBatch, _playerPosition );
+						// Other Sprites
+						foreach (var sprite in spaceJunk)
+							sprite.Draw( spriteBatch );
 
-					// Other Sprites
-					foreach (var sprite in sprites)
-						sprite.Draw( spriteBatch );
+						spriteBatch.End();
 
-					spriteBatch.End();
-
-
-					base.Draw( gameTime );
+						base.Draw( gameTime );
 				}
 
 				protected override void Update( GameTime gameTime )
@@ -120,6 +108,26 @@ namespace SpaceRaft
 						camera.UpdateCamera( graphics.GraphicsDevice.Viewport, _playerPosition );
 
 						base.Update( gameTime );
+				}
+
+				private List<Sprite> LoadJunk ()
+				{
+						// Junk content
+						junk1=Content.Load<Texture2D>("junk-1");
+						junk2=Content.Load<Texture2D>("junk-2");						junk3=Content.Load<Texture2D>("junk-3");						junk4=Content.Load<Texture2D>("junk-4");						junk5=Content.Load<Texture2D>("junk-5");
+
+						// Junk sprites
+						spaceJunk=new List<Sprite>()
+						{
+								new Junk(junk1)
+								{ Position = new Vector2(40, 40)},								new Junk(junk2)
+								{ Position = new Vector2(-40, -40)},								new Junk(junk3)
+								{ Position = new Vector2(40, 0)},								new Junk(junk4)
+								{ Position = new Vector2(0, 50)},								new Junk(junk5)
+								{ Position = new Vector2(40, 90)}
+						};
+
+						return spaceJunk;
 				}
 		}
 }

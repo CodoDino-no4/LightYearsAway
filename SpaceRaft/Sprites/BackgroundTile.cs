@@ -11,8 +11,7 @@ namespace SpaceRaft.Sprites
 				public float FollowDistance { get; set; }
 
 				public BackgroundTile( Texture2D texture ) : base( texture )
-				{
-						Origin = new Vector2( texture.Width / 2, texture.Height / 2 );
+				{
 				}
 
 				public override void Update( GameTime gameTime)

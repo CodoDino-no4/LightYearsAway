@@ -15,9 +15,7 @@ namespace SpaceRaft.Sprites
 		class Junk : Sprite
 		{
 				public Junk( Texture2D texture ) : base( texture )
-				{
-						//Rotation
-				}
+				{						//Rotation				}
 
 				public override void Update( GameTime gameTime)
 				{
