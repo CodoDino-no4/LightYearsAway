@@ -65,12 +65,17 @@ public class Camera
 
 		public Vector2 MoveCamera( Vector2 movePosition )
 		{
+				if (Keyboard.GetState().IsKeyDown( Keys.W ))
+						movePosition.Y-=3f;
+				if (Keyboard.GetState().IsKeyDown( Keys.S ))
+						movePosition.Y+=3f;
 
+				if (Keyboard.GetState().IsKeyDown( Keys.A ))
+						movePosition.X-=3f;
+				if (Keyboard.GetState().IsKeyDown( Keys.D ))
+						movePosition.X+=3f;
 
 				return movePosition;
-
-				//Vector2 newPosition = Position + movePosition;
-				//Position = newPosition;
 		}
 
 		public void AdjustZoom( float zoomAmount )
@@ -86,21 +91,11 @@ public class Camera
 				}
 		}
 
-		public Vector2 UpdateCamera( Viewport bounds, Vector2 target)
+		public void UpdateCamera( Viewport bounds, Vector2 target)
 		{
 				Bounds = bounds.Bounds;
 
 				FollowPosition(target);
-
-				if (Keyboard.GetState().IsKeyDown( Keys.W ))
-						target.Y-=3f;
-				if (Keyboard.GetState().IsKeyDown( Keys.S ))
-						target.Y+=3f;
-
-				if (Keyboard.GetState().IsKeyDown( Keys.A ))
-						target.X-=3f;
-				if (Keyboard.GetState().IsKeyDown( Keys.D ))
-						target.X+=3f;
 
 				previousMouseWheelValue= currentMouseWheelValue;
 				currentMouseWheelValue = Mouse.GetState().ScrollWheelValue;
@@ -122,7 +117,5 @@ public class Camera
 						//change ui stuff
 
 				}
-
-				return target;
 		}
 }

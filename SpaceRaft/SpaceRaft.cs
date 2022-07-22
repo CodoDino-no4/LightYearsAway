@@ -113,8 +113,11 @@ namespace SpaceRaft
 
 				protected override void Update( GameTime gameTime )
 				{
-						//_playerPosition = camera.MoveCamera(_playerPosition);
-						_playerPosition = camera.UpdateCamera( graphics.GraphicsDevice.Viewport, _playerPosition );
+						// Update the postion after moving
+						_playerPosition = camera.MoveCamera(_playerPosition);
+
+						// Update the camera based on the new position
+						camera.UpdateCamera( graphics.GraphicsDevice.Viewport, _playerPosition );
 
 						base.Update( gameTime );
 				}
