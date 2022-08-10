@@ -18,7 +18,7 @@ namespace SpaceRaft.Sprites
 				protected string state;
 				public float layer;
 
-				public float RotationVelocity = 10f;
+				public float RotationVelocity;
 				public float LinearVelocity = 2f;
 
 				public Input Input;
@@ -53,28 +53,26 @@ namespace SpaceRaft.Sprites
 								rotation=value;
 						}
 				}
-
 				public virtual void Update(GameTime gameTime)
 				{
 
 				}
-
 				// Static sprites
-				public virtual void Draw(SpriteBatch spriteBatch, Vector2 position)
+				public virtual void DrawInCentre()
 				{
 						if (_texture!=null)
 						{
-								spriteBatch.Draw(_texture, position, null, Color.White, rotation, Origin, 1, SpriteEffects.None, 0);
+								Globals.SpriteBatch.Draw(_texture, Globals.playerPosition, null, Color.White, rotation, Origin, 1, SpriteEffects.None, 0);
 
 						}
 				}
 
 				// Variable position sprites
-				public virtual void Draw(SpriteBatch spriteBatch)
+				public virtual void Draw()
 				{
 						if (_texture!=null)
 						{
-								spriteBatch.Draw(_texture, Position, null, Color.White, rotation, Origin, 1, SpriteEffects.None, 0);
+								Globals.SpriteBatch.Draw(_texture, Position, null, Color.White, rotation, Origin, 1, SpriteEffects.None, 0);
 
 						}
 				}

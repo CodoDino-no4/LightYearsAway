@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using SpaceRaft.Sprites;
 
 namespace SpaceRaft
 {
@@ -15,6 +16,10 @@ namespace SpaceRaft
 						get; set;
 				}
 				public static float ElapsedSeconds
+				{
+						get; set;
+				}
+				public static Vector2 playerPosition
 				{
 						get; set;
 				}

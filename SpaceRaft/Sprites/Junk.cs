@@ -4,7 +4,7 @@ using System;
 
 namespace SpaceRaft.Sprites
 {
-		class Junk: Sprite
+		class Junk: SpriteHandler
 		{
 				private float speed;
 				private Random rand;
@@ -23,10 +23,10 @@ namespace SpaceRaft.Sprites
 				{
 						Rotation-=MathHelper.ToRadians(RotationVelocity);
 
-						if (Position.X<=30||Position.Y<=30)
+						if (Position.X<=70||Position.Y<=70)
 						{
-								Position.X+=speed;
-								Position.Y+=speed;
+								Position.X+=speed /8;
+								Position.Y+=speed/8;
 
 						}
 				}

@@ -3,9 +3,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace SpaceRaft.Sprites
 {
-		public class Astro: Sprite
+		public class Astro: SpriteHandler
 		{
-				public bool hasDied = false;
 				public int health
 				{
 						get; set;
@@ -20,7 +19,6 @@ namespace SpaceRaft.Sprites
 
 				public Astro(Texture2D texture) : base(texture)
 				{
-
 						state="Idle";
 				}
 

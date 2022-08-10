@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SpaceRaft;
 using SpaceRaft.Models;
 
 public class Camera
@@ -94,9 +95,9 @@ public class Camera
 				{
 						Zoom=1f;
 				}
-				if (Zoom>3f)
+				if (Zoom>6f)
 				{
-						Zoom=3f;
+						Zoom=6f;
 				}
 		}
 
@@ -111,13 +112,14 @@ public class Camera
 
 				if (currentMouseWheelValue>previousMouseWheelValue)
 				{
-						AdjustZoom(.1f);
+						AdjustZoom(.2f);
 				}
 
 				if (currentMouseWheelValue<previousMouseWheelValue)
 				{
-						AdjustZoom(-.1f);
+						AdjustZoom(-.2f);
 				}
+
 
 				previousZoom=zoom;
 				zoom=Zoom;
@@ -128,24 +130,4 @@ public class Camera
 
 				}
 		}
-		//public static void drawSeamlessBackground(SpriteBatch s, Texture2D t, GraphicsDevice gd, float parallax, Camera2D cam)
-		//{
-		//		Vector2 textureSize = new Vector2(t.Width, t.Height);
-		//		Rectangle view = gd.Viewport.Bounds;
-
-		//		Matrix m = Matrix.CreateTranslation(new Vector3(-cam.Origin/textureSize, 0.0f))*
-		//								Matrix.CreateScale(1f/cam.Zoom)*
-		//								Matrix.CreateScale(textureSize.X, textureSize.Y, 1)*
-		//								Matrix.CreateRotationZ(-cam.Rotation)*
-		//								Matrix.CreateScale(1f/textureSize.X, 1f/textureSize.Y, 1)*
-		//								Matrix.CreateTranslation(new Vector3(cam.Origin/textureSize, 0.0f))*
-		//								Matrix.CreateTranslation(new Vector3((cam.Position*parallax)/textureSize, 0.0f));
-
-		//		infiniteShader.Parameters["ScrollMatrix"].SetValue(m);
-		//		infiniteShader.Parameters["ViewportSize"].SetValue(new Vector2(view.Width, view.Height));
-
-		//		s.Begin(samplerState: SamplerState.LinearWrap, effect: infiniteShader);
-		//		s.Draw(t, new Vector2(0, 0), view, Color.White);
-		//		s.End();
-		//}
 }

@@ -15,16 +15,13 @@ namespace SpaceRaft
 				public static int ScreenHeight;
 
 				public Astro astro;
-				private List<Sprite> background;
-				public List<Sprite> spaceJunk;
+				public List<SpriteHandler> spaceJunk;
 
 				Texture2D BG, FG;				Texture2D astroIdleTexture;				Texture2D junk1, junk2, junk3, junk4, junk5;
 
-				Effect effect;
+				BGManager bgManager;
 
-				//for game state calculation
-				double TotalSeconds = 0.0;
-				double ElapsedSeconds = 0.0;
+				Effect effect;
 
 				private Camera camera;
 
@@ -38,7 +35,6 @@ namespace SpaceRaft
 						// Content directory
 						Content.RootDirectory="Content";
 						Globals.Content=Content;
-
 				}
 
 				protected override void Initialize()
@@ -54,32 +50,37 @@ namespace SpaceRaft
 
 						graphics.ApplyChanges();
 
+						// will be where we left off at (serialisation)
+						_playerPosition=new Vector2(0, 0);
+						Globals.playerPosition=_playerPosition;
+
+						// Camera
 						camera=new Camera(graphics.GraphicsDevice.Viewport);
+
+						// Background manager
+						bgManager=new BGManager();
+
+						// Create a new SpriteBatch, which can be used to draw textures.
+						spriteBatch=new SpriteBatch(GraphicsDevice);
+						Globals.SpriteBatch=spriteBatch;
 
 						base.Initialize();
 				}
 
 				protected override void LoadContent()
 				{
-						// Create a new SpriteBatch, which can be used to draw textures.
-						spriteBatch=new SpriteBatch(GraphicsDevice);
-						Globals.SpriteBatch=spriteBatch;
-
-						effect=Globals.Content.Load<Effect>("InfinateBackground");
+						//effect=Globals.Content.Load<Effect>("InfinateBackground");
 						//effect.Parameters["ViewportSize"].SetValue(new Vector2(200, 200));
 
-						// BG content
+						// Background content
 						BG=Globals.Content.Load<Texture2D>("BG1-square-BG-large");
 						FG=Globals.Content.Load<Texture2D>("BG1-square-FG-large");
 
 						// Background sprites
-						background=new List<Sprite>()
-						{
-								new BackgroundTile( BG),
-
-								new BackgroundTile( FG)
-
-						};
+						bgManager.AddLayer(new BGLayer(BG, 0.1f, 0.5f));
+						bgManager.AddLayer(new BGLayer(FG, 0.2f, 0.1f));
+						//bgManager.AddLayer(new BGLayer(FG1));
+						//bgManager.AddLayer(new BGLayer(FG2));
 
 						// Player Astro content
 						astroIdleTexture=Globals.Content.Load<Texture2D>("Astro-Idle");
@@ -90,21 +91,23 @@ namespace SpaceRaft
 				}
 				protected override void Draw(GameTime gameTime)
 				{
+						// Background colour
 						GraphicsDevice.Clear(Color.SlateGray);
 
-						Globals.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, transformMatrix: camera.Transform);
+						// Begin Spritebatch
+						Globals.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, null, null, null, transformMatrix: camera.Transform);
 
 						// Background
-						foreach (var sprite in background)
-								sprite.Draw(Globals.SpriteBatch, _playerPosition);
+						bgManager.Draw();
+
+						// Astro
+						astro.DrawInCentre();
 
 						// Other Sprites
 						foreach (var sprite in spaceJunk)
-								sprite.Draw(Globals.SpriteBatch);
+								sprite.Draw();
 
-						// Astro
-						astro.Draw(Globals.SpriteBatch, _playerPosition);
-
+						// End SpriteBatch
 						Globals.SpriteBatch.End();
 
 						base.Draw(gameTime);
@@ -113,26 +116,31 @@ namespace SpaceRaft
 				protected override void Update(GameTime gameTime)
 				{
 						// Update the postion after moving
-						_playerPosition=camera.MoveCamera(_playerPosition);
+						Globals.playerPosition=camera.MoveCamera(Globals.playerPosition);
 
 						// Update the camera based on the new position
-						camera.UpdateCamera(graphics.GraphicsDevice.Viewport, _playerPosition);
+						camera.UpdateCamera(graphics.GraphicsDevice.Viewport, Globals.playerPosition);
+
+						//Update BG sprites
+						bgManager.Update(gameTime);
 
 						// Update Junk sprites
 						foreach (var sprite in spaceJunk)
 								sprite.Update(gameTime);
 
+						Globals.Update(gameTime);
+
 						base.Update(gameTime);
 				}
 
-				private List<Sprite> LoadJunk()
+				private List<SpriteHandler> LoadJunk()
 				{
 						// Junk content
 						junk1=Globals.Content.Load<Texture2D>("junk-1");
 						junk2=Globals.Content.Load<Texture2D>("junk-2");						junk3=Globals.Content.Load<Texture2D>("junk-3");						junk4=Globals.Content.Load<Texture2D>("junk-4");						junk5=Globals.Content.Load<Texture2D>("junk-5");
 
 						// Junk sprites
-						spaceJunk=new List<Sprite>()
+						spaceJunk=new List<SpriteHandler>()
 						{
 								new Junk(junk1)
 								{ Position = new Vector2(200, 40)},								new Junk(junk2)
