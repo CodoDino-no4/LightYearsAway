@@ -1,11 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
 using SpaceRaft.Models;
-using SpaceRaft.Sprites;
-using System.Diagnostics;
 
 public class Camera
 {
@@ -35,7 +31,7 @@ public class Camera
 
 		private float currentMouseWheelValue, previousMouseWheelValue, zoom, previousZoom;
 
-		public Camera (Viewport viewport)
+		public Camera(Viewport viewport)
 		{
 				Bounds=viewport.Bounds;
 				Zoom=2f;
@@ -43,7 +39,7 @@ public class Camera
 		}
 
 
-		private void UpdateVisibleArea ()
+		private void UpdateVisibleArea()
 		{
 				var inverseViewMatrix = Matrix.Invert(Transform);
 
@@ -63,7 +59,7 @@ public class Camera
 
 		}
 
-		public void FollowPosition (Vector2 target)
+		public void FollowPosition(Vector2 target)
 		{
 				var position = Matrix.CreateTranslation(
 					-target.X,
@@ -76,7 +72,7 @@ public class Camera
 				UpdateVisibleArea();
 		}
 
-		public Vector2 MoveCamera (Vector2 movePosition)
+		public Vector2 MoveCamera(Vector2 movePosition)
 		{
 				if (Keyboard.GetState().IsKeyDown(Keys.W))
 						movePosition.Y-=3f;
@@ -91,7 +87,7 @@ public class Camera
 				return movePosition;
 		}
 
-		public void AdjustZoom (float zoomAmount)
+		public void AdjustZoom(float zoomAmount)
 		{
 				Zoom+=zoomAmount;
 				if (Zoom<1f)
@@ -104,7 +100,7 @@ public class Camera
 				}
 		}
 
-		public void UpdateCamera (Viewport bounds, Vector2 target)
+		public void UpdateCamera(Viewport bounds, Vector2 target)
 		{
 				Bounds=bounds.Bounds;
 
@@ -132,4 +128,24 @@ public class Camera
 
 				}
 		}
+		//public static void drawSeamlessBackground(SpriteBatch s, Texture2D t, GraphicsDevice gd, float parallax, Camera2D cam)
+		//{
+		//		Vector2 textureSize = new Vector2(t.Width, t.Height);
+		//		Rectangle view = gd.Viewport.Bounds;
+
+		//		Matrix m = Matrix.CreateTranslation(new Vector3(-cam.Origin/textureSize, 0.0f))*
+		//								Matrix.CreateScale(1f/cam.Zoom)*
+		//								Matrix.CreateScale(textureSize.X, textureSize.Y, 1)*
+		//								Matrix.CreateRotationZ(-cam.Rotation)*
+		//								Matrix.CreateScale(1f/textureSize.X, 1f/textureSize.Y, 1)*
+		//								Matrix.CreateTranslation(new Vector3(cam.Origin/textureSize, 0.0f))*
+		//								Matrix.CreateTranslation(new Vector3((cam.Position*parallax)/textureSize, 0.0f));
+
+		//		infiniteShader.Parameters["ScrollMatrix"].SetValue(m);
+		//		infiniteShader.Parameters["ViewportSize"].SetValue(new Vector2(view.Width, view.Height));
+
+		//		s.Begin(samplerState: SamplerState.LinearWrap, effect: infiniteShader);
+		//		s.Draw(t, new Vector2(0, 0), view, Color.White);
+		//		s.End();
+		//}
 }

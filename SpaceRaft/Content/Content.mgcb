@@ -49,6 +49,12 @@
 /processorParam:TextureFormat=Color
 /build:BG1-square-FG-large.png
 
+#begin InfinateBackground.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:InfinateBackground.fx
+
 #begin junk-1.png
 /importer:TextureImporter
 /processor:TextureProcessor

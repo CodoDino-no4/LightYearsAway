@@ -30,15 +30,15 @@ namespace SpaceRaft.Sprites
 
 				public SpriteHandler(Texture2D texture)
 				{
-						_texture = texture;
-						Origin = new Vector2(texture.Width/2, texture.Height/2);
+						_texture=texture;
+						Origin=new Vector2(texture.Width/2, texture.Height/2);
 				}
 
 				public Rectangle Rectangle
 				{
 						get
 						{
-								return new Rectangle((int)Position.X, (int)Position.Y, _texture.Width, _texture.Height);
+								return new Rectangle((int) Position.X, (int) Position.Y, _texture.Width, _texture.Height);
 						}
 				}
 

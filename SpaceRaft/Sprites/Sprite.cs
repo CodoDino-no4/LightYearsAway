@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SpaceRaft.Models;
-using SpaceRaft.Sprites;
 
 namespace SpaceRaft.Sprites
 {
@@ -31,7 +27,7 @@ namespace SpaceRaft.Sprites
 				protected KeyboardState _previousKey;
 
 
-				public Sprite (Texture2D texture)
+				public Sprite(Texture2D texture)
 				{
 						_texture=texture;						Origin=new Vector2(texture.Width/2, texture.Height/2);				}
 
@@ -55,13 +51,13 @@ namespace SpaceRaft.Sprites
 						}
 				}
 
-				public virtual void Update (GameTime gameTime)
+				public virtual void Update(GameTime gameTime)
 				{
 
 				}
 
 				// Static sprites
-				public virtual void Draw (SpriteBatch spriteBatch, Vector2 position)
+				public virtual void Draw(SpriteBatch spriteBatch, Vector2 position)
 				{
 						if (_texture!=null)
 						{
@@ -71,7 +67,7 @@ namespace SpaceRaft.Sprites
 				}
 
 				// Variable position sprites
-				public virtual void Draw (SpriteBatch spriteBatch)
+				public virtual void Draw(SpriteBatch spriteBatch)
 				{
 						if (_texture!=null)
 						{
