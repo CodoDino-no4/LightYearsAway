@@ -25,7 +25,7 @@ namespace SpaceRaft.Sprites
 
 						if (Position.X<=70||Position.Y<=70)
 						{
-								Position.X+=speed /8;
+								Position.X+=speed/8;
 								Position.Y+=speed/8;
 
 						}

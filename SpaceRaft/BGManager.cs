@@ -1,9 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using SpaceRaft.Sprites;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SpaceRaft
 {
@@ -29,7 +26,7 @@ namespace SpaceRaft
 						}
 				}
 
-				public void Draw()
+				public void DrawInCentre()
 				{
 						foreach (var layer in _BGLayers)
 						{

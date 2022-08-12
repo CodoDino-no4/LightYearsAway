@@ -73,8 +73,8 @@ namespace SpaceRaft
 						//effect.Parameters["ViewportSize"].SetValue(new Vector2(200, 200));
 
 						// Background content
-						BG=Globals.Content.Load<Texture2D>("BG1-square-BG-large");
-						FG=Globals.Content.Load<Texture2D>("BG1-square-FG-large");
+						BG=Globals.Content.Load<Texture2D>("BG1-320px");
+						FG=Globals.Content.Load<Texture2D>("BG2-320px");
 
 						// Background sprites
 						bgManager.AddLayer(new BGLayer(BG, 0.1f, 0.5f));
@@ -98,7 +98,7 @@ namespace SpaceRaft
 						Globals.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, null, null, null, transformMatrix: camera.Transform);
 
 						// Background
-						bgManager.Draw();
+						bgManager.DrawInCentre();
 
 						// Astro
 						astro.DrawInCentre();

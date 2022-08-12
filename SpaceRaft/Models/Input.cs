@@ -1,28 +1,83 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿using Apos.Input;
+using Microsoft.Xna.Framework.Input;
 
 namespace SpaceRaft.Models
 {
 		public class Input
 		{
-				public Keys Up
+				AnyCondition keys;
+
+				public Input()
 				{
-						get; set;
+						keys=new AnyCondition();
 				}
-				public Keys Down
+
+				public ICondition Up()
 				{
-						get; set;
+						keys=
+						new AnyCondition(
+								new KeyboardCondition(Keys.Up),
+								new KeyboardCondition(Keys.W)
+						);
+
+						return keys;
 				}
-				public Keys Left
+				public ICondition Down()
 				{
-						get; set;
+						keys=
+						new AnyCondition(
+								new KeyboardCondition(Keys.Down),
+								new KeyboardCondition(Keys.S)
+						);
+
+						return keys;
 				}
-				public Keys Right
+				public ICondition Left()
 				{
-						get; set;
+						keys=
+						new AnyCondition(
+								new KeyboardCondition(Keys.Left),
+								new KeyboardCondition(Keys.A)
+						);
+
+						return keys;
 				}
-				public Keys Shoot
+				public ICondition Right()
 				{
-						get; set;
+						keys=
+						new AnyCondition(
+								new KeyboardCondition(Keys.Right),
+								new KeyboardCondition(Keys.D)
+						);
+
+						return keys;
 				}
+
+				public bool MouseZoom()
+				{
+						bool zoom = false;
+
+						if (MouseCondition.Scrolled())
+						{
+								zoom=true;
+						}
+
+						return zoom;
+				}
+
+				public ICondition ZoomIn()
+				{
+						keys=new AnyCondition(new KeyboardCondition(Keys.OemPlus));
+
+						return keys;
+				}
+
+				public ICondition ZoomOut()
+				{
+						keys=new AnyCondition(new KeyboardCondition(Keys.OemMinus));
+
+						return keys;
+				}
+
 		}
 }
