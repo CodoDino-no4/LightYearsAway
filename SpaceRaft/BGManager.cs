@@ -26,11 +26,11 @@ namespace SpaceRaft
 						}
 				}
 
-				public void DrawInCentre()
+				public void DrawAtAstro()
 				{
 						foreach (var layer in _BGLayers)
 						{
-								layer.DrawInCentre();
+								layer.DrawAtAstro();
 						}
 				}
 		}

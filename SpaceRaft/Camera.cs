@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SpaceRaft.Models;
-using System.Diagnostics;
 
 public class Camera
 {
@@ -63,14 +62,25 @@ public class Camera
 
 		public void FollowPosition(Vector2 target)
 		{
-				var position = Matrix.CreateTranslation(
-					-target.X,
-					-target.Y,
-					0);
+				var position =
+						Matrix.CreateTranslation(
+								-target.X,
+								-target.Y,
+								0);
 
-				var offset = Matrix.CreateTranslation(Bounds.Width/2, Bounds.Height/2, 0);
+				var zoom = Matrix.CreateScale(
+						Zoom);
 
-				Transform=position*Matrix.CreateScale(Zoom)*offset;
+				var offset =
+						Matrix.CreateTranslation(
+								Bounds.Width/2,
+								Bounds.Height/2,
+								0);
+
+				Transform=position*
+						zoom*
+						offset;
+
 				UpdateVisibleArea();
 		}
 
@@ -105,7 +115,6 @@ public class Camera
 
 		public void UpdateCamera(Viewport bounds, Vector2 target)
 		{
-				Bounds=bounds.Bounds;
 
 				FollowPosition(target);
 

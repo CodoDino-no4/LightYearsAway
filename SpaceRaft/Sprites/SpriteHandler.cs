@@ -44,25 +44,18 @@ namespace SpaceRaft.Sprites
 
 				public float Rotation
 				{
-						get
-						{
-								return rotation;
-						}
-						set
-						{
-								rotation=value;
-						}
+						get; set;
 				}
 				public virtual void Update(GameTime gameTime)
 				{
 
 				}
 				// Static sprites
-				public virtual void DrawInCentre()
+				public virtual void DrawAtAstro()
 				{
 						if (_texture!=null)
 						{
-								Globals.SpriteBatch.Draw(_texture, Globals.playerPosition, null, Color.White, rotation, Origin, 1, SpriteEffects.None, 0);
+								Globals.SpriteBatch.Draw(_texture, Globals.AstroPosition, null, Color.White, rotation, Origin, 1, SpriteEffects.None, 0);
 
 						}
 				}

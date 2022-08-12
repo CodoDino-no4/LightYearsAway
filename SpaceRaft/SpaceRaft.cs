@@ -10,10 +10,6 @@ namespace SpaceRaft
 		{
 				GraphicsDeviceManager graphics;
 				SpriteBatch spriteBatch;
-				private RenderTarget2D renderTarget;
-
-				public static int ScreenWidth;
-				public static int ScreenHeight;
 
 				public Astro astro;
 				public List<SpriteHandler> spaceJunk;
@@ -22,11 +18,9 @@ namespace SpaceRaft
 
 				BGManager bgManager;
 
-				Effect effect;
-
 				private Camera camera;
 
-				private Vector2 _playerPosition;
+				private Vector2 astroPosition;
 
 				public SpaceRaft()
 				{
@@ -52,8 +46,8 @@ namespace SpaceRaft
 						graphics.ApplyChanges();
 
 						// will be where we left off at (serialisation)
-						_playerPosition=new Vector2(0, 0);
-						Globals.playerPosition=_playerPosition;
+						astroPosition=new Vector2(0, 0);
+						Globals.AstroPosition=astroPosition;
 
 						// Camera
 						camera=new Camera(graphics.GraphicsDevice.Viewport);
@@ -98,10 +92,10 @@ namespace SpaceRaft
 						Globals.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointWrap, null, null, null, transformMatrix: camera.Transform);
 
 						// Background
-						bgManager.DrawInCentre();
+						bgManager.DrawAtAstro();
 
 						// Astro
-						astro.DrawInCentre();
+						astro.DrawAtAstro();
 
 						// Other Sprites
 						foreach (var sprite in spaceJunk)
@@ -118,10 +112,10 @@ namespace SpaceRaft
 						InputHelper.UpdateSetup();
 
 						// Update the postion after moving
-						Globals.playerPosition=camera.MoveCamera(Globals.playerPosition);
+						Globals.AstroPosition=camera.MoveCamera(Globals.AstroPosition);
 
 						// Update the camera based on the new position
-						camera.UpdateCamera(graphics.GraphicsDevice.Viewport, Globals.playerPosition);
+						camera.UpdateCamera(graphics.GraphicsDevice.Viewport, Globals.AstroPosition);
 
 						//Update BG sprites
 						bgManager.Update(gameTime);
