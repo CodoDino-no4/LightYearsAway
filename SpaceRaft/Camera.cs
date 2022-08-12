@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SpaceRaft.Models;
+using System.Diagnostics;
 
 public class Camera
 {
@@ -36,6 +37,7 @@ public class Camera
 				Bounds=viewport.Bounds;
 				Zoom=2f;
 				Position=Vector2.Zero;
+				input=new Input();
 		}
 
 
@@ -74,14 +76,15 @@ public class Camera
 
 		public Vector2 MoveCamera(Vector2 movePosition)
 		{
-				if (Keyboard.GetState().IsKeyDown(Keys.W))
+
+				if (input.Up().Held())
 						movePosition.Y-=3f;
-				if (Keyboard.GetState().IsKeyDown(Keys.S))
+				if (input.Down().Held())
 						movePosition.Y+=3f;
 
-				if (Keyboard.GetState().IsKeyDown(Keys.A))
+				if (input.Left().Held())
 						movePosition.X-=3f;
-				if (Keyboard.GetState().IsKeyDown(Keys.D))
+				if (input.Right().Held())
 						movePosition.X+=3f;
 
 				return movePosition;

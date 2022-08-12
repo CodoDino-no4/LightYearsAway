@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Apos.Input;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SpaceRaft.Sprites;
 using System.Collections.Generic;
@@ -69,8 +70,7 @@ namespace SpaceRaft
 
 				protected override void LoadContent()
 				{
-						//effect=Globals.Content.Load<Effect>("InfinateBackground");
-						//effect.Parameters["ViewportSize"].SetValue(new Vector2(200, 200));
+						InputHelper.Setup(this);
 
 						// Background content
 						BG=Globals.Content.Load<Texture2D>("BG1-320px");
@@ -115,6 +115,8 @@ namespace SpaceRaft
 
 				protected override void Update(GameTime gameTime)
 				{
+						InputHelper.UpdateSetup();
+
 						// Update the postion after moving
 						Globals.playerPosition=camera.MoveCamera(Globals.playerPosition);
 
@@ -129,7 +131,7 @@ namespace SpaceRaft
 								sprite.Update(gameTime);
 
 						Globals.Update(gameTime);
-
+						InputHelper.UpdateCleanup();
 						base.Update(gameTime);
 				}
 
