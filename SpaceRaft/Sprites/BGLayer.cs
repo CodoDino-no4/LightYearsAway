@@ -34,12 +34,8 @@ namespace SpaceRaft.Sprites
 
 				public virtual void DrawBGLayer(Camera camera)
 				{
-						Debug.WriteLine(Globals.ScreenSize);
-						//Debug.WriteLine(camera.VisibleArea);
-						//Debug.WriteLine(Position);
-						//Debug.WriteLine(Globals.CenterPosition);
 						if (texture!=null)
-								Globals.SpriteBatch.Draw(texture, Globals.CenterPosition, Globals.ScreenSize, Color.White, rotation, Origin, 1, SpriteEffects.None, 0);
+								Globals.SpriteBatch.Draw(texture, Globals.ScreenSize, Color.White);
 				}
 		}
 }

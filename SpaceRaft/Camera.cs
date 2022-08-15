@@ -53,6 +53,9 @@ public class Camera
 		{
 				Position.X=position.X-Globals.ScreenSize.Width/2;
 				Position.Y=position.Y-Globals.ScreenSize.Height/2;
+				//makes the zoom scale wrong
+
+				//Position=position;
 
 				if (MouseCondition.Scrolled())
 				{
@@ -106,24 +109,6 @@ public class Camera
 				}
 		}
 
-		//public void GetVisibleRectangle()
-		//{
-		//		var inverseViewMatrix = Matrix.Invert(Transform);
-
-		//		var tl = Vector2.Transform(Vector2.Zero, inverseViewMatrix);
-		//		var tr = Vector2.Transform(new Vector2(Globals.ScreenSize.Width, 0), inverseViewMatrix);
-		//		var bl = Vector2.Transform(new Vector2(0, Globals.ScreenSize.Height), inverseViewMatrix);
-		//		var br = Vector2.Transform(new Vector2(Globals.ScreenSize.Width, Globals.ScreenSize.Height), inverseViewMatrix);
-		//		var min = new Vector2(
-		//				MathHelper.Min(tl.X, MathHelper.Min(tr.X, MathHelper.Min(bl.X, br.X))),
-		//				MathHelper.Min(tl.Y, MathHelper.Min(tr.Y, MathHelper.Min(bl.Y, br.Y))));
-		//		var max = new Vector2(
-		//				MathHelper.Max(tl.X, MathHelper.Max(tr.X, MathHelper.Max(bl.X, br.X))),
-		//				MathHelper.Max(tl.Y, MathHelper.Max(tr.Y, MathHelper.Max(bl.Y, br.Y))));
-
-		//		VisibleArea=new Rectangle((int) min.X, (int) min.Y, (int) (max.X-min.X), (int) (max.Y-min.Y));
-		//}
-
 		public Matrix GetView()
 		{
 				Transform=
@@ -133,8 +118,6 @@ public class Camera
 						Matrix.CreateTranslation(Globals.ScreenSize.Width/2, Globals.ScreenSize.Width/2, 0f);
 				return Transform;
 
-				//Origin is used so all translations are done from the center instead of top left
-				//Position (0,0) is the center
 		}
 		public Matrix GetUVTransform(Texture2D t, Vector2 offset, float scale)
 		{
