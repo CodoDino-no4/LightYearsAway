@@ -1,7 +1,7 @@
 ﻿using Apos.Input;
 using Microsoft.Xna.Framework.Input;
 
-namespace SpaceRaft.Models
+namespace SpaceRaft.Helpers
 {
 		public class Input
 		{
@@ -63,6 +63,16 @@ namespace SpaceRaft.Models
 						}
 
 						return zoom;
+				}
+
+				public ICondition MiddleMouse()
+				{
+						keys=
+						new AnyCondition(
+								new MouseCondition(MouseButton.MiddleButton)
+								);
+
+						return keys;
 				}
 
 				public ICondition ZoomIn()

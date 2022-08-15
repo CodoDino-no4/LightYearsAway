@@ -73,11 +73,11 @@
 /processorParam:TextureFormat=Color
 /build:BG2-320px.png
 
-#begin InfinateBackground.fx
+#begin infinite.fx
 /importer:EffectImporter
 /processor:EffectProcessor
 /processorParam:DebugMode=Auto
-/build:InfinateBackground.fx
+/build:infinite.fx
 
 #begin junk-1.png
 /importer:TextureImporter

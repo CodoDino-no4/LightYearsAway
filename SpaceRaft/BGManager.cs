@@ -1,36 +1,40 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using SpaceRaft.Sprites;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace SpaceRaft
 {
 		class BGManager
 		{
-				private readonly List<BGLayer> _BGLayers;
+				private readonly List<BGLayer> BGLayers;
+				private Camera camera;
 
-				public BGManager()
+				public BGManager(Camera camera)
 				{
-						_BGLayers=new List<BGLayer>();
+						BGLayers=new List<BGLayer>();
+						this.camera=camera;
 				}
 
 				public void AddLayer(BGLayer layer)
 				{
-						_BGLayers.Add(layer);
+						BGLayers.Add(layer);
 				}
 
 				public void Update(GameTime gameTime)
 				{
-						foreach (var layer in _BGLayers)
+						foreach (var layer in BGLayers)
 						{
 								layer.Update(gameTime);
 						}
 				}
 
-				public void DrawAtAstro()
+				public void DrawBackground()
 				{
-						foreach (var layer in _BGLayers)
+						foreach (var layer in BGLayers)
 						{
-								layer.DrawAtAstro();
+								layer.DrawBGLayer(camera);
 						}
 				}
 		}
