@@ -137,11 +137,9 @@ namespace SpaceRaft
 						camera.UpdateCameraInput(astro.Position);
 
 						Debug.WriteLine(astro.Position);
-						Debug.WriteLine(camera.Position);
 
 						//Update BG sprites
 						//bgManager.Update(gameTime);
-
 
 						// Update Junk sprites
 						foreach (var sprite in spaceJunk)
