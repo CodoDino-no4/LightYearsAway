@@ -41,7 +41,7 @@ namespace SpaceRaft.Sprites
 				{
 						get; set;
 				}
-				public virtual void Update(GameTime gameTime)
+				public virtual void Update()
 				{
 
 				}

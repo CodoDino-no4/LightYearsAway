@@ -15,14 +15,6 @@ public class Camera
 				get; set;
 		}
 
-		public Rectangle Bounds
-		{
-				get; protected set;
-		}
-		public Viewport Viewport
-		{
-				get; protected set;
-		}
 		public Matrix Transform
 		{
 				get; protected set;
@@ -47,21 +39,20 @@ public class Camera
 		bool _isDragged = false;
 
 		float _expDistance = 0.002f;
-		public Vector2 Position = new Vector2(0f, 0f);
+		public Vector2 Position = Vector2.Zero; //whatever i set this to makes the top left corner be the start
 
 		ICondition CameraDrag = new MouseCondition(MouseButton.MiddleButton);
 
-		public Camera(Viewport viewport)
+		public Camera()
 		{
-				Viewport=viewport;
-				Bounds=viewport.Bounds;
 				Zoom=2f;
 				input = new Input();
 		}
 
-		public void UpdateCameraInput()
+		public void UpdateCameraInput(Vector2 position) //camera follow astro
 		{
-				Bounds=Viewport.Bounds;
+				Position.X=position.X-Globals.ScreenSize.Width/2;
+				Position.Y=position.Y-Globals.ScreenSize.Height/2;
 
 				if (MouseCondition.Scrolled())
 				{
@@ -86,18 +77,6 @@ public class Camera
 				{
 						_isDragged=false;
 				}
-
-				if (input.Up().Held())
-						Position.Y-=3f;
-				if (input.Down().Held())
-						Position.Y+=3f;
-
-				if (input.Left().Held())
-						Position.X-=3f;
-				if (input.Right().Held())
-						Position.X+=3f;
-
-
 		}
 
 		/// If the result is stored in the value, it will create a nice interpolation over multiple frames.
@@ -147,15 +126,15 @@ public class Camera
 
 		public Matrix GetView()
 		{
-				Vector2 origin = new Vector2(Globals.ScreenSize.Width/2f, Globals.ScreenSize.Height/2f);
 				Transform=
-						Matrix.CreateTranslation(-origin.X, -origin.Y, 0f)*
+						Matrix.CreateTranslation(-Globals.ScreenSize.Width/2, -Globals.ScreenSize.Width/2, 0f)*
 						Matrix.CreateTranslation(-Position.X, -Position.Y, 0f)*
 						Matrix.CreateScale(scale, scale, 1f)*
-						Matrix.CreateTranslation(origin.X, origin.Y, 0f);
+						Matrix.CreateTranslation(Globals.ScreenSize.Width/2, Globals.ScreenSize.Width/2, 0f);
 				return Transform;
 
 				//Origin is used so all translations are done from the center instead of top left
+				//Position (0,0) is the center
 		}
 		public Matrix GetUVTransform(Texture2D t, Vector2 offset, float scale)
 		{
@@ -164,7 +143,7 @@ public class Camera
 						Matrix.CreateScale(scale, scale, 1f)*
 						Matrix.CreateTranslation(offset.X, offset.Y, 0f)*
 						GetView()*
-						Matrix.CreateScale(1f/Viewport.Width, 1f/Viewport.Height, 1f);
+						Matrix.CreateScale(1f/Globals.ScreenSize.Width, 1f/Globals.ScreenSize.Height, 1f);
 		}
 
 		public float ScaleToExp(float scale)

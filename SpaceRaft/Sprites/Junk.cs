@@ -14,7 +14,7 @@ namespace SpaceRaft.Sprites
 						RotationVelocity=rand.Next(2, 7);						speed=rand.Next(0, 5);
 				}
 
-				public override void Update(GameTime gameTime)
+				public override void Update()
 				{
 						JunkMovement();
 				}

@@ -22,11 +22,11 @@ namespace SpaceRaft
 						BGLayers.Add(layer);
 				}
 
-				public void Update(GameTime gameTime)
+				public void Update()
 				{
 						foreach (var layer in BGLayers)
 						{
-								layer.Update(gameTime);
+								layer.Update();
 						}
 				}
 

@@ -16,7 +16,7 @@ namespace SpaceRaft.Sprites
 						this.defaultSpeed=defaultSpeed;
 				}
 
-				public override void Update(GameTime gameTime)
+				public override void Update()
 				{
 
 						//Position.X-=20f;
@@ -34,10 +34,10 @@ namespace SpaceRaft.Sprites
 
 				public virtual void DrawBGLayer(Camera camera)
 				{
-						Debug.WriteLine(camera.Position);
-						Debug.WriteLine(camera.VisibleArea);
-						Debug.WriteLine(Position);
-						Debug.WriteLine(Globals.CenterPosition);
+						Debug.WriteLine(Globals.ScreenSize);
+						//Debug.WriteLine(camera.VisibleArea);
+						//Debug.WriteLine(Position);
+						//Debug.WriteLine(Globals.CenterPosition);
 						if (texture!=null)
 								Globals.SpriteBatch.Draw(texture, Globals.CenterPosition, Globals.ScreenSize, Color.White, rotation, Origin, 1, SpriteEffects.None, 0);
 				}

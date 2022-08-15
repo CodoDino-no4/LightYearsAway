@@ -18,11 +18,6 @@ namespace SpaceRaft
 				{
 						get; set;
 				}
-				public static Vector2 AstroPosition
-				{
-						get; set;
-				}
-
 				public static Rectangle ScreenSize
 				{
 						get; set;

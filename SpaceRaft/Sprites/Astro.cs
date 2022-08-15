@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SpaceRaft.Helpers;
 
 namespace SpaceRaft.Sprites
 {
@@ -17,20 +18,34 @@ namespace SpaceRaft.Sprites
 						}
 				}
 
+				private Input input;
+
 				public Astro(Texture2D texture) : base(texture)
 				{
 						state="Idle";
+						input=new Input();
+						Position=Globals.CenterPosition;
 				}
 
-				public override void Update(GameTime gameTime)
+				public override void Update()
 				{
+						if (input.Up().Held())
+								Position.Y-=3f;
 
+						if (input.Down().Held())
+								Position.Y+=3f;
+
+						if (input.Left().Held())
+								Position.X-=3f;
+
+						if (input.Right().Held())
+								Position.X+=3f;
 				}
 
-				public  void DrawAstro()
+				public void DrawAstro()
 				{
 						if (texture!=null)
-								Globals.SpriteBatch.Draw(texture, Globals.CenterPosition, Rectangle, Color.White, rotation, Origin, 1, SpriteEffects.None, 0);
+								Globals.SpriteBatch.Draw(texture, Position, Rectangle, Color.White, rotation, Origin, 1, SpriteEffects.None, 0);
 				}
 		}
 }
