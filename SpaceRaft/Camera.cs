@@ -10,11 +10,6 @@ using MonoGame.Extended.Tweening;
 
 public class Camera
 {
-		public float Zoom
-		{
-				get; set;
-		}
-
 		public Matrix Transform
 		{
 				get; protected set;
@@ -38,18 +33,16 @@ public class Camera
 		Vector2 _dragAnchor = Vector2.Zero;
 		bool _isDragged = false;
 
-		float _expDistance = 0.002f;
-		public Vector2 Position = Vector2.Zero; //whatever i set this to makes the top left corner be the start
+		public Vector2 Position = Vector2.Zero; // Top left corner coords
 
 		ICondition CameraDrag = new MouseCondition(MouseButton.MiddleButton);
 
 		public Camera()
 		{
-				Zoom=2f;
 				input = new Input();
 		}
 
-		public void UpdateCameraInput(Vector2 position) //camera follow astro
+		public void UpdateCameraInput(Vector2 position)
 		{
 				Position.X=position.X-Globals.ScreenSize.Width/2;
 				Position.Y=position.Y-Globals.ScreenSize.Height/2;
@@ -60,7 +53,7 @@ public class Camera
 				if (MouseCondition.Scrolled())
 				{
 						int scrollDelta = MouseCondition.ScrollDelta;
-						targetExp=MathHelper.Clamp(targetExp-scrollDelta*_expDistance, maxExp, minExp);
+						targetExp=MathHelper.Clamp(targetExp-scrollDelta*snapDistance, maxExp, minExp);
 				}
 
 				_mouseWorld=Vector2.Transform(InputHelper.NewMouse.Position.ToVector2(), Matrix.Invert(GetView()));

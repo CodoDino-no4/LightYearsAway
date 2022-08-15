@@ -22,8 +22,6 @@ namespace SpaceRaft
 
 				private Camera camera;
 
-				private Vector2 astroPosition;
-
 				public SpaceRaft()
 				{
 						// Graphics manager
@@ -160,7 +158,7 @@ namespace SpaceRaft
 						spaceJunk=new List<SpriteHandler>()
 						{
 								new Junk(junk1)
-								{ Position = new Vector2(0, 0)},								//new Junk(junk2)
+								{ Position = new Vector2(50, 50)},								//new Junk(junk2)
 								//{ Position = new Vector2(-40, -40)},								//new Junk(junk3)
 								//{ Position = new Vector2(40, 0)},								//new Junk(junk4)
 								//{ Position = new Vector2(0, 100)},								//new Junk(junk5)

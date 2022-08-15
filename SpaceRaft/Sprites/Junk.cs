@@ -21,10 +21,10 @@ namespace SpaceRaft.Sprites
 
 				public void JunkMovement()
 				{
-						Rotation-=MathHelper.ToRadians(RotationVelocity);
+						//Rotation-=MathHelper.ToRadians(RotationVelocity);
 
-								Position.X+=speed/8;
-								Position.Y+=speed/8;
+						//		Position.X+=speed/8;
+						//		Position.Y+=speed/8;
 
 				}
 		}

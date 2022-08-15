@@ -45,7 +45,7 @@ namespace SpaceRaft.Sprites
 				public void DrawAstro()
 				{
 						if (texture!=null)
-								Globals.SpriteBatch.Draw(texture, Position, Rectangle, Color.White, rotation, Origin, 1, SpriteEffects.None, 0);
+								Globals.SpriteBatch.Draw(texture, Position, Rectangle, Color.White, rotation, Origin, 2, SpriteEffects.None, 0);
 				}
 		}
 }

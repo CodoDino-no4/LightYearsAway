@@ -49,7 +49,7 @@ namespace SpaceRaft.Sprites
 				public virtual void Draw()
 				{
 						if (this.texture !=null)
-								Globals.SpriteBatch.Draw(texture, Position, null, Color.White, Rotation, Origin, 1, SpriteEffects.None, 0);
+								Globals.SpriteBatch.Draw(texture, Position, null, Color.White, Rotation, Origin, 2, SpriteEffects.None, 0);
 
 				}
 		}
