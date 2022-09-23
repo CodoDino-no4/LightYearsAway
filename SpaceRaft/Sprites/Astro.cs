@@ -24,7 +24,7 @@ namespace SpaceRaft.Sprites
 				{
 						state="Idle";
 						input=new Input();
-						Position=Globals.CenterPosition;
+						Position= new Vector2(Globals.ScreenSize.Width/2, Globals.ScreenSize.Height/2);
 				}
 
 				public override void Update()

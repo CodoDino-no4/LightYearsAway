@@ -22,17 +22,10 @@ namespace SpaceRaft
 				{
 						get; set;
 				}
-
-				public static Vector2 CenterPosition
-				{
-						get; set;
-				}
-
 				public static void Update(GameTime gameTime, GraphicsDeviceManager graphics)
 				{
 						ElapsedSeconds = (float) gameTime.ElapsedGameTime.TotalSeconds;
 						ScreenSize=graphics.GraphicsDevice.Viewport.Bounds;
-						CenterPosition=new Vector2(ScreenSize.Width/2, ScreenSize.Height/2);
 				}
 		}
 }

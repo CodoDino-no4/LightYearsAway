@@ -48,7 +48,6 @@ namespace SpaceRaft
 
 						// Set inital viewport 
 						Globals.ScreenSize=graphics.GraphicsDevice.Viewport.Bounds;
-						Globals.CenterPosition=new Vector2(Globals.ScreenSize.Width/2, Globals.ScreenSize.Height/2);
 
 						// Camera
 						camera=new Camera();
@@ -56,7 +55,7 @@ namespace SpaceRaft
 						// Background manager
 						bgManager=new BGManager(camera);
 
-						// Create a new SpriteBatch, which can be used to draw textures.
+						// Create a new SpriteBatch
 						spriteBatch=new SpriteBatch(GraphicsDevice);
 						Globals.SpriteBatch=spriteBatch;
 
@@ -158,11 +157,11 @@ namespace SpaceRaft
 						spaceJunk=new List<SpriteHandler>()
 						{
 								new Junk(junk1)
-								{ Position = new Vector2(50, 50)},								//new Junk(junk2)
-								//{ Position = new Vector2(-40, -40)},								//new Junk(junk3)
-								//{ Position = new Vector2(40, 0)},								//new Junk(junk4)
-								//{ Position = new Vector2(0, 100)},								//new Junk(junk5)
-								//{ Position = new Vector2(40, 90)}
+								{ Position = new Vector2(50, 50)},								new Junk(junk2)
+								{ Position = new Vector2(-40, -40)},								new Junk(junk3)
+								{ Position = new Vector2(40, 0)},								new Junk(junk4)
+								{ Position = new Vector2(0, 100)},								new Junk(junk5)
+								{ Position = new Vector2(40, 90)}
 						};
 
 						return spaceJunk;
