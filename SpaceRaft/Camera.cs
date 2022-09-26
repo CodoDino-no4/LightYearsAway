@@ -44,7 +44,7 @@ public class Camera
 		{
 				this.position.X=position.X-Globals.ScreenSize.Width/2;
 				this.position.Y=position.Y-Globals.ScreenSize.Height/2;
-				//makes the zoom scale wrong after resizing
+				//keeps the inital zoom scale after resizing
 
 				// Scale FOV
 				if (input.MouseZoom())
@@ -81,7 +81,7 @@ public class Camera
 		}
 
 		// Tweening function
-		// If the result is stored in the value, it will create a nice interpolation over multiple frames.
+		// Interpolation over multiple frames.
 		/// <param name="start"> The value to start from.</param>
 		/// <param name="target"> The value to reach.</param>
 		/// <param name="speed"> A value between 0f and 1f.</param>

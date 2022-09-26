@@ -7,7 +7,7 @@ namespace SpaceRaft.Sprites
 {
 		public class SpriteHandler
 		{
-				public Texture2D texture;
+				protected Texture2D texture;
 
 				// Centre of sprite
 				public Vector2 Origin;
@@ -48,7 +48,7 @@ namespace SpaceRaft.Sprites
 
 				public virtual void Draw()
 				{
-						if (this.texture !=null)
+						if (texture !=null)
 								Globals.SpriteBatch.Draw(texture, Position, null, Color.White, Rotation, Origin, 2, SpriteEffects.None, 0);
 
 				}

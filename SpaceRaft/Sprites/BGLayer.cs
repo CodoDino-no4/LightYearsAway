@@ -20,16 +20,7 @@ namespace SpaceRaft.Sprites
 				{
 
 						//Position.X-=20f;
-						//Position.X+=((movement*_moveScale)+_defaultSpeed)*Globals.ElapsedSeconds;
-						//Position.X%=_texture.Width;
 
-						//if (Position.X>=0)
-						//{
-						//		Position2.X=Position.X-_texture.Width;
-						//} else
-						//{
-						//		Position2.X=Position.X+_texture.Width;
-						//}
 				}
 
 				public virtual void DrawBGLayer(Camera camera)

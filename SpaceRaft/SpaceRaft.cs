@@ -15,9 +15,13 @@ namespace SpaceRaft
 				public Astro astro;
 				public List<SpriteHandler> spaceJunk;
 
-				Texture2D BG1, BG2;				Texture2D astroIdleTexture;				Texture2D junk1, junk2, junk3, junk4, junk5;
+				Texture2D BG1, BG2;
+				Texture2D astroIdleTexture;
+				Texture2D junk1, junk2, junk3, junk4, junk5;
+				Texture2D toolBelt;
 
 				BGManager bgManager;
+				UIManager UIManager;
 				Effect bgEffect;
 
 				private Camera camera;
@@ -54,6 +58,7 @@ namespace SpaceRaft
 
 						// Background manager
 						bgManager=new BGManager(camera);
+						UIManager=new UIManager();
 
 						// Create a new SpriteBatch
 						spriteBatch=new SpriteBatch(GraphicsDevice);
@@ -82,8 +87,13 @@ namespace SpaceRaft
 						astroIdleTexture=Globals.Content.Load<Texture2D>("Astro-Idle");
 
 						// Player Astro sprite
-						astro=new Astro(astroIdleTexture);
+						astro=new Astro(astroIdleTexture);
+
 						LoadJunk();
+
+						toolBelt=Globals.Content.Load<Texture2D>("Toolbelt-empty");
+						UIManager.AddElement(new UIElement(toolBelt, new Vector2(0,0)));
+						//LoadUI();
 				}
 				protected override void Draw(GameTime gameTime)
 				{
@@ -151,16 +161,23 @@ namespace SpaceRaft
 				{
 						// Junk content
 						junk1=Globals.Content.Load<Texture2D>("junk-1");
-						junk2=Globals.Content.Load<Texture2D>("junk-2");						junk3=Globals.Content.Load<Texture2D>("junk-3");						junk4=Globals.Content.Load<Texture2D>("junk-4");						junk5=Globals.Content.Load<Texture2D>("junk-5");
+						junk2=Globals.Content.Load<Texture2D>("junk-2");
+						junk3=Globals.Content.Load<Texture2D>("junk-3");
+						junk4=Globals.Content.Load<Texture2D>("junk-4");
+						junk5=Globals.Content.Load<Texture2D>("junk-5");
 
 						// Junk sprites
 						spaceJunk=new List<SpriteHandler>()
 						{
 								new Junk(junk1)
-								{ Position = new Vector2(50, 50)},								new Junk(junk2)
-								{ Position = new Vector2(-40, -40)},								new Junk(junk3)
-								{ Position = new Vector2(40, 0)},								new Junk(junk4)
-								{ Position = new Vector2(0, 100)},								new Junk(junk5)
+								{ Position = new Vector2(50, 50)},
+								new Junk(junk2)
+								{ Position = new Vector2(-40, -40)},
+								new Junk(junk3)
+								{ Position = new Vector2(40, 0)},
+								new Junk(junk4)
+								{ Position = new Vector2(0, 100)},
+								new Junk(junk5)
 								{ Position = new Vector2(40, 90)}
 						};
 
