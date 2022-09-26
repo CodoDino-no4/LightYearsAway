@@ -1,4 +1,5 @@
-﻿using SpaceRaft.Sprites;
+﻿using Microsoft.Xna.Framework;
+using SpaceRaft.Sprites;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,26 +8,27 @@ namespace SpaceRaft
 {
 		public class UIManager
 		{
-				private readonly List<SpriteHandler> UIElements;
+				private readonly List<UIElement> UIElements;
 				public UIManager()
 				{
-						UIElements = new List<SpriteHandler>();
+						UIElements = new List<UIElement>();
 				}
 
-				public void AddElement(SpriteHandler element)
+				public void AddElement(UIElement element)
 				{
 						UIElements.Add(element);
 				}
 
-				public void Draw()
+				public void DrawElements()
 				{
-
+						foreach (var element in UIElements)
+								element.Draw();
 
 				}
-
-				public void Update()
+				public void Update(Vector2 position)
 				{
-
+						foreach (var element in UIElements)
+								element.Update(position);
 				}
 		}
 }

@@ -8,10 +8,16 @@ namespace SpaceRaft.Sprites
 {
 		public class UIElement : SpriteHandler
 		{
-				public UIElement(Texture2D texture, Vector2 position) : base(texture)
+				public UIElement(Texture2D texture) : base(texture)
 				{
 						this.texture = texture;
-						Position=position;
 				}
+
+				public void Update(Vector2 position)
+				{
+						Position.X=position.X;
+						Position.Y=position.Y+((Globals.ScreenSize.Height/2)-texture.Height);
+				}
+
 		}
 }

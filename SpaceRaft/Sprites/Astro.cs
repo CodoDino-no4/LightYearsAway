@@ -24,7 +24,6 @@ namespace SpaceRaft.Sprites
 				{
 						state="Idle";
 						input=new Input();
-						Position= new Vector2(Globals.ScreenSize.Width/2, Globals.ScreenSize.Height/2);
 				}
 
 				public override void Update()
@@ -40,12 +39,6 @@ namespace SpaceRaft.Sprites
 
 						if (input.Right().Held())
 								Position.X+=3f;
-				}
-
-				public void DrawAstro()
-				{
-						if (texture!=null)
-								Globals.SpriteBatch.Draw(texture, Position, Rectangle, Color.White, rotation, Origin, 2, SpriteEffects.None, 0);
 				}
 		}
 }

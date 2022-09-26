@@ -15,6 +15,11 @@ public class Camera
 				get; protected set;
 		}
 
+		public Matrix fixedTransform
+		{
+				get; protected set;
+		}
+
 		private Input input;
 
 		// Scale
@@ -25,11 +30,6 @@ public class Camera
 		private float minExp = 0f;
 		private float maxExp = -2f;
 		private float targetExp = 0f;
-
-		// Drag
-		private Vector2 mouseWorld = Vector2.Zero;
-		private Vector2 dragAnchor = Vector2.Zero;
-		private bool isDragged = false;
 
 		// Top left corner coordinates
 		private Vector2 position;
@@ -61,31 +61,9 @@ public class Camera
 
 				scale=ExpToScale(Interpolate(ScaleToExp(scale), targetExp, scrollSpeed, snapDistance));
 
-				// Get mouse position in world
-				mouseWorld=Vector2.Transform(InputHelper.NewMouse.Position.ToVector2(), Matrix.Invert(GetView()));
-
-				// Drag to peek at the world around you
-				if (input.MiddleMouse().Pressed())
-				{
-						dragAnchor=mouseWorld;
-						isDragged=true;
-				}
-				if (isDragged&&input.MiddleMouse().HeldOnly())
-				{
-						this.position+=dragAnchor-mouseWorld;
-				}
-				if (isDragged&&input.MiddleMouse().Released())
-				{
-						isDragged=false;
-				}
 		}
 
-		// Tweening function
-		// Interpolation over multiple frames.
-		/// <param name="start"> The value to start from.</param>
-		/// <param name="target"> The value to reach.</param>
-		/// <param name="speed"> A value between 0f and 1f.</param>
-		/// <param name="snapNear"> When the difference between the target and the result is smaller than this value, the target will be returned.</param>
+		// Tweening function, interpolation over multiple frames.
 		public float Interpolate(float start, float target, float speed, float snapNear)
 		{
 				float result = MathHelper.Lerp(start, target, speed);
@@ -116,8 +94,17 @@ public class Camera
 						Matrix.CreateScale(scale, scale, 1f)*
 						Matrix.CreateTranslation(Globals.ScreenSize.Width/2, Globals.ScreenSize.Width/2, 0f);
 				return Transform;
-
 		}
+
+		public Matrix GetFixedScaleView()
+		{
+				fixedTransform =
+						Matrix.CreateTranslation(-Globals.ScreenSize.Width/2, -Globals.ScreenSize.Width/2, 0f)*
+						Matrix.CreateTranslation(-position.X, -position.Y, 0f)*
+						Matrix.CreateTranslation(Globals.ScreenSize.Width/2, Globals.ScreenSize.Width/2, 0f);
+				return fixedTransform;
+		}
+
 		// Gets the UV Transform
 		public Matrix GetUVTransform(Texture2D t, Vector2 offset, float scale)
 		{

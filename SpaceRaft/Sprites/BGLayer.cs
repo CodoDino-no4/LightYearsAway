@@ -23,7 +23,7 @@ namespace SpaceRaft.Sprites
 
 				}
 
-				public virtual void DrawBGLayer(Camera camera)
+				public virtual void DrawLayer()
 				{
 						if (texture!=null)
 								Globals.SpriteBatch.Draw(texture, Globals.ScreenSize, Color.White);

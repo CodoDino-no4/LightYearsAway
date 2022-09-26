@@ -9,33 +9,27 @@ namespace SpaceRaft
 		class BGManager
 		{
 				private readonly List<BGLayer> BGLayers;
-				private Camera camera;
 
-				public BGManager(Camera camera)
+				public BGManager()
 				{
 						BGLayers=new List<BGLayer>();
-						this.camera=camera;
 				}
 
 				public void AddLayer(BGLayer layer)
 				{
 						BGLayers.Add(layer);
 				}
-
 				public void Update()
 				{
 						foreach (var layer in BGLayers)
-						{
 								layer.Update();
-						}
 				}
 
 				public void DrawBackground()
 				{
 						foreach (var layer in BGLayers)
-						{
-								layer.DrawBGLayer(camera);
-						}
+								layer.DrawLayer();
 				}
+
 		}
 }

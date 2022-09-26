@@ -12,19 +12,24 @@ namespace SpaceRaft
 				GraphicsDeviceManager graphics;
 				SpriteBatch spriteBatch;
 
-				public Astro astro;
-				public List<SpriteHandler> spaceJunk;
+				// Camera
+				private Camera camera;
+				Effect bgEffect;
 
+				// Managers
+				BGManager bgManager;
+				UIManager UIManager;
+
+				// Textures
 				Texture2D BG1, BG2;
 				Texture2D astroIdleTexture;
 				Texture2D junk1, junk2, junk3, junk4, junk5;
 				Texture2D toolBelt;
 
-				BGManager bgManager;
-				UIManager UIManager;
-				Effect bgEffect;
-
-				private Camera camera;
+				// Sprite Objects
+				public Astro astro;
+				public List<SpriteHandler> spaceJunk;
+				public List<SpriteHandler> UIElements;
 
 				public SpaceRaft()
 				{
@@ -39,10 +44,10 @@ namespace SpaceRaft
 				protected override void Initialize()
 				{
 						// Graphics settings
-						graphics.PreferredBackBufferWidth=700;
-						graphics.PreferredBackBufferHeight=700;
-						graphics.IsFullScreen=false;
 						graphics.SynchronizeWithVerticalRetrace=true;
+						graphics.PreferredBackBufferWidth=1000;
+						graphics.PreferredBackBufferHeight=1000;
+						graphics.IsFullScreen=false;
 
 						Window.AllowUserResizing=true;
 						Window.Title="SpaceRaft";
@@ -56,8 +61,8 @@ namespace SpaceRaft
 						// Camera
 						camera=new Camera();
 
-						// Background manager
-						bgManager=new BGManager(camera);
+						// Managers
+						bgManager=new BGManager();
 						UIManager=new UIManager();
 
 						// Create a new SpriteBatch
@@ -91,9 +96,11 @@ namespace SpaceRaft
 
 						LoadJunk();
 
+						// UI content
 						toolBelt=Globals.Content.Load<Texture2D>("Toolbelt-empty");
-						UIManager.AddElement(new UIElement(toolBelt, new Vector2(0,0)));
-						//LoadUI();
+
+						// UI sprites
+						UIManager.AddElement(new UIElement(toolBelt));
 				}
 				protected override void Draw(GameTime gameTime)
 				{
@@ -102,17 +109,17 @@ namespace SpaceRaft
 
 						Matrix projection = Matrix.CreateOrthographicOffCenter(Globals.ScreenSize.X, Globals.ScreenSize.Width, Globals.ScreenSize.Height, Globals.ScreenSize.Y, 0, 1);
 						Matrix uv_transform = camera.GetUVTransform(BG1, Vector2.Zero, 2f);
+						Matrix fixedTransform = camera.GetFixedScaleView();
 
 						bgEffect.Parameters["view_projection"].SetValue(Matrix.Identity*projection);
 						bgEffect.Parameters["uv_transform"].SetValue(Matrix.Invert(uv_transform));
 
-						// Begin BG Spritebatch
+						// Begin Background Spritebatch
 						Globals.SpriteBatch.Begin(effect: bgEffect, samplerState: SamplerState.PointWrap, transformMatrix: camera.Transform);
 
-						// Background
 						bgManager.DrawBackground();
 
-						// End BG SpriteBatch
+						// End Background SpriteBatch
 						Globals.SpriteBatch.End();
 
 						/////////////////////////////////////////////////////////////////
@@ -125,9 +132,17 @@ namespace SpaceRaft
 								sprite.Draw();
 
 						// Astro
-						astro.DrawAstro();
+						astro.Draw();
 
 						// End SpriteBatch
+						Globals.SpriteBatch.End();
+
+						// Begin Spritebatch
+						Globals.SpriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix: fixedTransform);
+
+						// Managers
+						UIManager.DrawElements();
+
 						Globals.SpriteBatch.End();
 
 						base.Draw(gameTime);
@@ -142,15 +157,17 @@ namespace SpaceRaft
 
 						// Update the camera
 						camera.UpdateCameraInput(astro.Position);
-
 						Debug.WriteLine(astro.Position);
 
 						//Update BG sprites
-						//bgManager.Update(gameTime);
+						bgManager.Update();
 
 						// Update Junk sprites
 						foreach (var sprite in spaceJunk)
 								sprite.Update();
+
+						//Update UI Sprites
+						UIManager.Update(astro.Position);
 
 						Globals.Update(gameTime, graphics);
 						InputHelper.UpdateCleanup();
