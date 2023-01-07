@@ -15,7 +15,7 @@ public class Camera
 				get; protected set;
 		}
 
-		public Matrix fixedTransform
+		public Matrix FixedTransform
 		{
 				get; protected set;
 		}
@@ -96,13 +96,14 @@ public class Camera
 				return Transform;
 		}
 
+		// Gets the visible camera area Transform
 		public Matrix GetFixedScaleView()
 		{
-				fixedTransform =
+				FixedTransform =
 						Matrix.CreateTranslation(-Globals.ScreenSize.Width/2, -Globals.ScreenSize.Width/2, 0f)*
 						Matrix.CreateTranslation(-position.X, -position.Y, 0f)*
 						Matrix.CreateTranslation(Globals.ScreenSize.Width/2, Globals.ScreenSize.Width/2, 0f);
-				return fixedTransform;
+				return FixedTransform;
 		}
 
 		// Gets the UV Transform

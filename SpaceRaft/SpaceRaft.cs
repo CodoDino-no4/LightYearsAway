@@ -14,7 +14,7 @@ namespace SpaceRaft
 
 				// Camera
 				private Camera camera;
-				Effect bgEffect;
+				Effect bgInfinateShader;
 
 				// Managers
 				BGManager bgManager;
@@ -76,7 +76,7 @@ namespace SpaceRaft
 				{
 						InputHelper.Setup(this);
 
-						bgEffect=Content.Load<Effect>("infinite");
+						bgInfinateShader=Content.Load<Effect>("infinite");
 
 						// Background content
 						BG1=Globals.Content.Load<Texture2D>("BG1-320px");
@@ -111,20 +111,25 @@ namespace SpaceRaft
 						Matrix uv_transform = camera.GetUVTransform(BG1, Vector2.Zero, 2f);
 						Matrix fixedTransform = camera.GetFixedScaleView();
 
-						bgEffect.Parameters["view_projection"].SetValue(Matrix.Identity*projection);
-						bgEffect.Parameters["uv_transform"].SetValue(Matrix.Invert(uv_transform));
+						bgInfinateShader.Parameters["view_projection"].SetValue(Matrix.Identity*projection);
+						bgInfinateShader.Parameters["uv_transform"].SetValue(Matrix.Invert(uv_transform));
 
-						// Begin Background Spritebatch
-						Globals.SpriteBatch.Begin(effect: bgEffect, samplerState: SamplerState.PointWrap, transformMatrix: camera.Transform);
+						////////////////////////////////////////////////
+
+						/* Begin Spritebatch
+						 * Infinate Background */
+
+						Globals.SpriteBatch.Begin(effect: bgInfinateShader, samplerState: SamplerState.PointWrap, transformMatrix: camera.Transform);
 
 						bgManager.DrawBackground();
 
-						// End Background SpriteBatch
 						Globals.SpriteBatch.End();
 
-						/////////////////////////////////////////////////////////////////
+						////////////////////////////////////////////////
 
-						// Begin Spritebatch
+						/* Begin Spritebatch
+						 * Variable Position Sprites */
+
 						Globals.SpriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix: camera.Transform);
 
 						// Other Sprites
@@ -134,10 +139,13 @@ namespace SpaceRaft
 						// Astro
 						astro.Draw();
 
-						// End SpriteBatch
 						Globals.SpriteBatch.End();
 
-						// Begin Spritebatch
+						////////////////////////////////////////////////
+
+						/* Begin Spritebatch
+						 * Fixed Position Sprites */
+
 						Globals.SpriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix: fixedTransform);
 
 						// Managers
