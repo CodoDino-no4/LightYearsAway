@@ -39,8 +39,8 @@ namespace SpaceRaft
 				protected override void Initialize()
 				{
 						// Graphics settings
-						graphics.PreferredBackBufferWidth=700;
-						graphics.PreferredBackBufferHeight=700;
+						graphics.PreferredBackBufferWidth=1500;
+						graphics.PreferredBackBufferHeight=1500;
 						graphics.IsFullScreen=false;
 						graphics.SynchronizeWithVerticalRetrace=true;
 

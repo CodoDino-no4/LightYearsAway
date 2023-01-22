@@ -29,6 +29,7 @@ namespace SpaceRaft.Sprites
 
 				public override void Update()
 				{
+						//TODO: smooth, floaty movement
 						if (input.Up().Held())
 								Position.Y-=3f;
 
