@@ -23,6 +23,7 @@ public class Camera
 
 		// Scale
 		private float scale = 1f;
+		private float fixedScale = 1f;
 		private float scrollSpeed = 0.1f;
 		private float snapDistance = 0.002f;
 
@@ -101,6 +102,7 @@ public class Camera
 				FixedTransform =
 						Matrix.CreateTranslation(-Globals.ScreenSize.Width/2, -Globals.ScreenSize.Width/2, 0f)*
 						Matrix.CreateTranslation(-position.X, -position.Y, 0f)*
+						Matrix.CreateScale(fixedScale, fixedScale, 1f)*
 						Matrix.CreateTranslation(Globals.ScreenSize.Width/2, Globals.ScreenSize.Width/2, 0f);
 				return FixedTransform;
 		}

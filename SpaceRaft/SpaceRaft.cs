@@ -112,7 +112,7 @@ namespace SpaceRaft
 
 						Matrix projection = Matrix.CreateOrthographicOffCenter(Globals.ScreenSize.X, Globals.ScreenSize.Width, Globals.ScreenSize.Height, Globals.ScreenSize.Y, 0, 1);
 						Matrix uv_transform = camera.GetUVTransform(BG1, Vector2.Zero, 2f);
-						Matrix fixedTransform = camera.GetFixedScaleView();
+						camera.GetFixedScaleView();
 
 						bgInfinateShader.Parameters["view_projection"].SetValue(Matrix.Identity*projection);
 						bgInfinateShader.Parameters["uv_transform"].SetValue(Matrix.Invert(uv_transform));
@@ -149,12 +149,14 @@ namespace SpaceRaft
 						/* Begin Spritebatch
 						 * Fixed Position Sprites */
 
-						Globals.SpriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix: fixedTransform);
+						Globals.SpriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix: camera.FixedTransform);
 
-						// Managers
+						// UI Manager
 						UIManager.DrawElements();
 
 						Globals.SpriteBatch.End();
+
+						////////////////////////////////////////////////
 
 						base.Draw(gameTime);
 				}
@@ -168,7 +170,6 @@ namespace SpaceRaft
 
 						// Update the camera
 						camera.UpdateCameraInput(astro.Position);
-						Debug.WriteLine(astro.Position);
 
 						//Update BG sprites
 						bgManager.Update();
