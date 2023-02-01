@@ -1,10 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SpaceRaft.Sprites;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace SpaceRaft
+namespace SpaceRaft.Sprites.Background
 {
 		class BGManager
 		{

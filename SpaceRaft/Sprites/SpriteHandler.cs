@@ -5,7 +5,7 @@ using SpaceRaft.Helpers;
 
 namespace SpaceRaft.Sprites
 {
-		public class SpriteHandler
+		public class SpriteHandler : SpriteComponent
 		{
 				protected Texture2D texture;
 
@@ -41,12 +41,12 @@ namespace SpaceRaft.Sprites
 				{
 						get; set;
 				}
-				public virtual void Update()
+				public override void Update()
 				{
 
 				}
 
-				public virtual void Draw()
+				public override void Draw()
 				{
 						if (texture !=null)
 								Globals.SpriteBatch.Draw(texture, Position, null, Color.White, Rotation, Origin, 2, SpriteEffects.None, 0);

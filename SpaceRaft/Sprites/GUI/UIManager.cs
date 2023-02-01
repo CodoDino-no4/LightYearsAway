@@ -1,17 +1,17 @@
 ﻿using Microsoft.Xna.Framework;
-using SpaceRaft.Sprites;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SpaceRaft
+// need this so i can scale the whole ui and change it for screen resoltions etc
+namespace SpaceRaft.Sprites.GUI
 {
 		public class UIManager
 		{
 				private readonly List<UIElement> UIElements;
 				public UIManager()
 				{
-						UIElements = new List<UIElement>();
+						UIElements=new List<UIElement>();
 				}
 
 				public void AddElement(UIElement element)

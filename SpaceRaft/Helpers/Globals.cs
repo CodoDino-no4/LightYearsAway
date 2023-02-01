@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace SpaceRaft
+namespace SpaceRaft.Helpers
 {
 		public static class Globals
 		{
@@ -24,7 +24,8 @@ namespace SpaceRaft
 				}
 				public static void Update(GameTime gameTime, GraphicsDeviceManager graphics)
 				{
-						ElapsedSeconds = (float) gameTime.ElapsedGameTime.TotalSeconds;
+						ElapsedSeconds=(float) gameTime.ElapsedGameTime.TotalSeconds;
+
 						ScreenSize=graphics.GraphicsDevice.Viewport.Bounds;
 				}
 		}

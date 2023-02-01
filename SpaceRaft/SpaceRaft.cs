@@ -1,7 +1,10 @@
 ﻿using Apos.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SpaceRaft.Helpers;
 using SpaceRaft.Sprites;
+using SpaceRaft.Sprites.Background;
+using SpaceRaft.Sprites.GUI;
 using System.Collections.Generic;
 using System.Diagnostics;
 
