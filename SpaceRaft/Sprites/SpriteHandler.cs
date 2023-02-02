@@ -32,6 +32,10 @@ namespace SpaceRaft.Sprites
 						{
 								return new Rectangle((int) -texture.Width, (int) -texture.Height, texture.Width, texture.Height);
 						}
+
+						set
+						{
+						}
 				}
 
 				public float Rotate

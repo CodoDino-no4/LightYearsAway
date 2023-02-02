@@ -22,7 +22,7 @@ public class Camera
 		private Input input;
 
 		// Scale
-		private float scale = 1f;
+		public float scale = 1f;
 		private float fixedScale = 1f;
 		private float scrollSpeed = 0.1f;
 		private float snapDistance = 0.002f;
@@ -44,15 +44,15 @@ public class Camera
 		{
 				this.position.X=position.X-Globals.ScreenSize.Width/2;
 				this.position.Y=position.Y-Globals.ScreenSize.Height/2;
-				//keeps the inital zoom scale after resizing
 
-				// Scale FOV
+				// Scale FOV with scroll wheel
 				if (input.MouseZoom())
 				{
 						int scrollDelta = MouseCondition.ScrollDelta;
 						targetExp=MathHelper.Clamp(targetExp-scrollDelta*snapDistance, maxExp, minExp);
 				}
 
+				// Scale FOV with buttons
 				if (input.ZoomIn().Pressed())
 						targetExp=MathHelper.Clamp(targetExp-120*snapDistance, maxExp, minExp);
 				
@@ -89,10 +89,11 @@ public class Camera
 		public Matrix GetView()
 		{
 				Transform=
-						Matrix.CreateTranslation(-Globals.ScreenSize.Width/2, -Globals.ScreenSize.Width/2, 0f)*
+						Matrix.CreateTranslation(-Globals.ScreenSize.Width/2, -Globals.ScreenSize.Height/2, 0f)*
 						Matrix.CreateTranslation(-position.X, -position.Y, 0f)*
-						Matrix.CreateScale(scale, scale, 1f)*
-						Matrix.CreateTranslation(Globals.ScreenSize.Width/2, Globals.ScreenSize.Width/2, 0f);
+						Matrix.CreateScale(scale, scale, 1f)*	
+						Matrix.CreateTranslation(Globals.ScreenSize.Width/2, Globals.ScreenSize.Height/2, 0f);
+				
 				return Transform;
 		}
 
@@ -100,10 +101,10 @@ public class Camera
 		public Matrix GetFixedScaleView()
 		{
 				FixedTransform =
-						Matrix.CreateTranslation(-Globals.ScreenSize.Width/2, -Globals.ScreenSize.Width/2, 0f)*
+						Matrix.CreateTranslation(-Globals.ScreenSize.Width/2, -Globals.ScreenSize.Height/2, 0f)*
 						Matrix.CreateTranslation(-position.X, -position.Y, 0f)*
 						Matrix.CreateScale(fixedScale, fixedScale, 1f)*
-						Matrix.CreateTranslation(Globals.ScreenSize.Width/2, Globals.ScreenSize.Width/2, 0f);
+						Matrix.CreateTranslation(Globals.ScreenSize.Width/2, Globals.ScreenSize.Height/2, 0f);
 				return FixedTransform;
 		}
 

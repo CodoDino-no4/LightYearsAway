@@ -48,7 +48,7 @@ namespace SpaceRaft
 				{
 						// Graphics settings
 						graphics.SynchronizeWithVerticalRetrace=true;
-						graphics.PreferredBackBufferWidth=1000;
+						graphics.PreferredBackBufferWidth=2000;
 						graphics.PreferredBackBufferHeight=1000;
 						graphics.IsFullScreen=false;
 
@@ -111,7 +111,7 @@ namespace SpaceRaft
 						GraphicsDevice.Clear(Color.SlateGray);
 
 						Matrix projection = Matrix.CreateOrthographicOffCenter(Globals.ScreenSize.X, Globals.ScreenSize.Width, Globals.ScreenSize.Height, Globals.ScreenSize.Y, 0, 1);
-						Matrix uv_transform = camera.GetUVTransform(BG1, Vector2.Zero, 2f);
+						Matrix uv_transform = camera.GetUVTransform(BG1, Vector2.Zero, 2);
 						camera.GetFixedScaleView();
 
 						bgInfinateShader.Parameters["view_projection"].SetValue(Matrix.Identity*projection);
@@ -199,7 +199,7 @@ namespace SpaceRaft
 						spaceJunk=new List<SpriteHandler>()
 						{
 								new Junk(junk1)
-								{ Position = new Vector2(50, 50)},
+								{ Position = new Vector2(0, 0)},
 								new Junk(junk2)
 								{ Position = new Vector2(-40, -40)},
 								new Junk(junk3)

@@ -22,6 +22,7 @@ namespace SpaceRaft.Helpers
 				{
 						get; set;
 				}
+ 
 				public static void Update(GameTime gameTime, GraphicsDeviceManager graphics)
 				{
 						ElapsedSeconds=(float) gameTime.ElapsedGameTime.TotalSeconds;
