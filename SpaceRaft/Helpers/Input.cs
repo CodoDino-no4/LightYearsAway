@@ -5,7 +5,7 @@ namespace SpaceRaft.Helpers
 {
 		public class Input
 		{
-				AnyCondition keys;
+				private AnyCondition keys;
 
 				public Input()
 				{

@@ -12,27 +12,27 @@ namespace SpaceRaft
 {
 		public class SpaceRaft: Game
 		{
-				GraphicsDeviceManager graphics;
-				SpriteBatch spriteBatch;
+				private GraphicsDeviceManager graphics;
+				private SpriteBatch spriteBatch;
 
 				// Camera
 				private Camera camera;
-				Effect bgInfinateShader;
+				private Effect bgInfinateShader;
 
 				// Managers
-				BGManager bgManager;
-				UIManager UIManager;
+				private BGManager BGManager;
+				private UIManager UIManager;
 
 				// Textures
-				Texture2D BG1, BG2;
-				Texture2D astroIdleTexture;
-				Texture2D junk1, junk2, junk3, junk4, junk5;
-				Texture2D toolBelt;
+				private Texture2D BG1, BG2;
+				private Texture2D astroIdleTexture;
+				private Texture2D junk1, junk2, junk3, junk4, junk5;
+				private Texture2D toolBelt;
 
 				// Sprite Objects
 				public Astro astro;
-				public List<SpriteHandler> spaceJunk;
-				public List<SpriteHandler> UIElements;
+				private List<SpriteHandler> spaceJunk;
+				private List<SpriteHandler> UIElements;
 
 				public SpaceRaft()
 				{
@@ -65,7 +65,7 @@ namespace SpaceRaft
 						camera=new Camera();
 
 						// Managers
-						bgManager=new BGManager();
+						BGManager=new BGManager();
 						UIManager=new UIManager();
 
 						// Create a new SpriteBatch
@@ -86,8 +86,8 @@ namespace SpaceRaft
 						BG2=Globals.Content.Load<Texture2D>("BG2-320px");
 
 						// Background sprites
-						bgManager.AddLayer(new BGLayer(BG1, 0.1f, 0.5f));
-						bgManager.AddLayer(new BGLayer(BG2, 0.2f, 0.1f));
+						BGManager.AddLayer(new BGLayer(BG1, 0.1f, 0.5f));
+						BGManager.AddLayer(new BGLayer(BG2, 0.2f, 0.1f));
 						//bgManager.AddLayer(new BGLayer(FG1));
 						//bgManager.AddLayer(new BGLayer(FG2));
 
@@ -124,7 +124,7 @@ namespace SpaceRaft
 
 						Globals.SpriteBatch.Begin(effect: bgInfinateShader, samplerState: SamplerState.PointWrap, transformMatrix: camera.Transform);
 
-						bgManager.DrawBackground();
+						BGManager.DrawBackground();
 
 						Globals.SpriteBatch.End();
 
@@ -172,7 +172,7 @@ namespace SpaceRaft
 						camera.UpdateCameraInput(astro.Position);
 
 						//Update BG sprites
-						bgManager.Update();
+						BGManager.Update();
 
 						// Update Junk sprites
 						foreach (var sprite in spaceJunk)

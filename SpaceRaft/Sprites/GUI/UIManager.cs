@@ -8,26 +8,26 @@ namespace SpaceRaft.Sprites.GUI
 {
 		public class UIManager
 		{
-				private readonly List<UIElement> UIElements;
+				private readonly List<UIElement> uiElements;
 				public UIManager()
 				{
-						UIElements=new List<UIElement>();
+						uiElements=new List<UIElement>();
 				}
 
 				public void AddElement(UIElement element)
 				{
-						UIElements.Add(element);
+						uiElements.Add(element);
 				}
 
 				public void DrawElements()
 				{
-						foreach (var element in UIElements)
+						foreach (var element in uiElements)
 								element.Draw();
 
 				}
 				public void Update(Vector2 position)
 				{
-						foreach (var element in UIElements)
+						foreach (var element in uiElements)
 								element.Update(position);
 				}
 		}

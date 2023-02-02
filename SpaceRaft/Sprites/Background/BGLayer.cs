@@ -23,11 +23,5 @@ namespace SpaceRaft.Sprites.Background
 						//Position.X-=20f;
 
 				}
-
-				public virtual void DrawLayer()
-				{
-						if (texture!=null)
-								Globals.SpriteBatch.Draw(texture, Globals.ScreenSize, Color.White);
-				}
 		}
 }

@@ -6,8 +6,9 @@ namespace SpaceRaft.Sprites
 {
 		class Junk: SpriteHandler
 		{
-				private float speed;
 				private Random rand;
+
+				private float speed;
 				public Junk(Texture2D texture) : base(texture)
 				{
 						rand=new Random();

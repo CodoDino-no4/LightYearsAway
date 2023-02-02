@@ -1,20 +1,33 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SpaceRaft.Helpers;
+using System.Linq;
 
 namespace SpaceRaft.Sprites
 {
 		public class Astro: SpriteHandler
 		{
-				public int health
+				private enum state
+				{
+						Idle,
+						Walking,
+						Floating
+				};
+
+				private string State
 				{
 						get; set;
 				}
-				public bool isDead
+				public int Health
+				{
+						get; set;
+				}
+
+				public bool IsDead
 				{
 						get
 						{
-								return health<=0;
+								return Health<=0;
 						}
 				}
 
@@ -22,23 +35,34 @@ namespace SpaceRaft.Sprites
 
 				public Astro(Texture2D texture) : base(texture)
 				{
-						state="Idle";
+						State="Idle";
 						input=new Input();
 				}
 
 				public override void Update()
 				{
-						if (input.Up().Held())
+						Movement ( );
+
+				}
+
+				public void Movement ( )
+				{
+						if (input.Up ( ).Held ( ))
 								Position.Y-=3f;
 
-						if (input.Down().Held())
+						if (input.Down ( ).Held ( ))
 								Position.Y+=3f;
 
-						if (input.Left().Held())
+						if (input.Left ( ).Held ( ))
 								Position.X-=3f;
 
-						if (input.Right().Held())
+						if (input.Right ( ).Held ( ))
 								Position.X+=3f;
+				}
+
+				public void UpdateState ( )
+				{
+
 				}
 		}
 }
