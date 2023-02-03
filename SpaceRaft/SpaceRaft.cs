@@ -105,13 +105,7 @@ namespace SpaceRaft
 						// UI content
 						toolBelt=Globals.Content.Load<Texture2D>("Toolbelt-empty");
 
-						UIManager.AddElement(
-
-								new UIElement(toolBelt)
-								{
-										Position=new Vector2(Globals.ScreenSize.Width/2, Globals.ScreenSize.Height-toolBelt.Height)
-								}
-						);
+						UIManager.AddElement(new Toolbelt(toolBelt));
 
 				}
 				protected override void Draw(GameTime gameTime)
@@ -189,7 +183,7 @@ namespace SpaceRaft
 								sprite.Update();
 
 						//Update UI Sprites
-						UIManager.Update(astro.Position);
+						UIManager.Update();
 
 						Globals.Update(gameTime, graphics);
 						InputHelper.UpdateCleanup();
