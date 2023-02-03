@@ -16,8 +16,7 @@ namespace SpaceRaft.Sprites.GUI
 
 				public void Update(Vector2 position)
 				{
-						Position.X=position.X;
-						Position.Y=position.Y+(Globals.ScreenSize.Height/2-texture.Height);
+
 				}
 
 		}

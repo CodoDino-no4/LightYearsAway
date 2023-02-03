@@ -14,7 +14,7 @@ public class Camera
 				get; protected set;
 		}
 
-		public Matrix FixedTransform
+		public Matrix UITransform
 		{
 				get; protected set;
 		}
@@ -23,7 +23,7 @@ public class Camera
 
 		// Scale
 		public float scale = 1f;
-		private float fixedScale = 1f;
+		private float uiScale = 1f;
 		private float scrollSpeed = 0.1f;
 		private float snapDistance = 0.002f;
 
@@ -98,14 +98,14 @@ public class Camera
 		}
 
 		// Gets the visible camera area Transform
-		public Matrix GetFixedScaleView()
+		public Matrix GetUILayerView()
 		{
-				FixedTransform =
+				UITransform =
 						Matrix.CreateTranslation(-Globals.ScreenSize.Width/2, -Globals.ScreenSize.Height/2, 0f)*
 						Matrix.CreateTranslation(-position.X, -position.Y, 0f)*
-						Matrix.CreateScale(fixedScale, fixedScale, 1f)*
+						Matrix.CreateScale(uiScale, uiScale, 1f)*
 						Matrix.CreateTranslation(Globals.ScreenSize.Width/2, Globals.ScreenSize.Height/2, 0f);
-				return FixedTransform;
+				return UITransform;
 		}
 
 		// Gets the UV Transform

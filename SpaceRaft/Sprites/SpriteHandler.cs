@@ -9,7 +9,6 @@ namespace SpaceRaft.Sprites
 		{
 				public Texture2D texture;
 
-				// Centre of sprite
 				private Vector2 Origin;
 				public Vector2 Position;
 				public Vector2 Velocity;

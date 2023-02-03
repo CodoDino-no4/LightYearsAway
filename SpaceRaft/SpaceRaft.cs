@@ -12,8 +12,10 @@ namespace SpaceRaft
 {
 		public class SpaceRaft: Game
 		{
+				// Graphics
 				private GraphicsDeviceManager graphics;
 				private SpriteBatch spriteBatch;
+				private bool isFullscreen =false;
 
 				// Camera
 				private Camera camera;
@@ -50,7 +52,7 @@ namespace SpaceRaft
 						graphics.SynchronizeWithVerticalRetrace=true;
 						graphics.PreferredBackBufferWidth=2000;
 						graphics.PreferredBackBufferHeight=1000;
-						graphics.IsFullScreen=false;
+						graphics.IsFullScreen=isFullscreen;
 
 						Window.AllowUserResizing=true;
 						Window.Title="SpaceRaft";
@@ -60,6 +62,7 @@ namespace SpaceRaft
 
 						// Set inital viewport 
 						Globals.ScreenSize=graphics.GraphicsDevice.Viewport.Bounds;
+						// x: 0 y: 0 width: 2000 height: 1000
 
 						// Camera
 						camera=new Camera();
@@ -102,20 +105,26 @@ namespace SpaceRaft
 						// UI content
 						toolBelt=Globals.Content.Load<Texture2D>("Toolbelt-empty");
 
-						// UI sprites
-						UIManager.AddElement(new UIElement(toolBelt));
+						UIManager.AddElement(
+
+								new UIElement(toolBelt)
+								{
+										Position=new Vector2(Globals.ScreenSize.Width/2, Globals.ScreenSize.Height-toolBelt.Height)
+								}
+						);
+
 				}
 				protected override void Draw(GameTime gameTime)
 				{
 						// Background colour
 						GraphicsDevice.Clear(Color.SlateGray);
 
-						Matrix projection = Matrix.CreateOrthographicOffCenter(Globals.ScreenSize.X, Globals.ScreenSize.Width, Globals.ScreenSize.Height, Globals.ScreenSize.Y, 0, 1);
+						Matrix projection = Matrix.CreateOrthographicOffCenter(Globals.ScreenSize, 0, 1);
 						Matrix uv_transform = camera.GetUVTransform(BG1, Vector2.Zero, 2);
-						camera.GetFixedScaleView();
 
 						bgInfinateShader.Parameters["view_projection"].SetValue(Matrix.Identity*projection);
 						bgInfinateShader.Parameters["uv_transform"].SetValue(Matrix.Invert(uv_transform));
+
 
 						////////////////////////////////////////////////
 
@@ -147,9 +156,9 @@ namespace SpaceRaft
 						////////////////////////////////////////////////
 
 						/* Begin Spritebatch
-						 * Fixed Position Sprites */
+						 * UI Layer Sprites */
 
-						Globals.SpriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix: camera.FixedTransform);
+						Globals.SpriteBatch.Begin(samplerState: SamplerState.PointWrap);
 
 						// UI Manager
 						UIManager.DrawElements();
