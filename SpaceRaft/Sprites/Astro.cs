@@ -41,6 +41,7 @@ namespace SpaceRaft.Sprites
 
 				public override void Update()
 				{
+
 						Movement ( );
 
 				}
