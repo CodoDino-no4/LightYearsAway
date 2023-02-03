@@ -28,7 +28,7 @@ namespace SpaceRaft.Sprites.Background
 				public void DrawBackground()
 				{
 						foreach (var layer in bgLayers)
-								Globals.SpriteBatch.Draw(layer.texture, Globals.ScreenSize, Color.White);
+								Globals.SpriteBatch.Draw(layer.Texture, Globals.ScreenSize, Color.White);
 				}
 
 		}

@@ -7,21 +7,16 @@ namespace SpaceRaft.Sprites.Background
 {
 		class BGLayer: SpriteHandler
 		{
-				private float moveScale;
-				private float defaultSpeed;
+				private float speed;
 
-				public BGLayer(Texture2D texture, float moveScale, float defaultSpeed = 0.0f) : base(texture)
+				public BGLayer(Texture2D texture) : base(texture)
 				{
-						this.texture=texture;
-						this.moveScale=moveScale;
-						this.defaultSpeed=defaultSpeed;
+						this.Texture=texture;
 				}
 
 				public override void Update()
 				{
-
-						//Position.X-=20f;
-
+						speed=1f;
 				}
 		}
 }

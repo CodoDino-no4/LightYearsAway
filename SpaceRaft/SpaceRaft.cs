@@ -34,7 +34,6 @@ namespace SpaceRaft
 				// Sprite Objects
 				public Astro astro;
 				private List<SpriteHandler> spaceJunk;
-				private List<SpriteHandler> UIElements;
 
 				public SpaceRaft()
 				{
@@ -62,7 +61,6 @@ namespace SpaceRaft
 
 						// Set inital viewport 
 						Globals.ScreenSize=graphics.GraphicsDevice.Viewport.Bounds;
-						// x: 0 y: 0 width: 2000 height: 1000
 
 						// Camera
 						camera=new Camera();
@@ -89,8 +87,8 @@ namespace SpaceRaft
 						BG2=Globals.Content.Load<Texture2D>("BG2-320px");
 
 						// Background sprites
-						BGManager.AddLayer(new BGLayer(BG1, 0.1f, 0.5f));
-						BGManager.AddLayer(new BGLayer(BG2, 0.2f, 0.1f));
+						BGManager.AddLayer(new BGLayer(BG1));
+						BGManager.AddLayer(new BGLayer(BG2));
 						//bgManager.AddLayer(new BGLayer(FG1));
 						//bgManager.AddLayer(new BGLayer(FG2));
 

@@ -7,9 +7,9 @@ namespace SpaceRaft.Sprites
 {
 		public class SpriteHandler : SpriteComponent
 		{
-				public Texture2D texture;
+				public Texture2D Texture;
 
-				private Vector2 Origin;
+				private Vector2 origin;
 				public Vector2 Position;
 				public Vector2 Velocity;
 				protected float Rotation;
@@ -21,15 +21,15 @@ namespace SpaceRaft.Sprites
 
 				public SpriteHandler(Texture2D texture)
 				{
-						this.texture=texture;
-						Origin=new Vector2(texture.Width/2, texture.Height/2);
+						this.Texture=texture;
+						origin=new Vector2(texture.Width/2, texture.Height/2);
 				}
 
 				public Rectangle Rectangle
 				{
 						get
 						{
-								return new Rectangle((int) -texture.Width, (int) -texture.Height, texture.Width, texture.Height);
+								return new Rectangle((int) -Texture.Width, (int) -Texture.Height, Texture.Width, Texture.Height);
 						}
 
 						set
@@ -41,15 +41,15 @@ namespace SpaceRaft.Sprites
 				{
 						get; set;
 				}
-				public override void Update()
-				{
-
-				}
 
 				public override void Draw()
 				{
-						if (texture !=null)
-								Globals.SpriteBatch.Draw(texture, Position, null, Color.White, Rotate, Origin, 2, SpriteEffects.None, 0);
+						if (Texture !=null)
+								Globals.SpriteBatch.Draw(Texture, Position, null, Color.White, Rotate, origin, 2, SpriteEffects.None, 0);
+
+				}
+				public override void Update ( )
+				{
 
 				}
 		}

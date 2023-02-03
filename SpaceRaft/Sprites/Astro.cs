@@ -10,32 +10,20 @@ namespace SpaceRaft.Sprites
 				private enum state
 				{
 						Idle,
-						Walking,
-						Floating
+						Walk,
+						Float
 				};
 
-				private string State
+				private int State
 				{
 						get; set;
-				}
-				public int Health
-				{
-						get; set;
-				}
-
-				public bool IsDead
-				{
-						get
-						{
-								return Health<=0;
-						}
 				}
 
 				private Input input;
 
 				public Astro(Texture2D texture) : base(texture)
 				{
-						State="Idle";
+						State=(int) state.Float;
 						input=new Input();
 				}
 

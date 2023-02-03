@@ -13,12 +13,12 @@ namespace SpaceRaft.Sprites.GUI
 		{
 				public Toolbelt ( Texture2D texture ) : base ( texture )
 				{
-						this.texture=texture;
+						this.Texture=texture;
 				}
 
 				public override void Update ( )
 				{
-						Position=new Vector2 ( Globals.ScreenSize.Width/2, Globals.ScreenSize.Height-texture.Height );
+						Position=new Vector2 ( Globals.ScreenSize.Width/2, Globals.ScreenSize.Height-Texture.Height );
 
 				}
 		}
