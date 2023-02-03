@@ -1,8 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SpaceRaft.Helpers;
 using System.Diagnostics;
 
-namespace SpaceRaft.Sprites
+namespace SpaceRaft.Sprites.Background
 {
 		class BGLayer: SpriteHandler
 		{
@@ -21,12 +22,6 @@ namespace SpaceRaft.Sprites
 
 						//Position.X-=20f;
 
-				}
-
-				public virtual void DrawBGLayer(Camera camera)
-				{
-						if (texture!=null)
-								Globals.SpriteBatch.Draw(texture, Globals.ScreenSize, Color.White);
 				}
 		}
 }

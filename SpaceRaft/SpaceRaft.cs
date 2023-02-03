@@ -1,7 +1,10 @@
 ﻿using Apos.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SpaceRaft.Helpers;
 using SpaceRaft.Sprites;
+using SpaceRaft.Sprites.Background;
+using SpaceRaft.Sprites.GUI;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -9,22 +12,29 @@ namespace SpaceRaft
 {
 		public class SpaceRaft: Game
 		{
-				GraphicsDeviceManager graphics;
-				SpriteBatch spriteBatch;
+				// Graphics
+				private GraphicsDeviceManager graphics;
+				private SpriteBatch spriteBatch;
+				private bool isFullscreen =false;
 
-				public Astro astro;
-				public List<SpriteHandler> spaceJunk;
-
-				Texture2D BG1, BG2;
-				Texture2D astroIdleTexture;
-				Texture2D junk1, junk2, junk3, junk4, junk5;
-				Texture2D toolBelt;
-
-				BGManager bgManager;
-				UIManager UIManager;
-				Effect bgEffect;
-
+				// Camera
 				private Camera camera;
+				private Effect bgInfinateShader;
+
+				// Managers
+				private BGManager BGManager;
+				private UIManager UIManager;
+
+				// Textures
+				private Texture2D BG1, BG2;
+				private Texture2D astroIdleTexture;
+				private Texture2D junk1, junk2, junk3, junk4, junk5;
+				private Texture2D toolBelt;
+
+				// Sprite Objects
+				public Astro astro;
+				private List<SpriteHandler> spaceJunk;
+				private List<SpriteHandler> UIElements;
 
 				public SpaceRaft()
 				{
@@ -39,10 +49,10 @@ namespace SpaceRaft
 				protected override void Initialize()
 				{
 						// Graphics settings
-						graphics.PreferredBackBufferWidth=1500;
-						graphics.PreferredBackBufferHeight=1500;
-						graphics.IsFullScreen=false;
 						graphics.SynchronizeWithVerticalRetrace=true;
+						graphics.PreferredBackBufferWidth=2000;
+						graphics.PreferredBackBufferHeight=1000;
+						graphics.IsFullScreen=isFullscreen;
 
 						Window.AllowUserResizing=true;
 						Window.Title="SpaceRaft";
@@ -52,12 +62,13 @@ namespace SpaceRaft
 
 						// Set inital viewport 
 						Globals.ScreenSize=graphics.GraphicsDevice.Viewport.Bounds;
+						// x: 0 y: 0 width: 2000 height: 1000
 
 						// Camera
 						camera=new Camera();
 
-						// Background manager
-						bgManager=new BGManager(camera);
+						// Managers
+						BGManager=new BGManager();
 						UIManager=new UIManager();
 
 						// Create a new SpriteBatch
@@ -71,15 +82,15 @@ namespace SpaceRaft
 				{
 						InputHelper.Setup(this);
 
-						bgEffect=Content.Load<Effect>("infinite");
+						bgInfinateShader=Content.Load<Effect>("infinite");
 
 						// Background content
 						BG1=Globals.Content.Load<Texture2D>("BG1-320px");
 						BG2=Globals.Content.Load<Texture2D>("BG2-320px");
 
 						// Background sprites
-						bgManager.AddLayer(new BGLayer(BG1, 0.1f, 0.5f));
-						bgManager.AddLayer(new BGLayer(BG2, 0.2f, 0.1f));
+						BGManager.AddLayer(new BGLayer(BG1, 0.1f, 0.5f));
+						BGManager.AddLayer(new BGLayer(BG2, 0.2f, 0.1f));
 						//bgManager.AddLayer(new BGLayer(FG1));
 						//bgManager.AddLayer(new BGLayer(FG2));
 
@@ -91,33 +102,47 @@ namespace SpaceRaft
 
 						LoadJunk();
 
+						// UI content
 						toolBelt=Globals.Content.Load<Texture2D>("Toolbelt-empty");
-						UIManager.AddElement(new UIElement(toolBelt, new Vector2(0,0)));
-						//LoadUI();
+
+						UIManager.AddElement(
+
+								new UIElement(toolBelt)
+								{
+										Position=new Vector2(Globals.ScreenSize.Width/2, Globals.ScreenSize.Height-toolBelt.Height)
+								}
+						);
+
 				}
 				protected override void Draw(GameTime gameTime)
 				{
 						// Background colour
 						GraphicsDevice.Clear(Color.SlateGray);
 
-						Matrix projection = Matrix.CreateOrthographicOffCenter(Globals.ScreenSize.X, Globals.ScreenSize.Width, Globals.ScreenSize.Height, Globals.ScreenSize.Y, 0, 1);
-						Matrix uv_transform = camera.GetUVTransform(BG1, Vector2.Zero, 2f);
+						Matrix projection = Matrix.CreateOrthographicOffCenter(Globals.ScreenSize, 0, 1);
+						Matrix uv_transform = camera.GetUVTransform(BG1, Vector2.Zero, 2);
+						Matrix ui_scale = camera.GetUIScale();
 
-						bgEffect.Parameters["view_projection"].SetValue(Matrix.Identity*projection);
-						bgEffect.Parameters["uv_transform"].SetValue(Matrix.Invert(uv_transform));
+						bgInfinateShader.Parameters["view_projection"].SetValue(Matrix.Identity*projection);
+						bgInfinateShader.Parameters["uv_transform"].SetValue(Matrix.Invert(uv_transform));
 
-						// Begin BG Spritebatch
-						Globals.SpriteBatch.Begin(effect: bgEffect, samplerState: SamplerState.PointWrap, transformMatrix: camera.Transform);
 
-						// Background
-						bgManager.DrawBackground();
+						////////////////////////////////////////////////
 
-						// End BG SpriteBatch
+						/* Begin Spritebatch
+						 * Infinate Background */
+
+						Globals.SpriteBatch.Begin(effect: bgInfinateShader, samplerState: SamplerState.PointWrap, transformMatrix: camera.Transform);
+
+						BGManager.DrawBackground();
+
 						Globals.SpriteBatch.End();
 
-						/////////////////////////////////////////////////////////////////
+						////////////////////////////////////////////////
 
-						// Begin Spritebatch
+						/* Begin Spritebatch
+						 * Variable Position Sprites */
+
 						Globals.SpriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix: camera.Transform);
 
 						// Other Sprites
@@ -125,10 +150,23 @@ namespace SpaceRaft
 								sprite.Draw();
 
 						// Astro
-						astro.DrawAstro();
+						astro.Draw();
 
-						// End SpriteBatch
 						Globals.SpriteBatch.End();
+
+						////////////////////////////////////////////////
+
+						/* Begin Spritebatch
+						 * UI Layer Sprites */
+
+						Globals.SpriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix: ui_scale);
+
+						// UI Manager
+						UIManager.DrawElements();
+
+						Globals.SpriteBatch.End();
+
+						////////////////////////////////////////////////
 
 						base.Draw(gameTime);
 				}
@@ -143,14 +181,15 @@ namespace SpaceRaft
 						// Update the camera
 						camera.UpdateCameraInput(astro.Position);
 
-						Debug.WriteLine(astro.Position);
-
 						//Update BG sprites
-						//bgManager.Update(gameTime);
+						BGManager.Update();
 
 						// Update Junk sprites
 						foreach (var sprite in spaceJunk)
 								sprite.Update();
+
+						//Update UI Sprites
+						UIManager.Update(astro.Position);
 
 						Globals.Update(gameTime, graphics);
 						InputHelper.UpdateCleanup();
@@ -170,7 +209,7 @@ namespace SpaceRaft
 						spaceJunk=new List<SpriteHandler>()
 						{
 								new Junk(junk1)
-								{ Position = new Vector2(50, 50)},
+								{ Position = new Vector2(0, 0)},
 								new Junk(junk2)
 								{ Position = new Vector2(-40, -40)},
 								new Junk(junk3)

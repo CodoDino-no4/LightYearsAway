@@ -5,18 +5,14 @@ using SpaceRaft.Helpers;
 
 namespace SpaceRaft.Sprites
 {
-		public class SpriteHandler
+		public class SpriteHandler : SpriteComponent
 		{
-				protected Texture2D texture;
+				public Texture2D texture;
 
-				// Centre of sprite
-				public Vector2 Origin;
-
+				private Vector2 Origin;
 				public Vector2 Position;
 				public Vector2 Velocity;
-				public float rotation;
-				protected string state;
-				public float layer;
+				protected float Rotation;
 
 				public float RotationVelocity;
 				public float LinearVelocity = 2f;
@@ -35,21 +31,25 @@ namespace SpaceRaft.Sprites
 						{
 								return new Rectangle((int) -texture.Width, (int) -texture.Height, texture.Width, texture.Height);
 						}
+
+						set
+						{
+						}
 				}
 
-				public float Rotation
+				public float Rotate
 				{
 						get; set;
 				}
-				public virtual void Update()
+				public override void Update()
 				{
 
 				}
 
-				public virtual void Draw()
+				public override void Draw()
 				{
 						if (texture !=null)
-								Globals.SpriteBatch.Draw(texture, Position, null, Color.White, Rotation, Origin, 2, SpriteEffects.None, 0);
+								Globals.SpriteBatch.Draw(texture, Position, null, Color.White, Rotate, Origin, 2, SpriteEffects.None, 0);
 
 				}
 		}
