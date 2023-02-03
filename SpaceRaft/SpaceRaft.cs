@@ -121,6 +121,7 @@ namespace SpaceRaft
 
 						Matrix projection = Matrix.CreateOrthographicOffCenter(Globals.ScreenSize, 0, 1);
 						Matrix uv_transform = camera.GetUVTransform(BG1, Vector2.Zero, 2);
+						Matrix ui_scale = camera.GetUIScale();
 
 						bgInfinateShader.Parameters["view_projection"].SetValue(Matrix.Identity*projection);
 						bgInfinateShader.Parameters["uv_transform"].SetValue(Matrix.Invert(uv_transform));
@@ -158,7 +159,7 @@ namespace SpaceRaft
 						/* Begin Spritebatch
 						 * UI Layer Sprites */
 
-						Globals.SpriteBatch.Begin(samplerState: SamplerState.PointWrap);
+						Globals.SpriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix: ui_scale);
 
 						// UI Manager
 						UIManager.DrawElements();

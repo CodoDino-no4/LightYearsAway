@@ -98,14 +98,9 @@ public class Camera
 		}
 
 		// Gets the visible camera area Transform
-		public Matrix GetUILayerView()
+		public Matrix GetUIScale()
 		{
-				UITransform =
-						Matrix.CreateTranslation(-Globals.ScreenSize.Width/2, -Globals.ScreenSize.Height/2, 0f)*
-						Matrix.CreateTranslation(-position.X, -position.Y, 0f)*
-						Matrix.CreateScale(uiScale, uiScale, 1f)*
-						Matrix.CreateTranslation(Globals.ScreenSize.Width/2, Globals.ScreenSize.Height/2, 0f);
-				return UITransform;
+				return Matrix.CreateScale ( uiScale, uiScale, 1f );
 		}
 
 		// Gets the UV Transform
