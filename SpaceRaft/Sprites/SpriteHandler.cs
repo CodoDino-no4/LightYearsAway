@@ -45,7 +45,7 @@ namespace SpaceRaft.Sprites
 				public override void Draw()
 				{
 						if (Texture !=null)
-								Globals.SpriteBatch.Draw(Texture, Position, null, Color.White, Rotate, origin, 2, SpriteEffects.None, 0);
+								Globals.SpriteBatch.Draw(Texture, Position, Rectangle, Color.White, Rotate, origin, 2, SpriteEffects.None, 0);
 
 				}
 				public override void Update ( )

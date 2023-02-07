@@ -31,6 +31,7 @@ namespace SpaceRaft.Sprites
 				{
 
 						Movement ( );
+						Globals.astroPos=Position;
 
 				}
 

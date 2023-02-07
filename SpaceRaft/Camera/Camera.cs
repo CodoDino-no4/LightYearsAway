@@ -23,7 +23,7 @@ public class Camera
 
 		// Scale
 		public float scale = 1f;
-		private float uiScale = 1f;
+		private float uiScale = 2f;
 		private float scrollSpeed = 0.1f;
 		private float snapDistance = 0.002f;
 

@@ -171,7 +171,7 @@ namespace SpaceRaft
 						astro.Update();
 
 						// Update the camera
-						camera.UpdateCameraInput(astro.Position);
+						camera.UpdateCameraInput(Globals.astroPos);
 
 						//Update BG sprites
 						BGManager.Update();

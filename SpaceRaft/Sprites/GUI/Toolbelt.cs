@@ -14,6 +14,7 @@ namespace SpaceRaft.Sprites.GUI
 				public Toolbelt ( Texture2D texture ) : base ( texture )
 				{
 						this.Texture=texture;
+						Rectangle.Inflate ( Rectangle.Width*2, Rectangle.Height*2 );
 				}
 
 				public override void Update ( )
