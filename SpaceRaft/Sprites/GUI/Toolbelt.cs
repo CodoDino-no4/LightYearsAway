@@ -16,13 +16,12 @@ namespace LYA.Sprites.GUI
 				public Toolbelt ( Texture2D texture ) : base ( texture )
 				{
 						this.Texture=texture;
+						scale=4f;
 				}
 
 				public override void Update ( )
 				{
-						Position=new Vector2 ( Globals.ScreenSize.Width/2, Globals.ScreenSize.Height-Texture.Height );
-						Rectangle.Inflate ( Rectangle.Width*2, Rectangle.Height*2 );
-
+						Position=new Vector2 ( Globals.ScreenSize.Width/2, Globals.ScreenSize.Height-Texture.Height*2 );
 				}
 
 				public void AddToBelt (Tool tool )
