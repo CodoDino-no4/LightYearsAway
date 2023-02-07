@@ -1,32 +1,34 @@
 ﻿using Apos.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SpaceRaft.Helpers;
-using SpaceRaft.Sprites;
-using SpaceRaft.Sprites.Background;
-using SpaceRaft.Sprites.GUI;
+using LYA.Helpers;
+using LYA.Sprites;
+using LYA.Sprites.Background;
+using LYA.Sprites.GUI;
 using System.Collections.Generic;
 using System.Diagnostics;
+using LYA.Sprites.Junk;
 
-namespace SpaceRaft
+namespace LYA
 {
-		public class SpaceRaft: Game
+		public class LYA: Game
 		{
 				// Graphics
 				private GraphicsDeviceManager graphics;
 				private SpriteBatch spriteBatch;
-				private bool isFullscreen =false;
+				private bool isFullscreen;
 
 				// Camera
 				private Camera camera;
 				private Effect bgInfinateShader;
 
 				// Managers
-				private BGManager BGManager;
-				private UIManager UIManager;
+				private BGManager bgManager;
+				private UIManager uiManager;
+				private JunkManager junkManager;
 
 				// Textures
-				private Texture2D BG1, BG2;
+				private Texture2D bG1, bG2;
 				private Texture2D astroIdleTexture;
 				private Texture2D junk1, junk2, junk3, junk4, junk5;
 				private Texture2D toolBelt;
@@ -35,7 +37,7 @@ namespace SpaceRaft
 				public Astro astro;
 				private List<SpriteHandler> spaceJunk;
 
-				public SpaceRaft()
+				public LYA()
 				{
 						// Graphics manager
 						graphics=new GraphicsDeviceManager(this);
@@ -48,13 +50,14 @@ namespace SpaceRaft
 				protected override void Initialize()
 				{
 						// Graphics settings
+						isFullscreen=false;
 						graphics.SynchronizeWithVerticalRetrace=true;
 						graphics.PreferredBackBufferWidth=2000;
 						graphics.PreferredBackBufferHeight=1000;
 						graphics.IsFullScreen=isFullscreen;
 
 						Window.AllowUserResizing=true;
-						Window.Title="SpaceRaft";
+						Window.Title="Light-Years Away";
 						IsMouseVisible=true;
 
 						graphics.ApplyChanges();
@@ -66,8 +69,9 @@ namespace SpaceRaft
 						camera=new Camera();
 
 						// Managers
-						BGManager=new BGManager();
-						UIManager=new UIManager();
+						bgManager=new BGManager();
+						uiManager=new UIManager();
+						junkManager=new JunkManager();
 
 						// Create a new SpriteBatch
 						spriteBatch=new SpriteBatch(GraphicsDevice);
@@ -83,12 +87,12 @@ namespace SpaceRaft
 						bgInfinateShader=Content.Load<Effect>("infinite");
 
 						// Background content
-						BG1=Globals.Content.Load<Texture2D>("BG1-320px");
-						BG2=Globals.Content.Load<Texture2D>("BG2-320px");
+						bG1=Globals.Content.Load<Texture2D>("BG1-320px");
+						bG2=Globals.Content.Load<Texture2D>("BG2-320px");
 
 						// Background sprites
-						BGManager.AddLayer(new BGLayer(BG1));
-						BGManager.AddLayer(new BGLayer(BG2));
+						bgManager.AddLayer(new BGLayer(bG1));
+						bgManager.AddLayer(new BGLayer(bG2));
 						//bgManager.AddLayer(new BGLayer(FG1));
 						//bgManager.AddLayer(new BGLayer(FG2));
 
@@ -98,12 +102,33 @@ namespace SpaceRaft
 						// Player Astro sprite
 						astro=new Astro(astroIdleTexture);
 
-						LoadJunk();
+						// Junk content
+						junk1=Globals.Content.Load<Texture2D> ( "junk-1" );
+						junk2=Globals.Content.Load<Texture2D> ( "junk-2" );
+						junk3=Globals.Content.Load<Texture2D> ( "junk-3" );
+						junk4=Globals.Content.Load<Texture2D> ( "junk-4" );
+						junk5=Globals.Content.Load<Texture2D> ( "junk-5" );
+
+						// Junk sprites
+						junkManager.AddJunk (new Junk(junk1));
+						spaceJunk=new List<SpriteHandler> ( )
+						{
+								new Junk(junk1)
+								{ Position = new Vector2(0, 0)},
+								new Junk(junk2)
+								{ Position = new Vector2(-40, -40)},
+								new Junk(junk3)
+								{ Position = new Vector2(40, 0)},
+								new Junk(junk4)
+								{ Position = new Vector2(0, 100)},
+								new Junk(junk5)
+								{ Position = new Vector2(40, 90)}
+						};
 
 						// UI content
 						toolBelt=Globals.Content.Load<Texture2D>("Toolbelt-empty");
 
-						UIManager.AddElement(new Toolbelt(toolBelt));
+						uiManager.AddElement(new Toolbelt(toolBelt));
 
 				}
 				protected override void Draw(GameTime gameTime)
@@ -112,12 +137,11 @@ namespace SpaceRaft
 						GraphicsDevice.Clear(Color.SlateGray);
 
 						Matrix projection = Matrix.CreateOrthographicOffCenter(Globals.ScreenSize, 0, 1);
-						Matrix uv_transform = camera.GetUVTransform(BG1, Vector2.Zero, 2);
+						Matrix bg_transform = camera.GetBgTransform(bG1);
 						Matrix ui_scale = camera.GetUIScale();
 
 						bgInfinateShader.Parameters["view_projection"].SetValue(Matrix.Identity*projection);
-						bgInfinateShader.Parameters["uv_transform"].SetValue(Matrix.Invert(uv_transform));
-
+						bgInfinateShader.Parameters["uv_transform"].SetValue(Matrix.Invert(bg_transform));
 
 						////////////////////////////////////////////////
 
@@ -126,7 +150,7 @@ namespace SpaceRaft
 
 						Globals.SpriteBatch.Begin(effect: bgInfinateShader, samplerState: SamplerState.PointWrap, transformMatrix: camera.Transform);
 
-						BGManager.DrawBackground();
+						bgManager.DrawBackground();
 
 						Globals.SpriteBatch.End();
 
@@ -154,7 +178,7 @@ namespace SpaceRaft
 						Globals.SpriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix: ui_scale);
 
 						// UI Manager
-						UIManager.DrawElements();
+						uiManager.DrawElements();
 
 						Globals.SpriteBatch.End();
 
@@ -171,48 +195,29 @@ namespace SpaceRaft
 						astro.Update();
 
 						// Update the camera
-						camera.UpdateCameraInput(Globals.astroPos);
+						camera.UpdateCameraInput();
 
 						//Update BG sprites
-						BGManager.Update();
+						bgManager.Update();
 
 						// Update Junk sprites
 						foreach (var sprite in spaceJunk)
 								sprite.Update();
 
 						//Update UI Sprites
-						UIManager.Update();
+						uiManager.Update();
+
+						HasQuit ( );
 
 						Globals.Update(gameTime, graphics);
 						InputHelper.UpdateCleanup();
 						base.Update(gameTime);
 				}
 
-				private List<SpriteHandler> LoadJunk()
+				private void HasQuit ( )
 				{
-						// Junk content
-						junk1=Globals.Content.Load<Texture2D>("junk-1");
-						junk2=Globals.Content.Load<Texture2D>("junk-2");
-						junk3=Globals.Content.Load<Texture2D>("junk-3");
-						junk4=Globals.Content.Load<Texture2D>("junk-4");
-						junk5=Globals.Content.Load<Texture2D>("junk-5");
-
-						// Junk sprites
-						spaceJunk=new List<SpriteHandler>()
-						{
-								new Junk(junk1)
-								{ Position = new Vector2(0, 0)},
-								new Junk(junk2)
-								{ Position = new Vector2(-40, -40)},
-								new Junk(junk3)
-								{ Position = new Vector2(40, 0)},
-								new Junk(junk4)
-								{ Position = new Vector2(0, 100)},
-								new Junk(junk5)
-								{ Position = new Vector2(40, 90)}
-						};
-
-						return spaceJunk;
+						if (Input.Quit().Pressed())
+								Exit ( );
 				}
 		}
 }

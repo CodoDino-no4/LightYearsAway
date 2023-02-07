@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SpaceRaft.Helpers;
+using LYA.Helpers;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace SpaceRaft.Sprites.Background
+namespace LYA.Sprites.Background
 {
-		class BGManager
+		public class BGManager
 		{
 				private readonly List<BGLayer> bgLayers;
 

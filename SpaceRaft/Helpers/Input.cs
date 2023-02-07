@@ -1,18 +1,13 @@
 ﻿using Apos.Input;
 using Microsoft.Xna.Framework.Input;
 
-namespace SpaceRaft.Helpers
+namespace LYA.Helpers
 {
-		public class Input
+		public static class Input
 		{
-				private AnyCondition keys;
+				private static AnyCondition keys = new AnyCondition();
 
-				public Input()
-				{
-						keys=new AnyCondition();
-				}
-
-				public ICondition Up()
+				public static ICondition Up()
 				{
 						keys=
 						new AnyCondition(
@@ -22,7 +17,7 @@ namespace SpaceRaft.Helpers
 
 						return keys;
 				}
-				public ICondition Down()
+				public static ICondition Down()
 				{
 						keys=
 						new AnyCondition(
@@ -32,7 +27,7 @@ namespace SpaceRaft.Helpers
 
 						return keys;
 				}
-				public ICondition Left()
+				public static ICondition Left()
 				{
 						keys=
 						new AnyCondition(
@@ -42,7 +37,7 @@ namespace SpaceRaft.Helpers
 
 						return keys;
 				}
-				public ICondition Right()
+				public static ICondition Right()
 				{
 						keys=
 						new AnyCondition(
@@ -53,7 +48,17 @@ namespace SpaceRaft.Helpers
 						return keys;
 				}
 
-				public bool MouseZoom()
+				public static ICondition Quit ( )
+				{
+						keys=
+						new AnyCondition (
+								new KeyboardCondition ( Keys.Escape )
+						);
+
+						return keys;
+				}
+
+				public static bool MouseZoom()
 				{
 						bool zoom = false;
 
@@ -65,7 +70,7 @@ namespace SpaceRaft.Helpers
 						return zoom;
 				}
 
-				public ICondition MiddleMouse()
+				public static ICondition MiddleMouse()
 				{
 						keys=
 						new AnyCondition(
@@ -75,14 +80,14 @@ namespace SpaceRaft.Helpers
 						return keys;
 				}
 
-				public ICondition ZoomIn()
+				public static ICondition ZoomIn()
 				{
 						keys=new AnyCondition(new KeyboardCondition(Keys.OemPlus));
 
 						return keys;
 				}
 
-				public ICondition ZoomOut()
+				public static ICondition ZoomOut()
 				{
 						keys=new AnyCondition(new KeyboardCondition(Keys.OemMinus));
 

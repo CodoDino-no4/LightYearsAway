@@ -1,10 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
+using LYA.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
+using LYA;
 
 // need this so i can scale the whole ui and change it for screen resoltions etc
-namespace SpaceRaft.Sprites.GUI
+namespace LYA.Sprites.GUI
 {
 		public class UIManager
 		{
@@ -28,7 +31,9 @@ namespace SpaceRaft.Sprites.GUI
 				public void Update()
 				{
 						foreach (var element in uiElements)
+						{
 								element.Update();
+						}
 				}
 		}
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SpaceRaft.Sprites
+namespace LYA.Sprites
 {
 		public abstract class SpriteComponent
 		{

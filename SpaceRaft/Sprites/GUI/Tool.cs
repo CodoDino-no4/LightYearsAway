@@ -1,12 +1,17 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SpaceRaft.Sprites.GUI
+namespace LYA.Sprites.GUI
 {
-		public class Tool
+		public class Tool : SpriteHandler
 		{
+				public Tool(Texture2D texture) : base(texture)
+				{
+						this.Texture=texture;
+				}
 		}
 }

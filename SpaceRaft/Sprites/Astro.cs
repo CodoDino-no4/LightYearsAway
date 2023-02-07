@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SpaceRaft.Helpers;
+using LYA.Helpers;
 using System.Linq;
 
-namespace SpaceRaft.Sprites
+namespace LYA.Sprites
 {
 		public class Astro: SpriteHandler
 		{
@@ -19,12 +19,10 @@ namespace SpaceRaft.Sprites
 						get; set;
 				}
 
-				private Input input;
 
 				public Astro(Texture2D texture) : base(texture)
 				{
 						State=(int) state.Float;
-						input=new Input();
 				}
 
 				public override void Update()
@@ -37,20 +35,25 @@ namespace SpaceRaft.Sprites
 
 				public void Movement ( )
 				{
-						if (input.Up ( ).Held ( ))
+						if (Input.Up ( ).Held ( ))
 								Position.Y-=3f;
 
-						if (input.Down ( ).Held ( ))
+						if (Input.Down ( ).Held ( ))
 								Position.Y+=3f;
 
-						if (input.Left ( ).Held ( ))
+						if (Input.Left ( ).Held ( ))
 								Position.X-=3f;
 
-						if (input.Right ( ).Held ( ))
+						if (Input.Right ( ).Held ( ))
 								Position.X+=3f;
 				}
 
 				public void UpdateState ( )
+				{
+
+				}
+
+				public void placeTile ( )
 				{
 
 				}

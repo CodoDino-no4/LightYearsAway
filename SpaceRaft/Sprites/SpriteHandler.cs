@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using SpaceRaft.Helpers;
+using LYA.Helpers;
 
-namespace SpaceRaft.Sprites
+namespace LYA.Sprites
 {
 		public class SpriteHandler : SpriteComponent
 		{
@@ -11,19 +11,16 @@ namespace SpaceRaft.Sprites
 
 				private Vector2 origin;
 				public Vector2 Position;
-				public Vector2 Velocity;
-				protected float Rotation;
-
 				public float RotationVelocity;
-				public float LinearVelocity = 2f;
-
-				public bool IsRemoved = false;
+				protected float Rotation;
+				public bool InScene;
 
 				public SpriteHandler(Texture2D texture)
 				{
 						this.Texture=texture;
 						origin=new Vector2(texture.Width/2, texture.Height/2);
-				}
+						InScene=true;
+				} 
 
 				public Rectangle Rectangle
 				{

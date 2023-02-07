@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace SpaceRaft.Helpers
+namespace LYA.Helpers
 {
 		public static class Globals
 		{
