@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Text;
 using LYA;
 
-// need this so i can scale the whole ui and change it for screen resoltions etc
 namespace LYA.Sprites.GUI
 {
 		public class UIManager

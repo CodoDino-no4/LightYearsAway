@@ -11,7 +11,7 @@ namespace LYA.Sprites
 
 				private Vector2 origin;
 				public Vector2 Position;
-				public float scale;
+				public float Scale;
 				public float RotationVelocity;
 				protected float Rotation;
 				public bool InScene;
@@ -20,7 +20,7 @@ namespace LYA.Sprites
 				{
 						this.Texture=texture;
 						origin=new Vector2(texture.Width/2, texture.Height/2);
-						scale=2f;
+						Scale=2f;
 						InScene=true;
 				} 
 
@@ -36,15 +36,10 @@ namespace LYA.Sprites
 						}
 				}
 
-				public float Rotate
-				{
-						get; set;
-				}
-
 				public override void Draw()
 				{
 						if (Texture !=null)
-								Globals.SpriteBatch.Draw(Texture, Position, Rectangle, Color.White, Rotate, origin, scale, SpriteEffects.None, 0);
+								Globals.SpriteBatch.Draw(Texture, Position, Rectangle, Color.White, Rotation, origin, Scale, SpriteEffects.None, 0);
 
 				}
 				public override void Update ( )

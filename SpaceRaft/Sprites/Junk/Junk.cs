@@ -27,6 +27,8 @@ namespace LYA.Sprites.Junk
 						Rotation-=MathHelper.ToRadians ( RotationVelocity );
 
 
+
+
 				}
 		}
 }

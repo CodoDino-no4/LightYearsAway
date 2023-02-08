@@ -5,7 +5,6 @@ using Microsoft.Xna.Framework.Input;
 using LYA.Helpers;
 using System;
 using System.Diagnostics;
-using MonoGame.Extended.Tweening;
 
 public class Camera
 {
@@ -98,7 +97,7 @@ public class Camera
 						Matrix.CreateScale(1f/Globals.ScreenSize.Width, 1f/Globals.ScreenSize.Height, 1f);
 		}
 
-		// Gets the UI scale
+		// Gets the UI Scale
 		public Matrix GetUIScale()
 		{
 				return Matrix.CreateScale ( uiScale, uiScale, 1f );

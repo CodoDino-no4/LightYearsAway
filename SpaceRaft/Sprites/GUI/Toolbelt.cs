@@ -16,7 +16,7 @@ namespace LYA.Sprites.GUI
 				public Toolbelt ( Texture2D texture ) : base ( texture )
 				{
 						this.Texture=texture;
-						scale=4f;
+						Scale=4f;
 				}
 
 				public override void Update ( )
