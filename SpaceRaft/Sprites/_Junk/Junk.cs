@@ -22,7 +22,8 @@ namespace LYA.Sprites.Junk
 
 				public void JunkMovement()
 				{
-						RotationVelocity=rand.Next( 2, 7 );						speed=rand.Next( 1, 5 )/8;
+						RotationVelocity=rand.Next( 2, 7 );
+						speed=rand.Next( 1, 5 )/8;
 						rotation-=MathHelper.ToRadians( RotationVelocity );
 
 

@@ -23,11 +23,6 @@ namespace LYA.Helpers
 						get; set;
 				}
 
-				public static Vector2 astroPos
-				{
-						get; set;
-				}
-
 				public static void Update( GameTime gameTime, GraphicsDeviceManager graphics )
 				{
 						ElapsedSeconds=(float) gameTime.ElapsedGameTime.TotalSeconds;

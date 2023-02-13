@@ -1,6 +1,5 @@
 ﻿using LYA.Helpers;
 using LYA.Sprites;
-using LYA.Sprites.Background;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
@@ -15,7 +14,7 @@ namespace LYA.Managers
 						bgLayers=new List<SpriteHandler>();
 				}
 
-				public  void AddElement( SpriteHandler element )
+				public void AddElement( SpriteHandler element )
 				{
 						bgLayers.Add( element );
 				}

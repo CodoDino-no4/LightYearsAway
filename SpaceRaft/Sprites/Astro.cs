@@ -1,5 +1,4 @@
-﻿using LYA.Helpers;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 
 namespace LYA.Sprites
 {
@@ -25,25 +24,9 @@ namespace LYA.Sprites
 
 				public override void Update()
 				{
+						//Globals.astroPosX=position.X;
+						//Globals.astroPosY=position.Y;
 
-						Movement();
-						Globals.astroPos=Position;
-
-				}
-
-				public void Movement()
-				{
-						if (Input.Up().Held())
-								Position.Y-=3f;
-
-						if (Input.Down().Held())
-								Position.Y+=3f;
-
-						if (Input.Left().Held())
-								Position.X-=3f;
-
-						if (Input.Right().Held())
-								Position.X+=3f;
 				}
 
 				public void UpdateState()
@@ -51,11 +34,5 @@ namespace LYA.Sprites
 
 				}
 
-				public void KeyPresses()
-				{
-						//if (Input.Place().Pressed())
-						//		PlaceTile();
-
-				}
 		}
 }

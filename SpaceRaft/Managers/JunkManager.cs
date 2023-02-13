@@ -1,6 +1,5 @@
 ﻿
 using LYA.Sprites;
-using LYA.Sprites.Junk;
 using System.Collections.Generic;
 
 namespace LYA.Managers
@@ -13,7 +12,7 @@ namespace LYA.Managers
 						junkInScene=new List<SpriteHandler>();
 				}
 
-				public void AddElement( SpriteHandler element)
+				public void AddElement( SpriteHandler element )
 				{
 						junkInScene.Add( element );
 				}

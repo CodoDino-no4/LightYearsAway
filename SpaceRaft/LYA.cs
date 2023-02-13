@@ -1,4 +1,6 @@
 ﻿using Apos.Input;
+using LYA._Camera;
+using LYA.Commands;
 using LYA.Helpers;
 using LYA.Managers;
 using LYA.Sprites;
@@ -8,6 +10,7 @@ using LYA.Sprites.Junk;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace LYA
 {
@@ -36,6 +39,9 @@ namespace LYA
 				// Sprite Objects
 				public Astro astro;
 				private List<SpriteHandler> spaceJunk;
+
+				InputHandler inputHandler;
+				CommandManager commandManager;
 
 				public LYA()
 				{
@@ -72,6 +78,10 @@ namespace LYA
 						bgManager=new BGManager();
 						uiManager=new UIManager();
 						junkManager=new JunkManager();
+
+						inputHandler=new InputHandler();
+
+						commandManager=new CommandManager();
 
 						// Create a new SpriteBatch
 						spriteBatch=new SpriteBatch( GraphicsDevice );
@@ -157,7 +167,7 @@ namespace LYA
 						////////////////////////////////////////////////
 
 						/* Begin Spritebatch
-						 * Variable Position Sprites */
+						 * Variable position Sprites */
 
 						Globals.SpriteBatch.Begin( samplerState: SamplerState.PointWrap, transformMatrix: camera.Transform );
 
@@ -191,11 +201,8 @@ namespace LYA
 				{
 						InputHelper.UpdateSetup();
 
-						// Update Astro
-						astro.Update();
-
 						// Update the camera
-						camera.UpdateCameraInput();
+						camera.UpdateCameraInput( inputHandler.PlayerCameraMovement( astro ) );
 
 						//Update BG sprites
 						bgManager.Update();
@@ -216,7 +223,7 @@ namespace LYA
 
 				private void HasQuit()
 				{
-						if (Input.Quit().Pressed())
+						if (InputBindings.Quit().Pressed())
 								Exit();
 				}
 		}

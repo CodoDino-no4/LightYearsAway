@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace LYA.Helpers
 {
-		public static class Input
+		public static class InputBindings
 		{
 				private static AnyCondition keys = new AnyCondition();
 
@@ -58,7 +58,7 @@ namespace LYA.Helpers
 						return keys;
 				}
 
-				public static bool MouseZoom()
+				public static bool ZoomAny()
 				{
 						bool zoom = false;
 
@@ -70,7 +70,7 @@ namespace LYA.Helpers
 						return zoom;
 				}
 
-				public static ICondition MiddleMouse()
+				public static ICondition unusedMiddleMouse()
 				{
 						keys=
 						new AnyCondition(
