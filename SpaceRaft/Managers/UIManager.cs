@@ -1,12 +1,7 @@
-﻿using Microsoft.Xna.Framework;
-using LYA.Helpers;
-using System;
+﻿using LYA.Sprites;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-using LYA;
 
-namespace LYA.Sprites.GUI
+namespace LYA.Managers
 {
 		public class UIManager
 		{
@@ -16,12 +11,12 @@ namespace LYA.Sprites.GUI
 						uiElements=new List<SpriteHandler>();
 				}
 
-				public void AddElement(SpriteHandler element)
+				public void AddElement( SpriteHandler element )
 				{
-						uiElements.Add(element);
+						uiElements.Add( element );
 				}
 
-				public void DrawElements()
+				public void Draw()
 				{
 						foreach (var element in uiElements)
 								element.Draw();
@@ -30,9 +25,7 @@ namespace LYA.Sprites.GUI
 				public void Update()
 				{
 						foreach (var element in uiElements)
-						{
 								element.Update();
-						}
 				}
 		}
 }

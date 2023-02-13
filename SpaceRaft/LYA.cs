@@ -1,17 +1,17 @@
 ﻿using Apos.Input;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using LYA.Helpers;
+using LYA.Managers;
 using LYA.Sprites;
 using LYA.Sprites.Background;
 using LYA.Sprites.GUI;
-using System.Collections.Generic;
-using System.Diagnostics;
 using LYA.Sprites.Junk;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace LYA
 {
-		public class LYA: Game
+		public class LYA : Game
 		{
 				// Graphics
 				private GraphicsDeviceManager graphics;
@@ -28,7 +28,7 @@ namespace LYA
 				private JunkManager junkManager;
 
 				// Textures
-				private Texture2D bG1, bG2;
+				private Texture2D bg1, bg2;
 				private Texture2D astroIdleTexture;
 				private Texture2D junk1, junk2, junk3, junk4, junk5;
 				private Texture2D toolBelt;
@@ -40,7 +40,7 @@ namespace LYA
 				public LYA()
 				{
 						// Graphics manager
-						graphics=new GraphicsDeviceManager(this);
+						graphics=new GraphicsDeviceManager( this );
 
 						// Content directory
 						Content.RootDirectory="Content";
@@ -74,7 +74,7 @@ namespace LYA
 						junkManager=new JunkManager();
 
 						// Create a new SpriteBatch
-						spriteBatch=new SpriteBatch(GraphicsDevice);
+						spriteBatch=new SpriteBatch( GraphicsDevice );
 						Globals.SpriteBatch=spriteBatch;
 
 						base.Initialize();
@@ -82,36 +82,36 @@ namespace LYA
 
 				protected override void LoadContent()
 				{
-						InputHelper.Setup(this);
+						InputHelper.Setup( this );
 
-						bgInfinateShader=Content.Load<Effect>("infinite");
+						bgInfinateShader=Content.Load<Effect>( "infinite" );
 
 						// Background content
-						bG1=Globals.Content.Load<Texture2D>("BG1-320px");
-						bG2=Globals.Content.Load<Texture2D>("BG2-320px");
+						bg1=Globals.Content.Load<Texture2D>( "BG1-320px" );
+						bg2=Globals.Content.Load<Texture2D>( "BG2-320px" );
 
 						// Background sprites
-						bgManager.AddLayer(new BGLayer(bG1));
-						bgManager.AddLayer(new BGLayer(bG2));
+						bgManager.AddElement( new BGLayer( bg1 ) );
+						bgManager.AddElement( new BGLayer( bg2 ) );
 						//bgManager.AddLayer(new BGLayer(FG1));
 						//bgManager.AddLayer(new BGLayer(FG2));
 
 						// Player Astro content
-						astroIdleTexture=Globals.Content.Load<Texture2D>("Astro-Idle");
+						astroIdleTexture=Globals.Content.Load<Texture2D>( "Astro-Idle" );
 
 						// Player Astro sprite
-						astro=new Astro(astroIdleTexture);
+						astro=new Astro( astroIdleTexture );
 
 						// Junk content
-						junk1=Globals.Content.Load<Texture2D> ( "junk-1" );
-						junk2=Globals.Content.Load<Texture2D> ( "junk-2" );
-						junk3=Globals.Content.Load<Texture2D> ( "junk-3" );
-						junk4=Globals.Content.Load<Texture2D> ( "junk-4" );
-						junk5=Globals.Content.Load<Texture2D> ( "junk-5" );
+						junk1=Globals.Content.Load<Texture2D>( "junk-1" );
+						junk2=Globals.Content.Load<Texture2D>( "junk-2" );
+						junk3=Globals.Content.Load<Texture2D>( "junk-3" );
+						junk4=Globals.Content.Load<Texture2D>( "junk-4" );
+						junk5=Globals.Content.Load<Texture2D>( "junk-5" );
 
 						// Junk sprites
-						junkManager.AddJunk (new Junk(junk1));
-						spaceJunk=new List<SpriteHandler> ( )
+						junkManager.AddElement( new Junk( junk1 ) );
+						spaceJunk=new List<SpriteHandler>()
 						{
 								new Junk(junk1)
 								{ Position = new Vector2(0, 0)},
@@ -126,31 +126,31 @@ namespace LYA
 						};
 
 						// UI content
-						toolBelt=Globals.Content.Load<Texture2D>("Toolbelt-empty");
+						toolBelt=Globals.Content.Load<Texture2D>( "Toolbelt-empty" );
 
-						uiManager.AddElement(new Toolbelt(toolBelt));
+						uiManager.AddElement( new Toolbelt( toolBelt ) );
 
 				}
-				protected override void Draw(GameTime gameTime)
+				protected override void Draw( GameTime gameTime )
 				{
 						// Background colour
-						GraphicsDevice.Clear(Color.SlateGray);
+						GraphicsDevice.Clear( Color.SlateGray );
 
 						Matrix projection = Matrix.CreateOrthographicOffCenter(Globals.ScreenSize, 0, 1);
-						Matrix bg_transform = camera.GetBgTransform(bG1);
+						Matrix bg_transform = camera.GetBgTransform(bg1);
 						Matrix ui_scale = camera.GetUIScale();
 
-						bgInfinateShader.Parameters["view_projection"].SetValue(Matrix.Identity*projection);
-						bgInfinateShader.Parameters["uv_transform"].SetValue(Matrix.Invert(bg_transform));
+						bgInfinateShader.Parameters[ "view_projection" ].SetValue( Matrix.Identity*projection );
+						bgInfinateShader.Parameters[ "uv_transform" ].SetValue( Matrix.Invert( bg_transform ) );
 
 						////////////////////////////////////////////////
 
 						/* Begin Spritebatch
 						 * Infinate Background */
 
-						Globals.SpriteBatch.Begin(effect: bgInfinateShader, samplerState: SamplerState.PointWrap, transformMatrix: camera.Transform);
+						Globals.SpriteBatch.Begin( effect: bgInfinateShader, samplerState: SamplerState.PointWrap, transformMatrix: camera.Transform );
 
-						bgManager.DrawBackground();
+						bgManager.Draw();
 
 						Globals.SpriteBatch.End();
 
@@ -159,7 +159,7 @@ namespace LYA
 						/* Begin Spritebatch
 						 * Variable Position Sprites */
 
-						Globals.SpriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix: camera.Transform);
+						Globals.SpriteBatch.Begin( samplerState: SamplerState.PointWrap, transformMatrix: camera.Transform );
 
 						// Other Sprites
 						foreach (var sprite in spaceJunk)
@@ -175,19 +175,19 @@ namespace LYA
 						/* Begin Spritebatch
 						 * UI Layer Sprites */
 
-						Globals.SpriteBatch.Begin(samplerState: SamplerState.PointWrap, transformMatrix: ui_scale);
+						Globals.SpriteBatch.Begin( samplerState: SamplerState.PointWrap, transformMatrix: ui_scale );
 
 						// UI Manager
-						uiManager.DrawElements();
+						uiManager.Draw();
 
 						Globals.SpriteBatch.End();
 
 						////////////////////////////////////////////////
 
-						base.Draw(gameTime);
+						base.Draw( gameTime );
 				}
 
-				protected override void Update(GameTime gameTime)
+				protected override void Update( GameTime gameTime )
 				{
 						InputHelper.UpdateSetup();
 
@@ -207,17 +207,17 @@ namespace LYA
 						//Update UI Sprites
 						uiManager.Update();
 
-						HasQuit ( );
+						HasQuit();
 
-						Globals.Update(gameTime, graphics);
+						Globals.Update( gameTime, graphics );
 						InputHelper.UpdateCleanup();
-						base.Update(gameTime);
+						base.Update( gameTime );
 				}
 
-				private void HasQuit ( )
+				private void HasQuit()
 				{
 						if (Input.Quit().Pressed())
-								Exit ( );
+								Exit();
 				}
 		}
 }

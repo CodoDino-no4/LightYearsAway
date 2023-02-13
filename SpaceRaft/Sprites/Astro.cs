@@ -1,11 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LYA.Helpers;
 using Microsoft.Xna.Framework.Graphics;
-using LYA.Helpers;
-using System.Linq;
 
 namespace LYA.Sprites
 {
-		public class Astro: SpriteHandler
+		public class Astro : SpriteHandler
 		{
 				private enum state
 				{
@@ -14,13 +12,13 @@ namespace LYA.Sprites
 						Float
 				};
 
-				private int State
+				public int State
 				{
 						get; set;
 				}
 
 
-				public Astro(Texture2D texture) : base(texture)
+				public Astro( Texture2D texture ) : base( texture )
 				{
 						State=(int) state.Float;
 				}
@@ -28,33 +26,35 @@ namespace LYA.Sprites
 				public override void Update()
 				{
 
-						Movement ( );
+						Movement();
 						Globals.astroPos=Position;
 
 				}
 
-				public void Movement ( )
+				public void Movement()
 				{
-						if (Input.Up ( ).Held ( ))
+						if (Input.Up().Held())
 								Position.Y-=3f;
 
-						if (Input.Down ( ).Held ( ))
+						if (Input.Down().Held())
 								Position.Y+=3f;
 
-						if (Input.Left ( ).Held ( ))
+						if (Input.Left().Held())
 								Position.X-=3f;
 
-						if (Input.Right ( ).Held ( ))
+						if (Input.Right().Held())
 								Position.X+=3f;
 				}
 
-				public void UpdateState ( )
+				public void UpdateState()
 				{
 
 				}
 
-				public void placeTile ( )
+				public void KeyPresses()
 				{
+						//if (Input.Place().Pressed())
+						//		PlaceTile();
 
 				}
 		}

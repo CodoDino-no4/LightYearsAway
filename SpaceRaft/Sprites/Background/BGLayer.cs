@@ -1,15 +1,12 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using LYA.Helpers;
-using System.Diagnostics;
+﻿using Microsoft.Xna.Framework.Graphics;
 
 namespace LYA.Sprites.Background
 {
-		public class BGLayer: SpriteHandler
+		public class BGLayer : SpriteHandler
 		{
 				private float parallaxSpeed;
 
-				public BGLayer(Texture2D texture) : base(texture)
+				public BGLayer( Texture2D texture ) : base( texture )
 				{
 						this.Texture=texture;
 				}

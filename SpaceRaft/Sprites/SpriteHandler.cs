@@ -1,7 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LYA.Helpers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using LYA.Helpers;
 
 namespace LYA.Sprites
 {
@@ -13,22 +12,22 @@ namespace LYA.Sprites
 				public Vector2 Position;
 				public float Scale;
 				public float RotationVelocity;
-				protected float Rotation;
+				protected float rotation;
 				public bool InScene;
 
-				public SpriteHandler(Texture2D texture)
+				public SpriteHandler( Texture2D texture )
 				{
 						this.Texture=texture;
-						origin=new Vector2(texture.Width/2, texture.Height/2);
+						origin=new Vector2( texture.Width/2, texture.Height/2 );
 						Scale=2f;
 						InScene=true;
-				} 
+				}
 
 				public Rectangle Rectangle
 				{
 						get
 						{
-								return new Rectangle((int) -Texture.Width, (int) -Texture.Height, Texture.Width, Texture.Height);
+								return new Rectangle( (int) -Texture.Width, (int) -Texture.Height, Texture.Width, Texture.Height );
 						}
 
 						set
@@ -38,11 +37,11 @@ namespace LYA.Sprites
 
 				public override void Draw()
 				{
-						if (Texture !=null)
-								Globals.SpriteBatch.Draw(Texture, Position, Rectangle, Color.White, Rotation, origin, Scale, SpriteEffects.None, 0);
+						if (Texture!=null)
+								Globals.SpriteBatch.Draw( Texture, Position, Rectangle, Color.White, rotation, origin, Scale, SpriteEffects.None, 0 );
 
 				}
-				public override void Update ( )
+				public override void Update()
 				{
 
 				}

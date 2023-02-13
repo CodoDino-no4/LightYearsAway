@@ -11,8 +11,8 @@ namespace LYA.Helpers
 				{
 						keys=
 						new AnyCondition(
-								new KeyboardCondition(Keys.Up),
-								new KeyboardCondition(Keys.W)
+								new KeyboardCondition( Keys.Up ),
+								new KeyboardCondition( Keys.W )
 						);
 
 						return keys;
@@ -21,8 +21,8 @@ namespace LYA.Helpers
 				{
 						keys=
 						new AnyCondition(
-								new KeyboardCondition(Keys.Down),
-								new KeyboardCondition(Keys.S)
+								new KeyboardCondition( Keys.Down ),
+								new KeyboardCondition( Keys.S )
 						);
 
 						return keys;
@@ -31,8 +31,8 @@ namespace LYA.Helpers
 				{
 						keys=
 						new AnyCondition(
-								new KeyboardCondition(Keys.Left),
-								new KeyboardCondition(Keys.A)
+								new KeyboardCondition( Keys.Left ),
+								new KeyboardCondition( Keys.A )
 						);
 
 						return keys;
@@ -41,18 +41,18 @@ namespace LYA.Helpers
 				{
 						keys=
 						new AnyCondition(
-								new KeyboardCondition(Keys.Right),
-								new KeyboardCondition(Keys.D)
+								new KeyboardCondition( Keys.Right ),
+								new KeyboardCondition( Keys.D )
 						);
 
 						return keys;
 				}
 
-				public static ICondition Quit ( )
+				public static ICondition Quit()
 				{
 						keys=
-						new AnyCondition (
-								new KeyboardCondition ( Keys.Escape )
+						new AnyCondition(
+								new KeyboardCondition( Keys.Escape )
 						);
 
 						return keys;
@@ -74,7 +74,7 @@ namespace LYA.Helpers
 				{
 						keys=
 						new AnyCondition(
-								new MouseCondition(MouseButton.MiddleButton)
+								new MouseCondition( MouseButton.MiddleButton )
 								);
 
 						return keys;
@@ -82,14 +82,24 @@ namespace LYA.Helpers
 
 				public static ICondition ZoomIn()
 				{
-						keys=new AnyCondition(new KeyboardCondition(Keys.OemPlus));
+						keys=new AnyCondition( new KeyboardCondition( Keys.OemPlus ) );
 
 						return keys;
 				}
 
 				public static ICondition ZoomOut()
 				{
-						keys=new AnyCondition(new KeyboardCondition(Keys.OemMinus));
+						keys=new AnyCondition( new KeyboardCondition( Keys.OemMinus ) );
+
+						return keys;
+				}
+
+				public static ICondition Place()
+				{
+						keys=
+						new AnyCondition(
+								new KeyboardCondition( Keys.E )
+						);
 
 						return keys;
 				}

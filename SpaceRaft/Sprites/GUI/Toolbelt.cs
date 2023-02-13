@@ -1,11 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LYA.Helpers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using LYA.Helpers;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LYA.Sprites.GUI
 {
@@ -13,20 +9,20 @@ namespace LYA.Sprites.GUI
 		{
 				public List<Tool> tools= new List<Tool>();
 
-				public Toolbelt ( Texture2D texture ) : base ( texture )
+				public Toolbelt( Texture2D texture ) : base( texture )
 				{
 						this.Texture=texture;
 						Scale=4f;
 				}
 
-				public override void Update ( )
+				public override void Update()
 				{
-						Position=new Vector2 ( Globals.ScreenSize.Width/2, Globals.ScreenSize.Height-Texture.Height*2 );
+						Position=new Vector2( Globals.ScreenSize.Width/2, Globals.ScreenSize.Height-Texture.Height*2 );
 				}
 
-				public void AddToBelt (Tool tool )
+				public void AddToBelt( Tool tool )
 				{
-						tools.Add ( tool );
+						tools.Add( tool );
 				}
 		}
 }
