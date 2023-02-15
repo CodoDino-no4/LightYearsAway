@@ -5,17 +5,18 @@ namespace LYA.Commands
 {
 		public class MoveLeftCommand : CommandManager.ICommand
 		{
-				private Vector2 Position;
+				public float positionX
+				{
+						get; set;
+				}
 				public MoveLeftCommand( SpriteHandler astro ) : base()
 				{
-						Position=astro.Position;
+						positionX=astro.Position.X;
 				}
 
-				public Vector2 Execute()
+				public void Execute()
 				{
-						Position.X-=3f;
-
-						return Position;
+						positionX-=3f;
 				}
 		}
 }

@@ -7,6 +7,7 @@ using LYA.Sprites;
 using LYA.Sprites.Background;
 using LYA.Sprites.GUI;
 using LYA.Sprites.Junk;
+using LYA.Sprites.ShipTile;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -32,12 +33,14 @@ namespace LYA
 
 				// Textures
 				private Texture2D bg1, bg2;
-				private Texture2D astroIdleTexture;
+				private Texture2D astroIdleTex;
 				private Texture2D junk1, junk2, junk3, junk4, junk5;
 				private Texture2D toolBelt;
+				private Texture2D foundationTex;
 
 				// Sprite Objects
 				public Astro astro;
+				private Tile foundationTile;
 				private List<SpriteHandler> spaceJunk;
 
 				InputHandler inputHandler;
@@ -107,10 +110,10 @@ namespace LYA
 						//bgManager.AddLayer(new BGLayer(FG2));
 
 						// Player Astro content
-						astroIdleTexture=Globals.Content.Load<Texture2D>( "Astro-Idle" );
+						astroIdleTex=Globals.Content.Load<Texture2D>( "Astro-Idle" );
 
 						// Player Astro sprite
-						astro=new Astro( astroIdleTexture );
+						astro=new Astro( astroIdleTex );
 
 						// Junk content
 						junk1=Globals.Content.Load<Texture2D>( "junk-1" );
@@ -136,9 +139,15 @@ namespace LYA
 						};
 
 						// UI content
-						toolBelt=Globals.Content.Load<Texture2D>( "Toolbelt-empty" );
+						toolBelt=Globals.Content.Load<Texture2D>( "toolbelt-empty" );
 
 						uiManager.AddElement( new Toolbelt( toolBelt ) );
+
+						// Ship Foundation content
+						foundationTex=Globals.Content.Load<Texture2D>( "foundation" );
+
+						// Ship Foundation sprite
+						foundationTile=new Tile(foundationTex);
 
 				}
 				protected override void Draw( GameTime gameTime )
@@ -174,6 +183,8 @@ namespace LYA
 						// Other Sprites
 						foreach (var sprite in spaceJunk)
 								sprite.Draw();
+
+						foundationTile.Draw();
 
 						// Astro
 						astro.Draw();

@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LYA.Sprites
 {
-		public class SpriteHandler : SpriteComponent
+		public class SpriteHandler
 		{
 				public Texture2D Texture;
 
@@ -35,13 +35,13 @@ namespace LYA.Sprites
 						}
 				}
 
-				public override void Draw()
+				public virtual void Draw()
 				{
 						if (Texture!=null)
 								Globals.SpriteBatch.Draw( Texture, Position, Rectangle, Color.White, rotation, origin, Scale, SpriteEffects.None, 0 );
 
 				}
-				public override void Update()
+				public virtual void Update()
 				{
 
 				}

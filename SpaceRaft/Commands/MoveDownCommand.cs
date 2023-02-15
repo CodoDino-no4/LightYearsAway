@@ -5,17 +5,20 @@ namespace LYA.Commands
 {
 		public class MoveDownCommand : CommandManager.ICommand
 		{
-				public Vector2 Position;
-				public MoveDownCommand( SpriteHandler astro ) : base()
+				public float positionY
 				{
-						Position=astro.Position;
+						get; set;
 				}
 
-				public Vector2 Execute()
+				public MoveDownCommand( SpriteHandler astro ) : base()
 				{
-						Position.Y+=3f;
+						positionY=astro.Position.Y;
+				}
 
-						return Position;
+				public void Execute()
+				{
+						positionY +=3f;
+
 				}
 		}
 }

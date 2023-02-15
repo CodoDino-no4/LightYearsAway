@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LYA.Sprites;
+using Microsoft.Xna.Framework;
 
 namespace LYA.Commands
 {
@@ -6,7 +7,7 @@ namespace LYA.Commands
 		{
 				public interface ICommand
 				{
-						protected Vector2 Execute();
+						protected void Execute();
 
 				}
 				private static CommandManager Instance

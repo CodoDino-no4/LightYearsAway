@@ -5,17 +5,19 @@ namespace LYA.Commands
 {
 		public class MoveUpCommand : CommandManager.ICommand
 		{
-				private Vector2 position;
+				public float positionY
+				{
+						get; set;
+				}
 				public MoveUpCommand( SpriteHandler astro ) : base()
 				{
-						position=astro.Position;
+						positionY=astro.Position.Y;
 				}
 
-				public Vector2 Execute()
+				public void Execute()
 				{
-						position.Y-=3f;
-
-						return position;
+						positionY-=3f;
 				}
+
 		}
 }

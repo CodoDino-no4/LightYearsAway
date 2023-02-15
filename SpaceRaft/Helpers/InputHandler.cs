@@ -15,36 +15,42 @@ namespace LYA.Helpers
 						if (InputBindings.Up().Held())
 						{
 								MoveUpCommand moveUp = new MoveUpCommand(astro);
-								astro.Position=moveUp.Execute();
+								moveUp.Execute();
+								astro.Position.Y=moveUp.positionY;
 						}
 
 						if (InputBindings.Down().Held())
 						{
 								MoveDownCommand moveDown = new MoveDownCommand(astro);
-								astro.Position=moveDown.Execute();
+								moveDown.Execute();
+								astro.Position.Y=moveDown.positionY;
 						}
 
 						if (InputBindings.Left().Held())
 						{
 								MoveLeftCommand moveLeft = new MoveLeftCommand(astro);
-								astro.Position=moveLeft.Execute();
+								moveLeft.Execute();
+								astro.Position.X=moveLeft.positionX;
 						}
 
 						if (InputBindings.Right().Held())
 						{
 								MoveRightCommand moveRight = new MoveRightCommand(astro);
-								astro.Position=moveRight.Execute();
+								moveRight.Execute();
+								astro.Position.X=moveRight.positionX;
 						}
 
 						return astro.Position;
 				}
 
-				//public Vector2 PlaceTile()
-				//{
-				//		if (InputBindings.Place().Pressed()) 
-				//		{ 
+				public void PlaceTile()
+				{
+						if (InputBindings.Place().Pressed())
+						{
+								PlaceCommand place = new PlaceCommand();
+								place.Execute();
 
-				//		}
-				//}
+						}
+				}
 		}
 }

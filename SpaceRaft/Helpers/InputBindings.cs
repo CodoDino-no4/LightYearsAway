@@ -5,57 +5,59 @@ namespace LYA.Helpers
 {
 		public static class InputBindings
 		{
-				private static AnyCondition keys = new AnyCondition();
+				private static AnyCondition keyList = new AnyCondition();
+
+				//private static KeyboardCondition bind = new KeyboardCondition(Keys.Up);
 
 				public static ICondition Up()
 				{
-						keys=
+						keyList=
 						new AnyCondition(
 								new KeyboardCondition( Keys.Up ),
 								new KeyboardCondition( Keys.W )
 						);
 
-						return keys;
+						return keyList;
 				}
 				public static ICondition Down()
 				{
-						keys=
+						keyList=
 						new AnyCondition(
 								new KeyboardCondition( Keys.Down ),
 								new KeyboardCondition( Keys.S )
 						);
 
-						return keys;
+						return keyList;
 				}
 				public static ICondition Left()
 				{
-						keys=
+						keyList=
 						new AnyCondition(
 								new KeyboardCondition( Keys.Left ),
 								new KeyboardCondition( Keys.A )
 						);
 
-						return keys;
+						return keyList;
 				}
 				public static ICondition Right()
 				{
-						keys=
+						keyList=
 						new AnyCondition(
 								new KeyboardCondition( Keys.Right ),
 								new KeyboardCondition( Keys.D )
 						);
 
-						return keys;
+						return keyList;
 				}
 
 				public static ICondition Quit()
 				{
-						keys=
+						keyList=
 						new AnyCondition(
 								new KeyboardCondition( Keys.Escape )
 						);
 
-						return keys;
+						return keyList;
 				}
 
 				public static bool ZoomAny()
@@ -72,36 +74,36 @@ namespace LYA.Helpers
 
 				public static ICondition unusedMiddleMouse()
 				{
-						keys=
+						keyList=
 						new AnyCondition(
 								new MouseCondition( MouseButton.MiddleButton )
 								);
 
-						return keys;
+						return keyList;
 				}
 
 				public static ICondition ZoomIn()
 				{
-						keys=new AnyCondition( new KeyboardCondition( Keys.OemPlus ) );
+						keyList=new AnyCondition( new KeyboardCondition( Keys.OemPlus ) );
 
-						return keys;
+						return keyList;
 				}
 
 				public static ICondition ZoomOut()
 				{
-						keys=new AnyCondition( new KeyboardCondition( Keys.OemMinus ) );
+						keyList=new AnyCondition( new KeyboardCondition( Keys.OemMinus ) );
 
-						return keys;
+						return keyList;
 				}
 
 				public static ICondition Place()
 				{
-						keys=
+						keyList=
 						new AnyCondition(
 								new KeyboardCondition( Keys.E )
 						);
 
-						return keys;
+						return keyList;
 				}
 
 		}
