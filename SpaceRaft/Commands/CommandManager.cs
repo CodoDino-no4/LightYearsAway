@@ -1,7 +1,4 @@
-﻿using LYA.Sprites;
-using Microsoft.Xna.Framework;
-
-namespace LYA.Commands
+﻿namespace LYA.Commands
 {
 		public class CommandManager
 		{

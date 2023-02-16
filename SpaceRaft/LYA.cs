@@ -11,7 +11,6 @@ using LYA.Sprites.ShipTile;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace LYA
 {
@@ -147,7 +146,7 @@ namespace LYA
 						foundationTex=Globals.Content.Load<Texture2D>( "foundation" );
 
 						// Ship Foundation sprite
-						foundationTile=new Tile(foundationTex);
+						foundationTile=new Tile( foundationTex );
 
 				}
 				protected override void Draw( GameTime gameTime )

@@ -1,22 +1,21 @@
 ﻿using LYA.Sprites;
-using Microsoft.Xna.Framework;
 
 namespace LYA.Commands
 {
 		public class MoveLeftCommand : CommandManager.ICommand
 		{
-				public float positionX
+				public float position;
+
+				public int direction;
+				public MoveLeftCommand( Astro astro ) : base()
 				{
-						get; set;
-				}
-				public MoveLeftCommand( SpriteHandler astro ) : base()
-				{
-						positionX=astro.Position.X;
+						position=astro.Position.X;
+						direction=1;
 				}
 
 				public void Execute()
 				{
-						positionX-=3f;
+						position-=3f;
 				}
 		}
 }

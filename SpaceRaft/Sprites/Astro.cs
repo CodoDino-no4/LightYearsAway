@@ -4,28 +4,36 @@ namespace LYA.Sprites
 {
 		public class Astro : SpriteHandler
 		{
-				private enum state
+				public enum State
 				{
-						Idle,
-						Walk,
-						Float
+						idle,
+						walk,
+						swim,
 				};
 
-				public int State
+				public int state;
+
+				public enum Direction
 				{
-						get; set;
+						front,
+						left,
+						right,
+						up,
+						down,
+						back
 				}
 
+				public int direction;
 
 				public Astro( Texture2D texture ) : base( texture )
 				{
-						State=(int) state.Float;
+						state=(int) State.swim;
+						direction=(int) Direction.front;
 				}
 
 				public override void Update()
 				{
-						//Globals.astroPosX=position.X;
-						//Globals.astroPosY=position.Y;
+
 
 				}
 
