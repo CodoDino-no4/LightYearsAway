@@ -2,7 +2,7 @@
 
 namespace LYA.Sprites.GUI
 {
-		public class Tool : SpriteHandler
+		public class Tool : BaseSprite
 		{
 				public Tool( Texture2D texture ) : base( texture )
 				{

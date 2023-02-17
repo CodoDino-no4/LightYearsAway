@@ -10,7 +10,7 @@ namespace LYA.Commands
 				public MoveLeftCommand( Astro astro ) : base()
 				{
 						position=astro.Position.X;
-						direction=1;
+						direction=-1;
 				}
 
 				public void Execute()

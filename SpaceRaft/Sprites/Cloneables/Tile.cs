@@ -1,12 +1,10 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using System;
 
-namespace LYA.Sprites.ShipTile
+namespace LYA.Sprites.Cloneables
 {
-		public class Tile : SpriteHandler
+		public class Tile : CloneableSprite
 		{
-
-				private Texture2D foundationTex;
-
 				private enum Type
 				{
 						foundation,
@@ -17,14 +15,10 @@ namespace LYA.Sprites.ShipTile
 						floorItem,
 						door
 				};
-				public int _type
-				{
-						get; set;
-				}
 
 				public Tile( Texture2D texture ) : base( texture )
 				{
-						this.Texture=texture;
+						Texture=texture;
 				}
 
 				public override void Draw()

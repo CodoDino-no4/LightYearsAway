@@ -5,13 +5,13 @@ namespace LYA.Managers
 {
 		public class UIManager
 		{
-				private readonly List<SpriteHandler> uiElements;
+				private readonly List<BaseSprite> uiElements;
 				public UIManager()
 				{
-						uiElements=new List<SpriteHandler>();
+						uiElements=new List<BaseSprite>();
 				}
 
-				public void AddElement( SpriteHandler element )
+				public void AddElement( BaseSprite element )
 				{
 						uiElements.Add( element );
 				}

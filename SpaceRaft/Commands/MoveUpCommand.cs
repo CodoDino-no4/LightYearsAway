@@ -11,7 +11,7 @@ namespace LYA.Commands
 				public MoveUpCommand( Astro astro ) : base()
 				{
 						position=astro.Position.Y;
-						direction=3;
+						direction=1;
 				}
 
 				public void Execute()

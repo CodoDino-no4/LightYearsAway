@@ -6,13 +6,13 @@ namespace LYA.Managers
 {
 		public class JunkManager
 		{
-				private readonly List<SpriteHandler> junkInScene;
+				private readonly List<BaseSprite> junkInScene;
 				public JunkManager()
 				{
-						junkInScene=new List<SpriteHandler>();
+						junkInScene=new List<BaseSprite>();
 				}
 
-				public void AddElement( SpriteHandler element )
+				public void AddElement( BaseSprite element )
 				{
 						junkInScene.Add( element );
 				}

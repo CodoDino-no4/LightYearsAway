@@ -7,14 +7,14 @@ namespace LYA.Managers
 {
 		public class BGManager
 		{
-				private readonly List<SpriteHandler> bgLayers;
+				private readonly List<BaseSprite> bgLayers;
 
 				public BGManager()
 				{
-						bgLayers=new List<SpriteHandler>();
+						bgLayers=new List<BaseSprite>();
 				}
 
-				public void AddElement( SpriteHandler element )
+				public void AddElement( BaseSprite element )
 				{
 						bgLayers.Add( element );
 				}

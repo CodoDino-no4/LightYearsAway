@@ -4,18 +4,17 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LYA.Sprites
 {
-		public class SpriteHandler
+		public class BaseSprite
 		{
 				public Texture2D Texture;
 
 				private Vector2 origin;
 				public Vector2 Position;
 				public float Scale;
-				public float RotationVelocity;
 				protected float rotation;
 				public bool InScene;
 
-				public SpriteHandler( Texture2D texture )
+				public BaseSprite( Texture2D texture )
 				{
 						this.Texture=texture;
 						origin=new Vector2( texture.Width/2, texture.Height/2 );

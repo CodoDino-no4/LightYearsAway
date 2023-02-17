@@ -1,59 +1,62 @@
-﻿using LYA.Commands;
+﻿using LYA.Helpers;
 using LYA.Sprites;
 using Microsoft.Xna.Framework;
 using System.Diagnostics;
 
-namespace LYA.Helpers
+namespace LYA.Commands
 {
-		public class InputHandler
+		public class CommandInput
 		{
-				public InputHandler()
+				public CommandInput()
 				{
 				}
 
 				public Vector2 PlayerCameraMovement( Astro astro )
 				{
+						//reset direction??? 
+						//astro.Direction= Vector2.Zero;
 
 						if (InputBindings.Up().Held())
 						{
-								MoveUpCommand moveUp = new MoveUpCommand(astro);
+								var moveUp = new MoveUpCommand(astro);
 								moveUp.Execute();
 								astro.Position.Y=moveUp.position;
-								astro.direction=moveUp.direction;
+								astro.Direction.Y=moveUp.direction;
 						}
 
 						if (InputBindings.Down().Held())
 						{
-								MoveDownCommand moveDown = new MoveDownCommand(astro);
+								var moveDown = new MoveDownCommand(astro);
 								moveDown.Execute();
 								astro.Position.Y=moveDown.position;
-								astro.direction=moveDown.direction;
+								astro.Direction.Y=moveDown.direction;
 						}
 
 						if (InputBindings.Left().Held())
 						{
-								MoveLeftCommand moveLeft = new MoveLeftCommand(astro);
+								var moveLeft = new MoveLeftCommand(astro);
 								moveLeft.Execute();
 								astro.Position.X=moveLeft.position;
-								astro.direction=moveLeft.direction;
+								astro.Direction.X=moveLeft.direction;
 						}
 
 						if (InputBindings.Right().Held())
 						{
-								MoveRightCommand moveRight = new MoveRightCommand(astro);
+								var moveRight = new MoveRightCommand(astro);
 								moveRight.Execute();
 								astro.Position.X=moveRight.position;
-								astro.direction=moveRight.direction;
+								astro.Direction.X=moveRight.direction;
 						}
 
+						Debug.WriteLine( astro.Direction );
 						return astro.Position;
 				}
 
-				public void PlaceTile(Astro astro)
+				public void PlaceTile( Astro astro )
 				{
 						if (InputBindings.Place().Pressed())
 						{
-								PlaceCommand place = new PlaceCommand(astro);
+								var place = new PlaceCommand(astro);
 								place.Execute();
 
 						}

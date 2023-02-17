@@ -6,13 +6,13 @@ namespace LYA.Managers
 {
 		public class ShipManager
 		{
-				private readonly List<SpriteHandler> shipFoundations;
+				private readonly List<BaseSprite> shipFoundations;
 				public ShipManager()
 				{
-						shipFoundations=new List<SpriteHandler>();
+						shipFoundations=new List<BaseSprite>();
 				}
 
-				public void AddElement( SpriteHandler element )
+				public void AddElement( BaseSprite element )
 				{
 						shipFoundations.Add( element );
 				}

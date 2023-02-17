@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace LYA.Sprites.GUI
 {
-		public class Toolbelt : SpriteHandler
+		public class Toolbelt : BaseSprite
 		{
 				public List<Tool> tools= new List<Tool>();
 

@@ -5,9 +5,8 @@ using LYA.Helpers;
 using LYA.Managers;
 using LYA.Sprites;
 using LYA.Sprites.Background;
+using LYA.Sprites.Cloneables;
 using LYA.Sprites.GUI;
-using LYA.Sprites.Junk;
-using LYA.Sprites.ShipTile;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -40,10 +39,9 @@ namespace LYA
 				// Sprite Objects
 				public Astro astro;
 				private Tile foundationTile;
-				private List<SpriteHandler> spaceJunk;
+				private List<BaseSprite> spaceJunk;
 
-				InputHandler inputHandler;
-				CommandManager commandManager;
+				CommandInput commandInput;
 
 				public LYA()
 				{
@@ -81,9 +79,7 @@ namespace LYA
 						uiManager=new UIManager();
 						junkManager=new JunkManager();
 
-						inputHandler=new InputHandler();
-
-						commandManager=new CommandManager();
+						commandInput=new CommandInput();
 
 						// Create a new SpriteBatch
 						spriteBatch=new SpriteBatch( GraphicsDevice );
@@ -123,7 +119,7 @@ namespace LYA
 
 						// Junk sprites
 						junkManager.AddElement( new Junk( junk1 ) );
-						spaceJunk=new List<SpriteHandler>()
+						spaceJunk=new List<BaseSprite>()
 						{
 								new Junk(junk1)
 								{ Position = new Vector2(0, 0)},
@@ -212,7 +208,7 @@ namespace LYA
 						InputHelper.UpdateSetup();
 
 						// Update the camera
-						camera.UpdateCameraInput( inputHandler.PlayerCameraMovement( astro ) );
+						camera.UpdateCameraInput( commandInput.PlayerCameraMovement( astro ) );
 
 						//Update BG sprites
 						bgManager.Update();

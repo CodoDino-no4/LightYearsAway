@@ -2,7 +2,7 @@
 
 namespace LYA.Sprites.Background
 {
-		public class BGLayer : SpriteHandler
+		public class BGLayer : BaseSprite
 		{
 				private float parallaxSpeed;
 

@@ -1,8 +1,9 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace LYA.Sprites
 {
-		public class Astro : SpriteHandler
+		public class Astro : BaseSprite
 		{
 				public enum State
 				{
@@ -13,22 +14,12 @@ namespace LYA.Sprites
 
 				public int state;
 
-				public enum Direction
-				{
-						front,
-						left,
-						right,
-						up,
-						down,
-						back
-				}
-
-				public int direction;
+				public Vector2 Direction;
 
 				public Astro( Texture2D texture ) : base( texture )
 				{
 						state=(int) State.swim;
-						direction=(int) Direction.front;
+						Direction=Vector2.Zero;
 				}
 
 				public override void Update()

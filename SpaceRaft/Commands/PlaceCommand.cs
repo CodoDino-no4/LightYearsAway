@@ -1,6 +1,6 @@
 ﻿using LYA.Helpers;
 using LYA.Sprites;
-using LYA.Sprites.ShipTile;
+using LYA.Sprites.Cloneables;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -10,7 +10,7 @@ namespace LYA.Commands
 		{
 				private Vector2 position;
 
-				private int direction;
+				private Vector2 direction;
 
 				private Texture2D tileTex;
 
@@ -19,7 +19,7 @@ namespace LYA.Commands
 				private string tileName;
 				public PlaceCommand( Astro astro ) : base()
 				{
-						direction=astro.direction;
+						direction=astro.Direction;
 						position=astro.Position;
 				}
 
@@ -27,19 +27,19 @@ namespace LYA.Commands
 				{
 
 						// Ship Foundation content
-						tileTex=Globals.Content.Load<Texture2D>(tileName);
+						tileTex=Globals.Content.Load<Texture2D>( tileName );
 
 						// Ship Foundation sprite
 						tile=new Tile( tileTex );
 
-						if (direction==1)
+						if (direction.X==-1)
 						{
 								position.X-=2;
 								tile.Draw(); //how to actually do this dynamically with or without spritebatch?
-								//placeleft
+														 //placeleft
 						}
 
-						if (direction==2)
+						if (direction.X==1)
 						{
 								position.X+=2;
 								tile.Draw();
