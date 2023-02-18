@@ -22,6 +22,8 @@ namespace LYA.Sprites.Cloneables
 
 				public Tile( Texture2D texture ) : base( texture )
 				{
+						this.Rectangle = new Rectangle( (int) -Texture.Width, (int) -Texture.Height, Texture.Width, Texture.Width);
+						Position.Y-=Rectangle.Height/2;
 						Texture=texture;
 				}
 

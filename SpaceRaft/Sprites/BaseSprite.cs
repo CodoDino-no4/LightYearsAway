@@ -25,15 +25,19 @@ namespace LYA.Sprites
 						InScene=true;
 				}
 
+				private Rectangle rectangle;
+
 				public Rectangle Rectangle
 				{
 						get
 						{
-								return new Rectangle( (int) -Texture.Width, (int) -Texture.Height, Texture.Width, Texture.Height );
+								rectangle =new Rectangle( (int) -Texture.Width, (int) -Texture.Height, Texture.Width, Texture.Height );
+								return rectangle;
 						}
 
 						set
 						{
+								rectangle=value;
 						}
 				}
 

@@ -59,7 +59,10 @@ namespace LYA.Commands
 				{
 						if (InputBindings.Place().Pressed())
 						{
-								Tile tile = new Tile(tileTex);
+								Tile tile = new Tile(tileTex)
+								{
+										Position = astro.Position
+								};
 								var place = new PlaceCommand(astro, tile, sprites);
 								place.Execute();
 
