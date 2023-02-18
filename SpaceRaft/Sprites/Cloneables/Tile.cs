@@ -1,5 +1,6 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace LYA.Sprites.Cloneables
 {
@@ -16,13 +17,12 @@ namespace LYA.Sprites.Cloneables
 						door
 				};
 
+				public Vector2 Direction;
+				public float linearVelocity;
+
 				public Tile( Texture2D texture ) : base( texture )
 				{
 						Texture=texture;
-				}
-
-				public override void Draw()
-				{
 				}
 
 				public override void Update()

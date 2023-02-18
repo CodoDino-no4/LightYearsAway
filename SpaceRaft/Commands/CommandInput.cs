@@ -1,6 +1,9 @@
 ﻿using LYA.Helpers;
 using LYA.Sprites;
+using LYA.Sprites.Cloneables;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace LYA.Commands
@@ -52,11 +55,12 @@ namespace LYA.Commands
 						return astro.Position;
 				}
 
-				public void PlaceTile( Astro astro )
+				public void PlaceTile( Astro astro, Texture2D tileTex, List<BaseSprite> sprites)
 				{
 						if (InputBindings.Place().Pressed())
 						{
-								var place = new PlaceCommand(astro);
+								Tile tile = new Tile(tileTex);
+								var place = new PlaceCommand(astro, tile, sprites);
 								place.Execute();
 
 						}

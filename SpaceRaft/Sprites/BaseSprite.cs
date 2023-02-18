@@ -1,6 +1,9 @@
-﻿using LYA.Helpers;
+﻿using LYA.Commands;
+using LYA.Helpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
 
 namespace LYA.Sprites
 {
@@ -16,7 +19,7 @@ namespace LYA.Sprites
 
 				public BaseSprite( Texture2D texture )
 				{
-						this.Texture=texture;
+						Texture=texture;
 						origin=new Vector2( texture.Width/2, texture.Height/2 );
 						Scale=2f;
 						InScene=true;
@@ -34,15 +37,24 @@ namespace LYA.Sprites
 						}
 				}
 
-				public virtual void Draw()
+				public virtual void Draw( List<BaseSprite> sprites )
 				{
-						if (Texture!=null)
-								Globals.SpriteBatch.Draw( Texture, Position, Rectangle, Color.White, rotation, origin, Scale, SpriteEffects.None, 0 );
+						foreach (BaseSprite sprite in sprites)
+						{
+								if (Texture!=null)
+										Globals.SpriteBatch.Draw( Texture, Position, Rectangle, Color.White, rotation, origin, Scale, SpriteEffects.None, 0 );
+
+						}
 
 				}
 				public virtual void Update()
 				{
 
+				}
+
+				public static implicit operator BaseSprite( PlaceCommand v )
+				{
+						throw new NotImplementedException();
 				}
 		}
 }

@@ -26,20 +26,17 @@ namespace LYA
 
 				// Managers
 				private BGManager bgManager;
-				private UIManager uiManager;
-				private JunkManager junkManager;
 
 				// Textures
 				private Texture2D bg1, bg2;
 				private Texture2D astroIdleTex;
-				private Texture2D junk1, junk2, junk3, junk4, junk5;
 				private Texture2D toolBelt;
 				private Texture2D foundationTex;
 
 				// Sprite Objects
 				public Astro astro;
-				private Tile foundationTile;
-				private List<BaseSprite> spaceJunk;
+				private List<BaseSprite> sprites;
+				private List<BaseSprite> uiSprites;
 
 				CommandInput commandInput;
 
@@ -76,14 +73,16 @@ namespace LYA
 
 						// Managers
 						bgManager=new BGManager();
-						uiManager=new UIManager();
-						junkManager=new JunkManager();
 
 						commandInput=new CommandInput();
 
 						// Create a new SpriteBatch
 						spriteBatch=new SpriteBatch( GraphicsDevice );
 						Globals.SpriteBatch=spriteBatch;
+
+						// Sprite List
+						sprites=new List<BaseSprite>();
+						uiSprites=new List<BaseSprite>();
 
 						base.Initialize();
 				}
@@ -92,63 +91,36 @@ namespace LYA
 				{
 						InputHelper.Setup( this );
 
+						// Background content
 						bgInfinateShader=Content.Load<Effect>( "infinite" );
 
-						// Background content
 						bg1=Globals.Content.Load<Texture2D>( "BG1-320px" );
 						bg2=Globals.Content.Load<Texture2D>( "BG2-320px" );
-
-						// Background sprites
 						bgManager.AddElement( new BGLayer( bg1 ) );
 						bgManager.AddElement( new BGLayer( bg2 ) );
-						//bgManager.AddLayer(new BGLayer(FG1));
-						//bgManager.AddLayer(new BGLayer(FG2));
-
-						// Player Astro content
-						astroIdleTex=Globals.Content.Load<Texture2D>( "Astro-Idle" );
-
-						// Player Astro sprite
-						astro=new Astro( astroIdleTex );
-
-						// Junk content
-						junk1=Globals.Content.Load<Texture2D>( "junk-1" );
-						junk2=Globals.Content.Load<Texture2D>( "junk-2" );
-						junk3=Globals.Content.Load<Texture2D>( "junk-3" );
-						junk4=Globals.Content.Load<Texture2D>( "junk-4" );
-						junk5=Globals.Content.Load<Texture2D>( "junk-5" );
-
-						// Junk sprites
-						junkManager.AddElement( new Junk( junk1 ) );
-						spaceJunk=new List<BaseSprite>()
-						{
-								new Junk(junk1)
-								{ Position = new Vector2(0, 0)},
-								new Junk(junk2)
-								{ Position = new Vector2(-40, -40)},
-								new Junk(junk3)
-								{ Position = new Vector2(40, 0)},
-								new Junk(junk4)
-								{ Position = new Vector2(0, 100)},
-								new Junk(junk5)
-								{ Position = new Vector2(40, 90)}
-						};
 
 						// UI content
 						toolBelt=Globals.Content.Load<Texture2D>( "toolbelt-empty" );
 
-						uiManager.AddElement( new Toolbelt( toolBelt ) );
+						// add sprites to list
+						uiSprites.Add( new Toolbelt( toolBelt ) );
 
-						// Ship Foundation content
+						// Player Astro content
+						astroIdleTex=Globals.Content.Load<Texture2D>( "Astro-Idle" );
+						astro=new Astro( astroIdleTex );
+
 						foundationTex=Globals.Content.Load<Texture2D>( "foundation" );
 
-						// Ship Foundation sprite
-						foundationTile=new Tile( foundationTex );
+						// add sprites to list
+						sprites.Add(astro);
+
+						//commandInput.PlaceTile(astro, tex, sprites)
 
 				}
 				protected override void Draw( GameTime gameTime )
 				{
 						// Background colour
-						GraphicsDevice.Clear( Color.SlateGray );
+						//GraphicsDevice.Clear( Color.SlateGray );
 
 						Matrix projection = Matrix.CreateOrthographicOffCenter(Globals.ScreenSize, 0, 1);
 						Matrix bg_transform = camera.GetBgTransform(bg1);
@@ -175,14 +147,8 @@ namespace LYA
 
 						Globals.SpriteBatch.Begin( samplerState: SamplerState.PointWrap, transformMatrix: camera.Transform );
 
-						// Other Sprites
-						foreach (var sprite in spaceJunk)
-								sprite.Draw();
-
-						foundationTile.Draw();
-
-						// Astro
-						astro.Draw();
+						foreach (var sprite in sprites)
+								sprite.Draw(sprites);
 
 						Globals.SpriteBatch.End();
 
@@ -193,8 +159,8 @@ namespace LYA
 
 						Globals.SpriteBatch.Begin( samplerState: SamplerState.PointWrap, transformMatrix: ui_scale );
 
-						// UI Manager
-						uiManager.Draw();
+						foreach (var sprite in uiSprites)
+								sprite.Draw( uiSprites );
 
 						Globals.SpriteBatch.End();
 
@@ -213,18 +179,26 @@ namespace LYA
 						//Update BG sprites
 						bgManager.Update();
 
-						// Update Junk sprites
-						foreach (var sprite in spaceJunk)
+						commandInput.PlaceTile( astro, foundationTex, sprites );
+
+						// Update sprites
+						foreach (var sprite in sprites)
 								sprite.Update();
 
 						//Update UI Sprites
-						uiManager.Update();
+						foreach (var sprite in uiSprites)
+								sprite.Update();
 
 						HasQuit();
 
 						Globals.Update( gameTime, graphics );
 						InputHelper.UpdateCleanup();
 						base.Update( gameTime );
+				}
+
+				protected override void UnloadContent()
+				{
+						//base.UnloadContent();
 				}
 
 				private void HasQuit()

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Data.Common;
 
 namespace LYA.Sprites.Cloneables
 {
@@ -19,10 +20,15 @@ namespace LYA.Sprites.Cloneables
 				public override void Update()
 				{
 						JunkMovement();
-
-						//if () junk leaves the (current visible area x no in all directions) remove
+						removeJunk();
 
 				}
+				//// Junk content
+				//junk1=Globals.Content.Load<Texture2D>( "junk-1" );
+				//		junk2=Globals.Content.Load<Texture2D>( "junk-2" );
+				//		junk3=Globals.Content.Load<Texture2D>( "junk-3" );
+				//		junk4=Globals.Content.Load<Texture2D>( "junk-4" );
+				//		junk5=Globals.Content.Load<Texture2D>( "junk-5" );
 
 				public void JunkMovement()
 				{
@@ -35,6 +41,17 @@ namespace LYA.Sprites.Cloneables
 						Position.X+=direction.X*linearVelcocity;
 						Position.Y+=direction.Y*linearVelcocity;
 
+				}
+
+				public void removeJunk()
+				{
+						//if (Position >= )
+
+						if (!InScene)
+						{
+								//delete this instance???
+								
+						}
 				}
 		}
 }
