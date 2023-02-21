@@ -1,69 +1,37 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SpaceRaft.Helpers;
-using System.Linq;
 
-namespace SpaceRaft.Sprites
+namespace LYA.Sprites
 {
-		public class Astro: SpriteHandler
+		public class Astro : BaseSprite
 		{
-				private enum state
+				public enum State
 				{
-						Idle,
-						Walking,
-						Floating
+						idle,
+						walk,
+						swim,
 				};
 
-				private string State
-				{
-						get; set;
-				}
-				public int Health
-				{
-						get; set;
-				}
+				public int state;
 
-				public bool IsDead
-				{
-						get
-						{
-								return Health<=0;
-						}
-				}
+				public Vector2 Direction;
 
-				private Input input;
-
-				public Astro(Texture2D texture) : base(texture)
+				public Astro( Texture2D texture ) : base( texture )
 				{
-						State="Idle";
-						input=new Input();
+						state=(int) State.swim;
+						Direction=Vector2.Zero;
 				}
 
 				public override void Update()
 				{
 
-						Movement ( );
 
 				}
 
-				public void Movement ( )
-				{
-						if (input.Up ( ).Held ( ))
-								Position.Y-=3f;
-
-						if (input.Down ( ).Held ( ))
-								Position.Y+=3f;
-
-						if (input.Left ( ).Held ( ))
-								Position.X-=3f;
-
-						if (input.Right ( ).Held ( ))
-								Position.X+=3f;
-				}
-
-				public void UpdateState ( )
+				public void UpdateState()
 				{
 
 				}
+
 		}
 }

@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace SpaceRaft.Helpers
+namespace LYA.Helpers
 {
 		public static class Globals
 		{
@@ -22,8 +22,8 @@ namespace SpaceRaft.Helpers
 				{
 						get; set;
 				}
- 
-				public static void Update(GameTime gameTime, GraphicsDeviceManager graphics)
+
+				public static void Update( GameTime gameTime, GraphicsDeviceManager graphics )
 				{
 						ElapsedSeconds=(float) gameTime.ElapsedGameTime.TotalSeconds;
 

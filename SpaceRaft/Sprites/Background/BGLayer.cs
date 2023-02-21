@@ -1,27 +1,19 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using SpaceRaft.Helpers;
-using System.Diagnostics;
+﻿using Microsoft.Xna.Framework.Graphics;
 
-namespace SpaceRaft.Sprites.Background
+namespace LYA.Sprites.Background
 {
-		class BGLayer: SpriteHandler
+		public class BGLayer : BaseSprite
 		{
-				private float moveScale;
-				private float defaultSpeed;
+				private float parallaxSpeed;
 
-				public BGLayer(Texture2D texture, float moveScale, float defaultSpeed = 0.0f) : base(texture)
+				public BGLayer( Texture2D texture ) : base( texture )
 				{
-						this.texture=texture;
-						this.moveScale=moveScale;
-						this.defaultSpeed=defaultSpeed;
+						this.Texture=texture;
 				}
 
 				public override void Update()
 				{
-
-						//Position.X-=20f;
-
+						parallaxSpeed=1f;
 				}
 		}
 }
