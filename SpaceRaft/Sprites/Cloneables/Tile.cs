@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace LYA.Sprites.Cloneables
 {
@@ -22,9 +22,10 @@ namespace LYA.Sprites.Cloneables
 
 				public Tile( Texture2D texture ) : base( texture )
 				{
-						this.Rectangle = new Rectangle( (int) -Texture.Width, (int) -Texture.Height, Texture.Width, Texture.Width);
-						Position.Y-=Rectangle.Height/2;
+						Rectangle=new Rectangle( -Texture.Width, -Texture.Height, Texture.Width, Texture.Width );
+						Origin=new Vector2( Rectangle.Width/2, Rectangle.Height/2 );
 						Texture=texture;
+						Debug.WriteLine( "Rectangle TILE"+Rectangle );
 				}
 
 				public override void Update()

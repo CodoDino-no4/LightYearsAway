@@ -3,18 +3,15 @@ using LYA.Sprites;
 using LYA.Sprites.Cloneables;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace LYA.Commands
 {
-		public class CommandInput
+		public static class CommandInput
 		{
-				public CommandInput()
-				{
-				}
-
-				public Vector2 PlayerCameraMovement( Astro astro )
+				public static Vector2 PlayerCameraMovement( Astro astro )
 				{
 						//reset direction??? 
 						//astro.Direction= Vector2.Zero;
@@ -55,7 +52,7 @@ namespace LYA.Commands
 						return astro.Position;
 				}
 
-				public void PlaceTile( Astro astro, Texture2D tileTex, List<BaseSprite> sprites)
+				public static void PlaceTile( Astro astro, Texture2D tileTex, Deque<BaseSprite> sprites )
 				{
 						if (InputBindings.Place().Pressed())
 						{
@@ -67,6 +64,11 @@ namespace LYA.Commands
 								place.Execute();
 
 						}
+				}
+
+				public static void Commands( Astro astro, Texture2D tileTex, Deque<BaseSprite> sprites )
+				{
+						PlaceTile( astro, tileTex, sprites );
 				}
 		}
 }

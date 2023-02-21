@@ -5,10 +5,10 @@ using LYA.Helpers;
 using LYA.Managers;
 using LYA.Sprites;
 using LYA.Sprites.Background;
-using LYA.Sprites.Cloneables;
 using LYA.Sprites.GUI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Collections;
 using System.Collections.Generic;
 
 namespace LYA
@@ -35,10 +35,8 @@ namespace LYA
 
 				// Sprite Objects
 				public Astro astro;
-				private List<BaseSprite> sprites;
-				private List<BaseSprite> uiSprites;
-
-				CommandInput commandInput;
+				private Deque<BaseSprite> sprites;
+				private Deque<BaseSprite> uiSprites;
 
 				public LYA()
 				{
@@ -74,15 +72,13 @@ namespace LYA
 						// Managers
 						bgManager=new BGManager();
 
-						commandInput=new CommandInput();
-
 						// Create a new SpriteBatch
 						spriteBatch=new SpriteBatch( GraphicsDevice );
 						Globals.SpriteBatch=spriteBatch;
 
 						// Sprite List
-						sprites=new List<BaseSprite>();
-						uiSprites=new List<BaseSprite>();
+						sprites=new Deque<BaseSprite>();
+						uiSprites=new Deque<BaseSprite>();
 
 						base.Initialize();
 				}
@@ -103,7 +99,7 @@ namespace LYA
 						toolBelt=Globals.Content.Load<Texture2D>( "toolbelt-empty" );
 
 						// add sprites to list
-						uiSprites.Add( new Toolbelt( toolBelt ) );
+						uiSprites.AddToBack( new Toolbelt( toolBelt ) );
 
 						// Player Astro content
 						astroIdleTex=Globals.Content.Load<Texture2D>( "Astro-Idle" );
@@ -112,16 +108,11 @@ namespace LYA
 						foundationTex=Globals.Content.Load<Texture2D>( "foundation" );
 
 						// add sprites to list
-						sprites.Add(astro);
-
-						//commandInput.PlaceTile(astro, tex, sprites)
+						sprites.AddToBack( astro );
 
 				}
 				protected override void Draw( GameTime gameTime )
 				{
-						// Background colour
-						//GraphicsDevice.Clear( Color.SlateGray );
-
 						Matrix projection = Matrix.CreateOrthographicOffCenter(Globals.ScreenSize, 0, 1);
 						Matrix bg_transform = camera.GetBgTransform(bg1);
 						Matrix ui_scale = camera.GetUIScale();
@@ -148,7 +139,7 @@ namespace LYA
 						Globals.SpriteBatch.Begin( samplerState: SamplerState.PointWrap, transformMatrix: camera.Transform );
 
 						foreach (var sprite in sprites)
-								sprite.Draw(sprites);
+								sprite.Draw( sprites );
 
 						Globals.SpriteBatch.End();
 
@@ -174,12 +165,12 @@ namespace LYA
 						InputHelper.UpdateSetup();
 
 						// Update the camera
-						camera.UpdateCameraInput( commandInput.PlayerCameraMovement( astro ) );
+						camera.UpdateCameraInput( CommandInput.PlayerCameraMovement( astro ) );
 
 						//Update BG sprites
 						bgManager.Update();
 
-						commandInput.PlaceTile( astro, foundationTex, sprites );
+						CommandInput.Commands( astro, foundationTex, sprites );
 
 						// Update sprites
 						foreach (var sprite in sprites)

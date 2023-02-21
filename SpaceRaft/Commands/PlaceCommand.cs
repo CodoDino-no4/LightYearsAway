@@ -1,8 +1,7 @@
-﻿using LYA.Helpers;
-using LYA.Sprites;
+﻿using LYA.Sprites;
 using LYA.Sprites.Cloneables;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Collections;
 using System.Collections.Generic;
 
 namespace LYA.Commands
@@ -15,41 +14,27 @@ namespace LYA.Commands
 
 				private Tile tile;
 
-				private string tileName;
-
-				private List<BaseSprite> sprites;
-				public PlaceCommand( Astro astro, Tile tile, List<BaseSprite> sprites ) : base()
+				private Deque<BaseSprite> sprites;
+				public PlaceCommand( Astro astro, Tile tile, Deque<BaseSprite> sprites ) : base()
 				{
 						direction=astro.Direction;
 						position=astro.Position;
-						this.tile = tile;
+						this.tile=tile;
 						this.sprites=sprites;
 				}
 
 				public void Execute()
 				{
-						if (direction.X==1 || direction.X==0) //default to right
-						{
-								//position.X+=3;
-								tile.Clone();
-								sprites.Add( tile );
-						}
+						tile.Position=position;
+
+						if (direction.X==1||direction.X==0) //default to right
+								tile.Position.X-=10;
 
 						if (direction.X==-1) //left
-						{
-								//position.X-=3;
-								tile.Clone();
-								sprites.Add( tile );
-						}
+								tile.Position.X-=10;
+
+						//tile.Clone(); //doesnt actually clone anything?? hmm
+						sprites.AddToFront( tile );
 				}
-
-				public void AddTile()
-				{
-						
-
-				}
-
-
-
 		}
 }
