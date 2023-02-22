@@ -1,2 +1,12 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿namespace Server
+{
+    public static class Program
+    {
+        [STAThread]
+        private static void Main()
+        {
+            using var server = new BasicServer();
+            server.Start();
+        }
+    }
+}

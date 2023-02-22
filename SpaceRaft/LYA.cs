@@ -9,7 +9,6 @@ using LYA.Sprites.GUI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Collections;
-using System.Collections.Generic;
 
 namespace LYA
 {

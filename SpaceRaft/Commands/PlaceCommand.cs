@@ -2,7 +2,6 @@
 using LYA.Sprites.Cloneables;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Collections;
-using System.Collections.Generic;
 
 namespace LYA.Commands
 {

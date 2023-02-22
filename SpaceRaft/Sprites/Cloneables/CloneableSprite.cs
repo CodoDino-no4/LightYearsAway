@@ -12,7 +12,7 @@ namespace LYA.Sprites.Cloneables
 
 				public object Clone()
 				{
-						return this.MemberwiseClone();
+						return MemberwiseClone();
 				}
 		}
 }
