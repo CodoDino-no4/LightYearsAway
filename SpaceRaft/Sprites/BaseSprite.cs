@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Collections;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -12,6 +13,7 @@ namespace LYA.Sprites
 				public Texture2D Texture;
 
 				public Vector2 Origin;
+
 				public Vector2 Position;
 				public float Scale;
 				protected float rotation;

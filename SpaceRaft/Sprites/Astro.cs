@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace LYA.Sprites
 {
@@ -12,13 +13,13 @@ namespace LYA.Sprites
 						swim,
 				};
 
-				public int state;
+				public State state;
 
 				public Vector2 Direction;
 
 				public Astro( Texture2D texture ) : base( texture )
 				{
-						state=(int) State.swim;
+						state=State.swim;
 						Direction=Vector2.Zero;
 				}
 
