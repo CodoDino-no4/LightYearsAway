@@ -10,12 +10,13 @@ using System.Diagnostics;
 
 namespace LYA.Networking
 {
-		public class Server
+		public class Server : IDisposable
 		{
 				//192.168.1.101
 				public ArrayList clientList;
 				public Socket serverSocket;
-				byte[] data;
+				byte[] dataStream;
+				public Packet packet;
 
 				struct ClientInfo
 				{
@@ -28,43 +29,48 @@ namespace LYA.Networking
 				{
 						try
 						{
-								data=new byte[ 1024 ];
-								// Initialise the ArrayList of connected clients
-								clientList=new ArrayList();
+								dataStream=new byte[ 1024 ];
 
-								// Initialise the delegate which updates the status
-								this.updateStatusDelegate=new UpdateStatusDelegate( this.UpdateStatus );
+								clientList=new ArrayList();
 
 								// Initialise the socket
 								serverSocket=new Socket( AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp );
 
-								// Initialise the IPEndPoint for the server and listen on port 30000
-								IPEndPoint server = new IPEndPoint(IPAddress.Any, 30000);
+								// Initialise the IPEndPoint for the server and listen on port 8888
+								IPEndPoint server = new IPEndPoint(IPAddress.Any, 8888);
 
 								// Associate the socket with this IP address and port
 								serverSocket.Bind( server );
 
-								// Initialise the IPEndPoint for the clients
+								Console.WriteLine( "UDP Server started on port 8888" );
+
+								// Recieve data from any client
 								IPEndPoint clients = new IPEndPoint(IPAddress.Any, 0);
 
 								// Initialise the EndPoint for the clients
-								EndPoint epSender = (EndPoint)clients;
+								EndPoint epSender = clients;
 
 								// Start listening for incoming data
-								serverSocket.BeginReceiveFrom( this.dataStream, 0, this.dataStream.Length, SocketFlags.None, ref epSender, new AsyncCallback( ReceiveData ), epSender );
+								serverSocket.BeginReceiveFrom( dataStream, 0, dataStream.Length, SocketFlags.None, ref epSender, new AsyncCallback( ReceiveData ), epSender );
 
-								lblStatus.Text="Listening";
+								//lblStatus.Text="Listening";
 
 						} catch(Exception e) {
 
-								lblStatus.Text="Error";
+								//lblStatus.Text="Error";
 								Debug.WriteLine( "Load Error: "+e.Message);
 						}
 						
 				}
-				
 
+				private void ReceiveData( IAsyncResult ar )
+				{
+						throw new NotImplementedException();
+				}
 
-
+				public void Dispose()
+				{
+						throw new NotImplementedException();
+				}
 		}
 }

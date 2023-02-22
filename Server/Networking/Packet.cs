@@ -10,24 +10,25 @@ namespace LYA.Networking
 		{
 				public enum Command
 				{
-						Move,
-						Zoom,
-						Place,
-						Null
+						Move, // Astro movement
+						Zoom, // Zoom in/out
+						Place, // PLace a tile
+						Join, // A clinet joins the server
+						Leave, // A client leaves the server
+						Null // Default
 
 				}
 
 				private Command command;
 
-				private string data;
-
 				private string clientId;
+				private string data;
 
 				public Packet()
 				{
 						command=Command.Null;
-						data=null;
 						clientId=null;
+						data=null;
 				}
 
 
@@ -40,14 +41,14 @@ namespace LYA.Networking
 						command=(Command) BitConverter.ToInt32( dataStream, 0 );
 
 						// Store the length of the clientID
-						int nameLength = BitConverter.ToInt32( dataStream, 4 );
+						int clientIdLen = BitConverter.ToInt32( dataStream, 4 );
 
 						// Store the length of the data (4 bytes)
-						int msgLength = BitConverter.ToInt32(dataStream, 8);
+						int commandLen = BitConverter.ToInt32(dataStream, 8);
 
 						// Read the message field
-						if (msgLength>0)
-								data=Encoding.UTF8.GetString( dataStream, 12, msgLength );
+						if (commandLen>0)
+								data=Encoding.UTF8.GetString( dataStream, 12 + clientIdLen, commandLen );
 						else
 								data=null;
 				}

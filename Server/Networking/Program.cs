@@ -1,14 +1,14 @@
 ﻿using System;
 
-namespace LYA
+namespace LYA.Networking
 {
 		public static class Program
 		{
 				[STAThread]
 				private static void Main()
 				{
-						using (var game = new LYA())
-								game.Run();
+						using (var server = new BasicServer())
+								server.Connect();
 				}
 		}
 }
