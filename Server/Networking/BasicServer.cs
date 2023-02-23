@@ -22,8 +22,11 @@ namespace Server
         {
             dataRecv = new byte[4096];
             dataRecvSegment = new ArraySegment<byte>(dataRecv);
+            conns = new ArrayList();
 
-            endPoint = new IPEndPoint(IPAddress.Any, PORT);
+            // IP and PORT
+            IPAddress serverIP = IPAddress.Parse("127.0.0.1"); //localhost
+            endPoint = new IPEndPoint(serverIP, PORT);
 
             udpServer = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             udpServer.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.PacketInformation, true);
@@ -31,14 +34,25 @@ namespace Server
 
             Console.WriteLine("Server connected on port: " + PORT);
 
-            conns = new ArrayList();
+        }
 
+        public void Send()
+        {
+            Console.WriteLine("Start");
+
+            string data = "the packet has been sent oh yea";
+
+            dataRecv = Encoding.ASCII.GetBytes(data);
+
+            udpServer.SendTo(dataRecv, endPoint);
+
+            Console.WriteLine("Sent");
         }
 
         public void Start()
         {
             Console.WriteLine("Start");
-            _=Task.Run(async () =>
+            _ = Task.Run(async () =>
             {
                 SocketReceiveMessageFromResult res;
 

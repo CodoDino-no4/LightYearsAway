@@ -6,7 +6,7 @@
         private static void Main()
         {
             using var server = new BasicServer();
-            server.Start();
+            server.Send();
         }
     }
 }

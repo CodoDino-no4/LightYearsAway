@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Protobuf" Version="3.22.0" />
+    <PackageReference Include="Google.FlatBuffers" Version="23.1.21" />
   </ItemGroup>
 
 </Project>
