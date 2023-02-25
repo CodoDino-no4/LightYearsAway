@@ -40,7 +40,7 @@ namespace Server
         {
             Console.WriteLine("Start");
 
-            string data = "the packet has been sent oh yea";
+            string data = "A reply from the server oh yea";
 
             dataRecv = Encoding.ASCII.GetBytes(data);
 
