@@ -41,11 +41,16 @@ namespace Server
             {
                 udpClient.Connect(serverEndPoint);
 
+                //check connection has been made
+
+                Console.WriteLine("Connection Established");
+
                 string data = "the packet has been sent oh yea";
 
                 dataRecv = Encoding.ASCII.GetBytes(data);
 
                 udpClient.Send(dataRecv);
+
 
             }
             catch (SocketException e)
@@ -53,7 +58,6 @@ namespace Server
                 Console.WriteLine(e.ToString());
             }
 
-            Console.WriteLine("Connection Established");
         }
 
         protected virtual void Dispose(bool disposing)

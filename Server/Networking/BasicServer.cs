@@ -13,15 +13,15 @@ namespace Server
         private Socket udpServer;
         private EndPoint endPoint;
 
-        private byte[] dataRecv;
-        private ArraySegment<byte> dataRecvSegment;
+        private byte[] buffer;
+        private ArraySegment<byte> bufferSegment;
         private bool disposedValue;
         private ArrayList conns;
 
         public BasicServer()
         {
-            dataRecv = new byte[4096];
-            dataRecvSegment = new ArraySegment<byte>(dataRecv);
+            buffer = new byte[4096];
+            bufferSegment = new ArraySegment<byte>(buffer);
             conns = new ArrayList();
 
             // IP and PORT
@@ -42,9 +42,12 @@ namespace Server
 
             string data = "A reply from the server oh yea";
 
-            dataRecv = Encoding.ASCII.GetBytes(data);
+            buffer = Encoding.ASCII.GetBytes(data);
 
-            udpServer.SendTo(dataRecv, endPoint);
+            foreach (IPEndPoint e in conns)
+            {
+                udpServer.SendTo(buffer, e);
+            }
 
             Console.WriteLine("Sent");
         }
@@ -59,7 +62,7 @@ namespace Server
                 Console.WriteLine("Start Task.Run");
                 while (true)
                 {
-                    res = await udpServer.ReceiveMessageFromAsync(dataRecvSegment, SocketFlags.None, endPoint);
+                    res = await udpServer.ReceiveMessageFromAsync(bufferSegment, SocketFlags.None, endPoint);
                     await SendTo(res.RemoteEndPoint, Encoding.UTF8.GetBytes("Hello back!"));
 
                     Console.WriteLine("Start Task.Run while(true)");
