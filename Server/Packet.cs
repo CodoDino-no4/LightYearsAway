@@ -20,11 +20,11 @@ namespace Server
         private string clientId;
         private string data;
 
-        public Packet()
+        public Packet(int command, string clientId, string data)
         {
-            command = Command.Null;
-            clientId = null;
-            data = null;
+            this.command = (Command)command;
+            this.clientId = clientId;
+            this.data = data;
         }
 
 

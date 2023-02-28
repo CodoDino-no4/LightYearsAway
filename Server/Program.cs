@@ -4,12 +4,11 @@
     {
         private static void Main(string[] args)
         {
-
             var server = new BasicServer();
+            var packet = new Packet(3, "1234", "Data innit server");
 
             server.Init();
-            server.StartLoop();
-            Console.WriteLine("Server Listening...");
+            server.StartLoop(packet.GetDataStream());
 
             Console.ReadLine();
         }
