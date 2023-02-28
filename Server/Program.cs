@@ -1,18 +1,17 @@
 ﻿namespace Server
 {
-    public static class Program
+    class Program
     {
-        [STAThread]
-        private static void Main()
+        private static void Main(string[] args)
         {
-            //client will load up 
-            //connect to server button
-            //user enters info
-            //tries to connect
 
-            using var client = new Client();
-            client.Connect("127.0.0.1", 3000);
-            //client.Start();
+            var server = new BasicServer();
+
+            server.Init();
+            server.StartLoop();
+            Console.WriteLine("Server Listening...");
+
+            Console.ReadLine();
         }
     }
 }
