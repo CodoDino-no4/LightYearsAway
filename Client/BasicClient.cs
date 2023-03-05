@@ -20,6 +20,7 @@ namespace Client
 
             udpClient = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             udpClient.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.PacketInformation, true);
+            udpClient.Connect(serverEndPoint);
 
         }
 
@@ -35,11 +36,9 @@ namespace Client
                     while (true)
                     {
                         await Send(data);
+                        Thread.Sleep(1000);
 
-                        await Recieve();
-
-                        string bitString = BitConverter.ToString(data);
-                        Console.WriteLine(bitString);
+                        //await Recieve();
                     }
                 }
                 catch (Exception ex)

@@ -50,7 +50,7 @@ namespace Server
                         res = await udpServer.ReceiveMessageFromAsync(bufferSegment, SocketFlags.None, endPoint);
                         await SendTo(res.RemoteEndPoint, data);
 
-                        await RecieveFrom(res.RemoteEndPoint);
+                        //await RecieveFrom(res.RemoteEndPoint);
 
                         string bitString = BitConverter.ToString(data);
                         Console.WriteLine(bitString);
