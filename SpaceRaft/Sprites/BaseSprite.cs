@@ -8,11 +8,13 @@ namespace LYA.Sprites
 {
 		public class BaseSprite
 		{
+
 				public Texture2D Texture;
 
 				public Vector2 Origin;
 
 				public Vector2 Position;
+				
 				public float Scale;
 				protected float rotation;
 				public bool InScene;

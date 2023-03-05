@@ -53,13 +53,13 @@ namespace Client
         public async Task Send(byte[] data)
         {
             var s = new ArraySegment<byte>(data);
-            _ = await udpClient.SendToAsync(s, SocketFlags.None, serverEndPoint);
+            _ = await udpClient.SendToAsync(s, serverEndPoint);
         }
 
         public async Task Recieve()
         {
             var s = new ArraySegment<byte>();
-            _ = await udpClient.ReceiveFromAsync(s, SocketFlags.None, serverEndPoint);
+            _ = await udpClient.ReceiveFromAsync(s, serverEndPoint);
 
         }
     }
