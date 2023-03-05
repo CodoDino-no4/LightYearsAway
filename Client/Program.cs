@@ -1,4 +1,5 @@
-﻿using Server;
+﻿using LYA;
+using Server;
 using System.Net;
 
 namespace Client
@@ -31,7 +32,9 @@ namespace Client
 
             client.StartLoop(packet.GetDataStream());
 
-            Console.ReadLine();
+            using (var game = new LYA.LYA())
+                game.Run();
+
         }
     }
 }

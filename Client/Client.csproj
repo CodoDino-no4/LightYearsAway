@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Server\Server.csproj" />
+    <ProjectReference Include="..\SpaceRaft\LYA.csproj" />
   </ItemGroup>
 
 </Project>
