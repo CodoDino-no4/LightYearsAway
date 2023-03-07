@@ -164,12 +164,12 @@ namespace LYA
 						InputHelper.UpdateSetup();
 
 						// Update the camera
-						camera.UpdateCameraInput( CommandInput.PlayerCameraMovement( astro ) );
+						camera.UpdateCameraInput( CommandManager.PlayerCameraMovement( astro ) );
 
 						//Update BG sprites
 						bgManager.Update();
 
-						CommandInput.Commands( astro, foundationTex, sprites );
+						CommandManager.Commands( astro, foundationTex, sprites );
 
 						// Update sprites
 						foreach (var sprite in sprites)
