@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.FlatBuffers" Version="23.1.21" />
+    <PackageReference Include="Google.FlatBuffers" Version="23.3.3" />
   </ItemGroup>
 
   <ItemGroup>

@@ -32,8 +32,7 @@ namespace LYA.Commands
 						if (direction.X==-1) //left
 								tile.Position.X-=10;
 
-						//tile.Clone(); //doesnt actually clone anything?? hmm
-						sprites.AddToFront( tile );
+						sprites.AddToFront( (BaseSprite) tile.Clone() );
 				}
 		}
 }
