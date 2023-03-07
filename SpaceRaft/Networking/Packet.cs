@@ -1,6 +1,8 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace Server
+namespace LYA
 {
     public class Packet
     {
@@ -33,7 +35,7 @@ namespace Server
 
         public Packet(byte[] dataStream)
         {
-            // Command (4 bytes)
+            // Command (1 byte)
             command = (Command)BitConverter.ToInt32(dataStream, 0);
 
             // Store the length of the clientID
@@ -49,17 +51,16 @@ namespace Server
                 data = null;
         }
 
-        // Converts the packet into a byte array for sending/receiving 
+        // Converts the packet into a byte array for sending
         public byte[] GetDataStream()
         {
             List<byte> dataStream = new List<byte>();
 
-            // Add the command
-            dataStream.AddRange(BitConverter.GetBytes((int)command));
-
             // Add the message length and message
             if (data != null || clientId != null)
             {
+								// Add the command
+								dataStream.AddRange(BitConverter.GetBytes((int)command));
                 dataStream.AddRange(BitConverter.GetBytes(clientId.Length));
                 dataStream.AddRange(BitConverter.GetBytes(data.Length));
                 dataStream.AddRange(Encoding.UTF8.GetBytes(data));

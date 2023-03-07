@@ -25,12 +25,13 @@ namespace Server
             bufferSegment = new ArraySegment<byte>(buffer);
             conns = new ArrayList();
 
+            udpServer = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            udpServer.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.PacketInformation, true);
+
             // IP and PORT
             IPAddress IPADD = IPAddress.Loopback;
             endPoint = new IPEndPoint(IPADD, PORT);
 
-            udpServer = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            udpServer.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.PacketInformation, true);
             udpServer.Bind(endPoint);
 
             Console.WriteLine("Server successfully intialised on: " + IPADD + ":" + PORT);
@@ -48,9 +49,9 @@ namespace Server
                     while (true)
                     {
                         res = await udpServer.ReceiveMessageFromAsync(bufferSegment, SocketFlags.None, endPoint);
-                        await SendTo(res.RemoteEndPoint, data);
+                        //await SendTo(res.RemoteEndPoint, data);
 
-                        //await RecieveFrom(res.RemoteEndPoint);
+                        await RecieveFrom(res.RemoteEndPoint);
 
                         string bitString = BitConverter.ToString(data);
                         Console.WriteLine(bitString);
