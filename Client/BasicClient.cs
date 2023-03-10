@@ -1,14 +1,13 @@
 ﻿using System.Net;
 using System.Net.Sockets;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Client
 {
     public class BasicClient
     {
-        private Socket? udpClient;
-        private IPEndPoint? serverEndPoint;
-        private byte[]? buffer;
+        private Socket udpClient;
+        private IPEndPoint serverEndPoint;
+        private byte[] buffer;
         private ArraySegment<byte> bufferSegment;
 
         public void Init(IPAddress ip, int port)
@@ -24,22 +23,18 @@ namespace Client
 
         }
 
-
-        public void StartLoop(byte[] data)
+        // Sends a packet to connect to the server
+        public void JoinServer(byte[] joinData)
         {
-
             _ = Task.Factory.StartNew(async () =>
             {
-                SocketReceiveMessageFromResult res;
+                //SocketReceiveMessageFromResult res;
+
                 try
                 {
-                    while (true)
-                    {
-                        await Send(data);
-                        Thread.Sleep(1000);
-
-                        //await Recieve();
-                    }
+                     await Send(joinData);
+                     //res = await udpClient.ReceiveMessageFromAsync(bufferSegment, SocketFlags.None, serverEndPoint);
+                     //await Recieve();
                 }
                 catch (Exception ex)
                 {
@@ -52,15 +47,19 @@ namespace Client
 
         public async Task Send(byte[] data)
         {
-            var s = new ArraySegment<byte>(data);
-            _ = await udpClient.SendToAsync(s, serverEndPoint);
+            if (serverEndPoint != null)
+            { 
+                bufferSegment = new ArraySegment<byte>(data);
+                _ = await udpClient.SendToAsync(bufferSegment, serverEndPoint);
+            }
         }
 
-        public async Task Recieve()
+        public async Task<ArraySegment<byte>> Recieve()
         {
             var s = new ArraySegment<byte>();
             _ = await udpClient.ReceiveFromAsync(s, serverEndPoint);
 
+            return s;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using SharpFont;
+using System.Collections;
 using System.Net;
 using System.Net.Sockets;
 
@@ -10,7 +11,8 @@ namespace Server
         public const int PORT = 4000;
 
         private Socket? udpServer;
-        private EndPoint? endPoint;
+        private EndPoint? serverEndPoint;
+        private EndPoint remoteEndPoint;
 
         private byte[]? buffer;
         private ArraySegment<byte> bufferSegment;
@@ -21,7 +23,7 @@ namespace Server
         {
             Console.WriteLine("Server intialisaing...");
 
-            buffer = new byte[4096];
+            buffer = new byte[1024];
             bufferSegment = new ArraySegment<byte>(buffer);
             conns = new ArrayList();
 
@@ -29,32 +31,32 @@ namespace Server
             udpServer.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.PacketInformation, true);
 
             // IP and PORT
-            IPAddress IPADD = IPAddress.Loopback;
-            endPoint = new IPEndPoint(IPADD, PORT);
+            IPAddress IPADD = IPAddress.Any;
+            serverEndPoint = new IPEndPoint(IPADD, PORT);
 
-            udpServer.Bind(endPoint);
+            udpServer.Bind(serverEndPoint);
+
+            remoteEndPoint = new IPEndPoint(IPAddress.Loopback, 4000);
 
             Console.WriteLine("Server successfully intialised on: " + IPADD + ":" + PORT);
 
         }
 
-        public void StartLoop(byte[] data)
+        // When a client joins the server, it is assigned an ID and added to known connections
+        public void MessageLoop(byte[] data)
         {
-
             _ = Task.Factory.StartNew(async () =>
             {
-                SocketReceiveMessageFromResult res;
+                //SocketReceiveMessageFromResult res;
+
                 try
                 {
                     while (true)
                     {
-                        res = await udpServer.ReceiveMessageFromAsync(bufferSegment, SocketFlags.None, endPoint);
-                        //await SendTo(res.RemoteEndPoint, data);
+                        //await RecieveFrom(remoteEndPoint);
 
-                        await RecieveFrom(res.RemoteEndPoint);
-
-                        string bitString = BitConverter.ToString(data);
-                        Console.WriteLine(bitString);
+                        //string bitString = BitConverter.ToString(data);
+                        //Console.WriteLine(bitString);
 
                     }
                 }
@@ -63,19 +65,27 @@ namespace Server
                     Console.WriteLine(ex.ToString());
                 }
             });
-
         }
-
-        public async Task SendTo(EndPoint recipient, byte[] data)
-        {
-            var s = new ArraySegment<byte>(data);
-            await udpServer.SendToAsync(s, SocketFlags.None, recipient);
-        }
-
         public async Task RecieveFrom(EndPoint recipient)
         {
             var s = new ArraySegment<byte>();
-            _ = await udpServer.ReceiveFromAsync(s, SocketFlags.None, recipient);
+            _ = await udpServer.ReceiveFromAsync(s, recipient);
+
         }
+
+        //public async Task SendTo(EndPoint recipient, byte[] data)
+        //{
+        //    var s = new ArraySegment<byte>(data);
+        //    await udpServer.SendToAsync(s, SocketFlags.None, recipient);
+        //}
+
+                //while (conns.Count < 8)
+                //{
+                //    //res = await udpServer.ReceiveMessageFromAsync(bufferSegment, SocketFlags.None, remoteEndPoint);
+                //    //await RecieveFrom(res.RemoteEndPoint);
+
+                //    //string data = res.PacketInformation.ToString();
+                //    //Console.WriteLine(data);
+                //}
     }
 }

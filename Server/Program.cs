@@ -1,4 +1,4 @@
-﻿using LYA;
+﻿using Server.Networking;
 
 namespace Server
 {
@@ -7,10 +7,11 @@ namespace Server
         private static void Main(string[] args)
         {
             var server = new BasicServer();
-            var packet = new LYA.Packet(3, "1234", "Data innit server");
 
             server.Init();
-            server.StartLoop(packet.GetDataStream());
+            Packet packet = new Packet("Join");
+            byte[] data = packet.MakeBytes();
+            server.MessageLoop(data);
 
             Console.ReadLine();
         }

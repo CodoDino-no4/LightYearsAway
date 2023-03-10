@@ -3,7 +3,6 @@ using LYA._Camera;
 using LYA.Commands;
 using LYA.Helpers;
 using LYA.Managers;
-using LYA.Networking;
 using LYA.Sprites;
 using LYA.Sprites.Background;
 using LYA.Sprites.GUI;
@@ -185,7 +184,7 @@ namespace LYA
 						Globals.Update( gameTime, graphics );
 						InputHelper.UpdateCleanup();
 
-						PacketManager.MakePacket();
+						//send/rec packet
 
 						base.Update( gameTime );
 				}

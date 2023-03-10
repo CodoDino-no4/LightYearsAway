@@ -14,7 +14,7 @@ namespace LYA.Sprites
 				public Vector2 Origin;
 
 				public Vector2 Position;
-				
+
 				public float Scale;
 				protected float rotation;
 				public bool InScene;
