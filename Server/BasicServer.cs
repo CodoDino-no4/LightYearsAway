@@ -40,10 +40,10 @@ namespace Server
                 while (true)
                 {
                     Console.WriteLine("Waiting for broadcast");
-                    byte[] bytes = udpServer.Receive(ref remoteEndpoint);
+                    bufferSegment = udpServer.Receive(ref remoteEndpoint);
 
                     Console.WriteLine($"Received broadcast from {remoteEndpoint} :");
-                    Console.WriteLine($" {Encoding.ASCII.GetString(bytes, 0, bytes.Length)}");
+                    Console.WriteLine(Encoding.UTF8.GetString(bufferSegment));
                 }
             }
             catch (SocketException e)

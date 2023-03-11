@@ -60,7 +60,7 @@ namespace Client
                         break;
                     }
 
-                    Packet packet = new Packet("Join");
+                    Packet packet = new Packet("Leave");
                     byte[] data = packet.MakeBytes();
 
                     client.StartLoop(data);
