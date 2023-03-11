@@ -27,24 +27,30 @@ namespace Client
 
         public void StartLoop(byte[] data)
         {
-            _ = Task.Factory.StartNew(async () =>
-            {
-                SocketReceiveMessageFromResult res;
+            //_ = Task.Factory.StartNew(async () =>
+            //{
+            //    SocketReceiveMessageFromResult res;
 
-                while (true)
-                {
-                    await Send(data);
-                    res = await udpClient.ReceiveMessageFromAsync(bufferSegment, SocketFlags.None, serverEndPoint);
+            //    while (true)
+            //    {
+            //        await Send(data);
+            //        res = await udpClient.ReceiveMessageFromAsync(bufferSegment, SocketFlags.None, serverEndPoint);
 
-                    Console.WriteLine(res);
-                }
-            });
-        }
+            //        Console.WriteLine(res);
+            //    }
+            //});
 
-        public async Task Send(byte[] data)
-        {
             var s = new ArraySegment<byte>(data);
-            await udpClient.SendToAsync(s, SocketFlags.None, serverEndPoint);
+
+            udpClient.SendTo(s, serverEndPoint);
+
+            Console.WriteLine("Message sent to the broadcast address");
         }
+
+        //public async Task Send(byte[] data)
+        //{
+        //    var s = new ArraySegment<byte>(data);
+        //    await udpClient.SendToAsync(s, SocketFlags.None, serverEndPoint);
+        //}
     }
 }
