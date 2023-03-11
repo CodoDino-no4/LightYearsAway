@@ -1,4 +1,4 @@
-﻿using Server.Networking;
+﻿using Client.Networking;
 
 namespace Server
 {
@@ -6,12 +6,13 @@ namespace Server
     {
         private static void Main(string[] args)
         {
+
             var server = new BasicServer();
 
             server.Init();
-            Packet packet = new Packet("Join");
-            byte[] data = packet.MakeBytes();
-            server.MessageLoop(data);
+            Packet packet = new Packet("Leave");
+            server.StartLoop(packet.MakeBytes());
+            Console.WriteLine("Server Listening...");
 
             Console.ReadLine();
         }

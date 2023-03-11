@@ -1,13 +1,16 @@
-﻿using System.Net;
-using Client.Networking;
+﻿using Client.Networking;
+using Server;
+using System.Net;
+using System.Text;
 
 namespace Client
 {
     public static class Program
     {
-            static bool isMultiplayer = false;
-            static bool isValid = false;
-            static bool connected = false;
+
+        static bool isMultiplayer = false;
+        static bool isValid = false;
+        static bool connected = false;
 
         private static void Main(string[] args)
         {
@@ -28,9 +31,9 @@ namespace Client
                 while (!isValid)
                 {
                     try
-                    {
+                    { //169.254.211.137
 
-                        Console.WriteLine("Enter the server IP Address: "); // 169.254.162.206 4000
+                        Console.WriteLine("Enter the server IP Address: "); // 169.254.162.206 9876
                         serverIP = Console.ReadLine();
                         Console.WriteLine("Enter the server Port: ");
                         serverPort = Console.ReadLine();
@@ -60,15 +63,19 @@ namespace Client
                     Packet packet = new Packet("Join");
                     byte[] data = packet.MakeBytes();
 
-                    client.JoinServer(data);
+                    client.StartLoop(data);
+
+                    Console.WriteLine("Client Started");
 
                     connected = true;
                 }
 
             }
 
-            using (var game = new LYA.LYA())
-                game.Run();
+            Console.ReadLine();
+
+            //using (var game = new LYA.LYA())
+            //    game.Run();
         }
     }
 }

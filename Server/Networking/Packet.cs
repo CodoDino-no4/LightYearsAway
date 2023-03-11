@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using System.Text;
 
-namespace Server.Networking
+namespace Client.Networking
 {
     public class Packet
     {
@@ -62,7 +62,7 @@ namespace Server.Networking
 
         public Packet()
         {
-            
+
         }
 
 
@@ -94,9 +94,9 @@ namespace Server.Networking
 
         }
 
-        
 
-        
+
+
 
     }
 }

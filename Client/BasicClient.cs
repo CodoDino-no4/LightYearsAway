@@ -1,65 +1,50 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Sockets;
+using System.Text;
 
 namespace Client
 {
     public class BasicClient
     {
         private Socket udpClient;
-        private IPEndPoint serverEndPoint;
+        private IPEndPoint serverEndPoint; 
         private byte[] buffer;
-        private ArraySegment<byte> bufferSegment;
+        private ArraySegment<byte> bufferSegment; 
 
         public void Init(IPAddress ip, int port)
         {
-            buffer = new byte[1048];
+            buffer = new byte[4096];
             bufferSegment = new ArraySegment<byte>(buffer);
 
             serverEndPoint = new IPEndPoint(ip, port);
 
             udpClient = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             udpClient.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.PacketInformation, true);
-            udpClient.Connect(serverEndPoint);
 
         }
 
-        // Sends a packet to connect to the server
-        public void JoinServer(byte[] joinData)
+
+        public void StartLoop(byte[] data)
         {
             _ = Task.Factory.StartNew(async () =>
             {
-                //SocketReceiveMessageFromResult res;
+                SocketReceiveMessageFromResult res;
 
-                try
+                while (true)
                 {
-                     await Send(joinData);
-                     //res = await udpClient.ReceiveMessageFromAsync(bufferSegment, SocketFlags.None, serverEndPoint);
-                     //await Recieve();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.ToString());
-                }
+                    await Send(data);
+                    res = await udpClient.ReceiveMessageFromAsync(bufferSegment, SocketFlags.None, serverEndPoint);
 
-
+                    Console.WriteLine(res);
+                }
             });
         }
 
         public async Task Send(byte[] data)
         {
-            if (serverEndPoint != null)
-            { 
-                bufferSegment = new ArraySegment<byte>(data);
-                _ = await udpClient.SendToAsync(bufferSegment, serverEndPoint);
-            }
-        }
-
-        public async Task<ArraySegment<byte>> Recieve()
-        {
-            var s = new ArraySegment<byte>();
-            _ = await udpClient.ReceiveFromAsync(s, serverEndPoint);
-
-            return s;
+            var s = new ArraySegment<byte>(data);
+            await udpClient.SendToAsync(s, SocketFlags.None, serverEndPoint);
         }
     }
 }
