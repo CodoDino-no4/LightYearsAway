@@ -28,8 +28,7 @@ public class Packet
     {
         // Set command
         this.command = (int)(Command)System.Enum.Parse(typeof(Command), command);
-        this.data = "What is up from client";
-
+        this.data = "What is up from client on laptop ooo";
     }
 
     // Converts the Packet into an array of bytes

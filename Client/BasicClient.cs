@@ -14,10 +14,12 @@ namespace Client
         public void Init(IPAddress ip, int port)
         {
             buffer = new byte[1024];
-            
+
             serverEndPoint = new IPEndPoint(ip, port);
 
             udpClient = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            udpClient.EnableBroadcast = true;
+            udpClient.DontFragment = true;
             udpClient.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.PacketInformation, true);
         }
 

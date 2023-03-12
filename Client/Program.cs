@@ -28,9 +28,8 @@ namespace Client
                 while (!isValid)
                 {
                     try
-                    { //169.254.211.137
-
-                        //Console.WriteLine("Enter the server IP Address: "); // 169.254.162.206 9876
+                    {
+                        //Console.WriteLine("Enter the server IP Address: ");
                         //serverIP = Console.ReadLine();
                         //Console.WriteLine("Enter the server Port: ");
                         //serverPort = Console.ReadLine();
