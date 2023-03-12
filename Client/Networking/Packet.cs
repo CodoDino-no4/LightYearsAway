@@ -1,5 +1,4 @@
-﻿using System.Data;
-using System.Text;
+﻿using System.Text;
 
 namespace Client.Networking
 {
@@ -62,7 +61,7 @@ namespace Client.Networking
 
         public Packet()
         {
-            
+
         }
 
 
@@ -94,9 +93,9 @@ namespace Client.Networking
 
         }
 
-        
 
-        
+
+
 
     }
 }

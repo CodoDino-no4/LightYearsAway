@@ -29,7 +29,7 @@ namespace Server
             udpServer = new UdpClient(PORT);
             remoteEndpoint = new IPEndPoint(IPAddress.Any, PORT);
 
-            Console.WriteLine("Server successfully intialised on: " + IPAddress.Any + ":" + PORT);
+            Console.WriteLine("Server successfully intialised at port :" + PORT);
 
         }
 

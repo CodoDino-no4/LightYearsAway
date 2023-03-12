@@ -1,7 +1,5 @@
 ﻿using Client.Networking;
-using Server;
 using System.Net;
-using System.Text;
 
 namespace Client
 {
@@ -33,12 +31,12 @@ namespace Client
                     try
                     { //169.254.211.137
 
-                        Console.WriteLine("Enter the server IP Address: "); // 169.254.162.206 9876
-                        serverIP = Console.ReadLine();
-                        Console.WriteLine("Enter the server Port: ");
-                        serverPort = Console.ReadLine();
+                        //Console.WriteLine("Enter the server IP Address: "); // 169.254.162.206 9876
+                        //serverIP = Console.ReadLine();
+                        //Console.WriteLine("Enter the server Port: ");
+                        //serverPort = Console.ReadLine();
 
-                        client.Init(IPAddress.Parse(serverIP), Int32.Parse(serverPort));
+                        client.Init(IPAddress.Parse("192.168.1.255"), Int32.Parse("11000"));
 
                         isValid = true;
 
@@ -60,7 +58,7 @@ namespace Client
                         break;
                     }
 
-                    Packet packet = new Packet("Leave");
+                    Packet packet = new Packet("Join");
                     byte[] data = packet.MakeBytes();
 
                     client.StartLoop(data);
@@ -72,10 +70,8 @@ namespace Client
 
             }
 
-            Console.ReadLine();
-
-            //using (var game = new LYA.LYA())
-            //    game.Run();
+            using (var game = new LYA.LYA())
+                game.Run();
         }
     }
 }

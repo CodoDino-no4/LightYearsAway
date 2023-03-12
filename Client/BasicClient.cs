@@ -1,16 +1,14 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
-using System.Text;
 
 namespace Client
 {
     public class BasicClient
     {
         private Socket udpClient;
-        private IPEndPoint serverEndPoint; 
+        private IPEndPoint serverEndPoint;
         private byte[] buffer;
-        private ArraySegment<byte> bufferSegment; 
+        private ArraySegment<byte> bufferSegment;
 
         public void Init(IPAddress ip, int port)
         {
@@ -27,30 +25,31 @@ namespace Client
 
         public void StartLoop(byte[] data)
         {
-            //_ = Task.Factory.StartNew(async () =>
-            //{
-            //    SocketReceiveMessageFromResult res;
+            _ = Task.Factory.StartNew(async () =>
+            {
+                try
+                {
+                    while (true)
+                    {
+                        await Send(data);
+                        Console.WriteLine("Message sent to the broadcast address");
+                    }
 
-            //    while (true)
-            //    {
-            //        await Send(data);
-            //        res = await udpClient.ReceiveMessageFromAsync(bufferSegment, SocketFlags.None, serverEndPoint);
+                } catch (SocketException e)
+                {
+                    Console.WriteLine(e);
 
-            //        Console.WriteLine(res);
-            //    }
-            //});
-
-            var s = new ArraySegment<byte>(data);
-
-            udpClient.SendTo(s, serverEndPoint);
-
-            Console.WriteLine("Message sent to the broadcast address");
+                } finally
+                {
+                    udpClient.Close();
+                }
+            });
         }
 
-        //public async Task Send(byte[] data)
-        //{
-        //    var s = new ArraySegment<byte>(data);
-        //    await udpClient.SendToAsync(s, SocketFlags.None, serverEndPoint);
-        //}
+        public async Task Send(byte[] data)
+        {
+            var s = new ArraySegment<byte>(data);
+            _ = await udpClient.SendToAsync(s, serverEndPoint);
+        }
     }
 }

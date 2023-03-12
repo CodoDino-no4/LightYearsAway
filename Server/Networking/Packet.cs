@@ -1,7 +1,6 @@
-﻿using System.Data;
-using System.Text;
+﻿using System.Text;
 
-namespace Client.Networking
+namespace Server.Networking
 {
     public class Packet
     {
