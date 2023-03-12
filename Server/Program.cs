@@ -8,7 +8,7 @@
             var server = new BasicServer();
 
             server.Init();
-            Packet sendPacket = new Packet("Move");
+            Packet sendPacket = new Packet("Leave");
             server.StartLoop(sendPacket.MakeBytes());
             Packet recvPacket = new Packet();
             server.RecievedBytes();

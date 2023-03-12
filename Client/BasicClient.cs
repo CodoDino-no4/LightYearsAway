@@ -34,7 +34,7 @@ namespace Client
                         Console.WriteLine("Message sent to the broadcast address");
 
                         await Recieve(buffer);
-                        Console.WriteLine($"client buffer: {Encoding.UTF8.GetString(buffer)}");
+                        Console.WriteLine($"{serverEndPoint}: {Encoding.UTF8.GetString(buffer)}");
 
                     }
 

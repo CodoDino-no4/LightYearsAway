@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 
 public class Packet
 {
@@ -30,7 +28,7 @@ public class Packet
     {
         // Set command
         this.command = (int)(Command)System.Enum.Parse(typeof(Command), command);
-        //this.data = "What is up friendos";
+        this.data = "What is up from server";
 
     }
 
