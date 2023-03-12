@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Sockets;
+using System.Text;
 
 namespace Client
 {
@@ -19,9 +20,7 @@ namespace Client
 
             udpClient = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             udpClient.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.PacketInformation, true);
-
         }
-
 
         public void StartLoop(byte[] data)
         {
@@ -33,6 +32,10 @@ namespace Client
                     {
                         await Send(data);
                         Console.WriteLine("Message sent to the broadcast address");
+
+                        await Recieve(buffer);
+                        Console.WriteLine($"client buffer: {Encoding.UTF8.GetString(buffer)}");
+
                     }
 
                 } catch (SocketException e)
@@ -50,6 +53,11 @@ namespace Client
         {
             var s = new ArraySegment<byte>(data);
             _ = await udpClient.SendToAsync(s, serverEndPoint);
+        }
+
+        public async Task Recieve(byte[] data)
+        {
+            _ = await udpClient.ReceiveAsync(data);
         }
     }
 }

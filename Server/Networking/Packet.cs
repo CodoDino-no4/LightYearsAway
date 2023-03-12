@@ -30,6 +30,7 @@ namespace Server.Networking
         {
             // Set command
             this.command = (int)(Command)System.Enum.Parse(typeof(Command), command);
+            //this.data = "What is up friendos";
 
         }
 

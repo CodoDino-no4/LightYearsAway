@@ -25,11 +25,17 @@ namespace Client.Networking
         // Payload sent within packet
         private string data;
 
+        public Packet()
+        {
+
+        }
+
         //Creates an instance of the packet and sets the data
         public Packet(string command)
         {
             // Set command
             this.command = (int)(Command)System.Enum.Parse(typeof(Command), command);
+            this.data = "What is up";
 
         }
 
@@ -39,37 +45,31 @@ namespace Client.Networking
             // Byte stream
             List<byte> dataStream = new List<byte>();
 
-            // Add the command
-            dataStream.AddRange(BitConverter.GetBytes((int)command));
+            // Add command
+            if (command != 0)
+            { 
+                dataStream.AddRange(BitConverter.GetBytes(command));
+            } else
+                dataStream.AddRange(BitConverter.GetBytes(0));
+
+            // Add client ID
+            if (clientID != null)
+            { 
+                dataStream.AddRange(BitConverter.GetBytes(clientID.Length));
+                dataStream.AddRange(Encoding.UTF8.GetBytes(clientID));
+            } else
+                dataStream.AddRange(BitConverter.GetBytes(0));
 
             // Add data
-            if (data != null && clientID != null)
+            if (data != null)
             {
-                //Add length
-                dataStream.AddRange(BitConverter.GetBytes(clientID.Length));
                 dataStream.AddRange(BitConverter.GetBytes(data.Length));
-
-                //Add data
-                dataStream.AddRange(Encoding.UTF8.GetBytes(clientID));
                 dataStream.AddRange(Encoding.UTF8.GetBytes(data));
-            }
-            else
+            } else
                 dataStream.AddRange(BitConverter.GetBytes(0));
 
             return dataStream.ToArray();
         }
-
-        public Packet()
-        {
-
-        }
-
-
-        // Description   -> |dataIdentifier|name length|message length|    name   |    message   |
-        // Size in bytes -> |       4      |     4     |       4      |name length|message length|
-
-        // Description   -> |    command   |name length|message length|    name   |    message   |
-        // Size in bytes -> |       4      |     4     |       4      |name length|message length|
 
         // converts the bytes into a Packet
         public void MakePacket(byte[] data)
@@ -92,10 +92,5 @@ namespace Client.Networking
                 this.data = null;
 
         }
-
-
-
-
-
     }
 }

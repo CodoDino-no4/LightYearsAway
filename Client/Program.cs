@@ -47,6 +47,7 @@ namespace Client
                     }
                 }
 
+                //if the server is unreachable then try again 3 times and finally fail
                 while (!connected)
                 {
                     int i = 0;
