@@ -27,7 +27,7 @@ namespace Server
             conns = new ArrayList();
 
             udpServer = new UdpClient(PORT);
-            remoteEndpoint = new IPEndPoint(IPAddress.Any, PORT);
+            remoteEndpoint = new IPEndPoint(IPAddress.Broadcast, 0);
 
             Console.WriteLine("Server successfully intialised");
 
@@ -42,7 +42,7 @@ namespace Server
                     while (true)
                     {
                         Console.WriteLine("Waiting to recieve packets");
-                        bufferSegment = udpServer.Receive(ref remoteEndpoint);
+                        bufferSegment = udpServer.Receive(ref remoteEndpoint); // not recieving from laptop, remoteEndPoint is wrong?
 
                         Console.WriteLine($"Received packets from {remoteEndpoint}: {Encoding.UTF8.GetString(bufferSegment)}");
 
