@@ -13,9 +13,8 @@ namespace Client
 
         public void Init(IPAddress ip, int port)
         {
-            buffer = new byte[4096];
-            bufferSegment = new ArraySegment<byte>(buffer);
-
+            buffer = new byte[1024];
+            
             serverEndPoint = new IPEndPoint(ip, port);
 
             udpClient = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
@@ -34,7 +33,8 @@ namespace Client
                         Console.WriteLine("Message sent to the broadcast address");
 
                         await Recieve(buffer);
-                        Console.WriteLine($"{serverEndPoint}: {Encoding.UTF8.GetString(buffer)}");
+                        bufferSegment = new ArraySegment<byte>(buffer);
+                        Console.WriteLine($"Recieved packets from {serverEndPoint}: {Encoding.UTF8.GetString(buffer)}");
 
                     }
 

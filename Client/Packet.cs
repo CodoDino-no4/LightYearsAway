@@ -41,15 +41,19 @@ public class Packet
         // Add the command
         dataStream.AddRange(BitConverter.GetBytes((int)command));
 
-        // Add data
-        if (data != null && clientID != null)
+        // Add client ID
+        if (clientID != null)
         {
-            //Add length
             dataStream.AddRange(BitConverter.GetBytes(clientID.Length));
-            dataStream.AddRange(BitConverter.GetBytes(data.Length));
-
-            //Add data
             dataStream.AddRange(Encoding.UTF8.GetBytes(clientID));
+        }
+        else
+            dataStream.AddRange(BitConverter.GetBytes(0));
+
+        // Add data
+        if (data != null)
+        {
+            dataStream.AddRange(BitConverter.GetBytes(data.Length));
             dataStream.AddRange(Encoding.UTF8.GetBytes(data));
         }
         else
