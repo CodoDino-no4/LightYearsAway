@@ -38,11 +38,13 @@ namespace Client
 
                     }
 
-                } catch (SocketException e)
+                }
+                catch (SocketException e)
                 {
                     Console.WriteLine(e);
 
-                } finally
+                }
+                finally
                 {
                     udpClient.Close();
                 }

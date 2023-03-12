@@ -1,6 +1,4 @@
-﻿using Server.Networking;
-
-namespace Server
+﻿namespace Server
 {
     class Program
     {
@@ -10,8 +8,10 @@ namespace Server
             var server = new BasicServer();
 
             server.Init();
-            Packet packet = new Packet("Move");
-            server.StartLoop(packet.MakeBytes());
+            Packet sendPacket = new Packet("Move");
+            server.StartLoop(sendPacket.MakeBytes());
+            Packet recvPacket = new Packet();
+            server.RecievedBytes();
             Console.WriteLine("Server Listening...");
 
             Console.ReadLine();

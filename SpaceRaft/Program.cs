@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LYA
+﻿namespace LYA
 {
 		public static class Program
 		{

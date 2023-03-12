@@ -1,5 +1,4 @@
-﻿using Client.Networking;
-using System.Net;
+﻿using System.Net;
 
 namespace Client
 {
