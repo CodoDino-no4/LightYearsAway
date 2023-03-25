@@ -18,13 +18,14 @@ namespace Server
         private bool disposedValue;
         private Dictionary<IPAddress, int> conns;
 
-        private Packet packet;
+        private Packet packetSent;
+        private Packet packetRecv;
 
         public void Init()
         {
             Console.WriteLine("Server intialisaing...");
 
-            buffer = new byte[1024];
+            byte[] buffer = new byte[1024];
             bufferSegment = new ArraySegment<byte>(buffer);
             conns = new Dictionary<IPAddress, int>();
 
@@ -34,7 +35,8 @@ namespace Server
 
             remoteEndpoint = new IPEndPoint(IPAddress.Broadcast, PORT);
 
-            packet = new Packet();
+            packetSent = new Packet();
+            packetRecv = new Packet();
 
             Console.WriteLine("Server successfully intialised");
 
@@ -49,11 +51,45 @@ namespace Server
                     while (true)
                     {
                         Console.WriteLine("Waiting to recieve packets");
-                        bufferSegment = udpServer.Receive(ref remoteEndpoint);
+                        buffer = udpServer.Receive(ref remoteEndpoint);
+                        //packetRecv.MakePacket(buffer);
 
-                        Console.WriteLine($"Received packets from {remoteEndpoint}: {Encoding.UTF8.GetString(bufferSegment)}");
+                        Console.WriteLine($"Received packets from {remoteEndpoint}: {Encoding.UTF8.GetString(buffer)}");
 
-                        await SendTo(packet.MakeBytes("Join", "1", "FromServer"), remoteEndpoint);
+
+                        await SendTo(packetSent.MakeBytes("Join", "FromServer"), remoteEndpoint);
+                        Thread.Sleep(1000);
+
+
+                        //// Join Resp
+                        //if (Convert.ToInt32(bufferSegment) == 1)
+                        //{
+                        //    byte[] joinResp = ClientJoin();
+                        //    await SendTo(joinResp, remoteEndpoint);
+                        //};
+
+                        //// Leave Resp
+                        //if (Convert.ToInt32(bufferSegment) == 2)
+                        //{
+                        //    byte[] leaveResp = ClientLeave();
+                        //    await SendTo(leaveResp, remoteEndpoint);
+                        //};
+
+                        //// Move Resp
+                        //if (Convert.ToInt32(bufferSegment) == 3)
+                        //{
+                        //    byte[] moveResp = ClientMove();
+                        //    await SendTo(moveResp, remoteEndpoint);
+                        //};
+
+                        //// Place Resp
+                        //if (Convert.ToInt32(bufferSegment) == 4)
+                        //{
+                        //    byte[] placeResp = ClientPlace();
+                        //    await SendTo(placeResp, remoteEndpoint);
+                        //};
+
+
                     }
                 }
                 catch (SocketException e)
@@ -67,10 +103,34 @@ namespace Server
             });
 
         }
-
-        public ArraySegment<byte> RecievedBytes()
+        public byte[] ClientJoin()
         {
-            return bufferSegment;
+            if (!conns.ContainsKey(remoteEndpoint.Address))
+            {
+                conns.Add(remoteEndpoint.Address, conns.Count() + 1);
+            }
+
+            return packetSent.MakeBytes("Join", "Join Response");
+        }
+
+        public byte[] ClientLeave()
+        {
+            if (conns.ContainsKey(remoteEndpoint.Address))
+            {
+                conns.Remove(remoteEndpoint.Address);
+            }
+
+            return packetSent.MakeBytes("Leave", "Leave Response"); ;
+        }
+
+        public byte[] ClientMove()
+        {
+            return packetSent.MakeBytes("Move", "Move Response");
+        }
+
+        public byte[] ClientPlace()
+        {
+            return packetSent.MakeBytes("Place", "Place Response");
         }
 
         public async Task SendTo(byte[] data, IPEndPoint recipient)

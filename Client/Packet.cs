@@ -38,7 +38,7 @@ public class Packet
 
         // Byte stream
         List<byte> dataStream = new List<byte>();
-
+        
         // Add the command
         dataStream.AddRange(BitConverter.GetBytes(this.command));
 
@@ -54,8 +54,8 @@ public class Packet
         // Add data
         if (data != null)
         {
-            dataStream.AddRange(BitConverter.GetBytes(data.Length));
-            dataStream.AddRange(Encoding.UTF8.GetBytes(data));
+            dataStream.AddRange(BitConverter.GetBytes(this.data.Length));
+            dataStream.AddRange(Encoding.UTF8.GetBytes(this.data));
         }
         else
             dataStream.AddRange(BitConverter.GetBytes(0));

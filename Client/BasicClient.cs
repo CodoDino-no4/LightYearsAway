@@ -37,6 +37,7 @@ namespace Client
                     {
                         await Send(packet.MakeBytes("Join", "1", "FromClient"));
                         Console.WriteLine("Message sent to the broadcast address");
+                        Thread.Sleep(1000);
 
                         bufferSegment = udpClient.Receive(ref serverEndPoint);
                         Console.WriteLine($"Recieved packets from {serverEndPoint}: {Encoding.UTF8.GetString(bufferSegment)}");

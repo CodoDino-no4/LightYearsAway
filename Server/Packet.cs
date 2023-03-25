@@ -19,21 +19,20 @@ public class Packet
     // Client unique ID
     private string clientId;
 
-    // Payload sent within packet
+    // Payload sent within packetSent
     private string data;
 
-    //Creates an instance of packet
+    //Creates an instance of packetSent
     public Packet()
     {
 
     }
 
     // Converts data into an array of bytes
-    public byte[] MakeBytes(string command, string clientId, string data)
+    public byte[] MakeBytes(string command, string data)
     {
-        // Set packet data
+        // Set packetSent data
         this.command = (int)(Command)Enum.Parse(typeof(Command), command, true);
-        this.clientId = clientId;
         this.data = data;
 
         // Byte stream
@@ -42,20 +41,11 @@ public class Packet
         // Add the command
         dataStream.AddRange(BitConverter.GetBytes(this.command));
 
-        // Add client ID
-        if (this.clientId != null)
-        {
-            dataStream.AddRange(BitConverter.GetBytes(this.clientId.Length));
-            dataStream.AddRange(Encoding.UTF8.GetBytes(this.clientId));
-        }
-        else
-            dataStream.AddRange(BitConverter.GetBytes(0));
-
         // Add data
         if (data != null)
         {
-            dataStream.AddRange(BitConverter.GetBytes(data.Length));
-            dataStream.AddRange(Encoding.UTF8.GetBytes(data));
+            dataStream.AddRange(BitConverter.GetBytes(this.data.Length));
+            dataStream.AddRange(Encoding.UTF8.GetBytes(this.data));
         }
         else
             dataStream.AddRange(BitConverter.GetBytes(0));
@@ -66,7 +56,7 @@ public class Packet
     // converts the bytes into a Packet
     public void MakePacket(byte[] data)
     {
-        // Gets the formation of the packet length
+        // Gets the formation of the packetSent length
 
         // Command (1 byte)
         command = BitConverter.ToInt32(data, 0);
