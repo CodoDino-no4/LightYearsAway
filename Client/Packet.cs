@@ -9,7 +9,6 @@ public class Packet
         Join,   // A client joins the server
         Leave,  // A client leaves the server
         Move,   // Astro movement
-        Zoom,   // Zoom in/out
         Place,  // PLace a tile
 
     }
@@ -18,33 +17,36 @@ public class Packet
     private int command = 0;
 
     // Client unique ID
-    private string clientID;
+    private string clientId;
 
     // Payload sent within packet
     private string data;
 
-    //Creates an instance of the packet and sets the data
-    public Packet(string command)
+    //Creates an instance of packet
+    public Packet()
     {
-        // Set command
-        this.command = (int)(Command)System.Enum.Parse(typeof(Command), command);
-        this.data = "What is up from client on laptop ooo";
+
     }
 
-    // Converts the Packet into an array of bytes
-    public byte[] MakeBytes()
+    // Converts data into an array of bytes
+    public byte[] MakeBytes(string command, string clientId, string data)
     {
+        // Set packet data
+        this.command = (int)(Command)Enum.Parse(typeof(Command), command, true);
+        this.clientId = clientId;
+        this.data = data;
+
         // Byte stream
         List<byte> dataStream = new List<byte>();
 
         // Add the command
-        dataStream.AddRange(BitConverter.GetBytes((int)command));
+        dataStream.AddRange(BitConverter.GetBytes(this.command));
 
         // Add client ID
-        if (clientID != null)
+        if (this.clientId != null)
         {
-            dataStream.AddRange(BitConverter.GetBytes(clientID.Length));
-            dataStream.AddRange(Encoding.UTF8.GetBytes(clientID));
+            dataStream.AddRange(BitConverter.GetBytes(this.clientId.Length));
+            dataStream.AddRange(Encoding.UTF8.GetBytes(this.clientId));
         }
         else
             dataStream.AddRange(BitConverter.GetBytes(0));
@@ -61,18 +63,6 @@ public class Packet
         return dataStream.ToArray();
     }
 
-    public Packet()
-    {
-
-    }
-
-
-    // Description   -> |dataIdentifier|name length|message length|    name   |    message   |
-    // Size in bytes -> |       4      |     4     |       4      |name length|message length|
-
-    // Description   -> |    command   |name length|message length|    name   |    message   |
-    // Size in bytes -> |       4      |     4     |       4      |name length|message length|
-
     // converts the bytes into a Packet
     public void MakePacket(byte[] data)
     {
@@ -81,7 +71,7 @@ public class Packet
         // Command (1 byte)
         command = BitConverter.ToInt32(data, 0);
 
-        // Store the length of the clientID (4 bytes)
+        // Store the length of the clientId (4 bytes)
         int clientIDLen = BitConverter.ToInt32(data, 1);
 
         // Store the length of the data (4 bytes)
@@ -94,9 +84,4 @@ public class Packet
             this.data = null;
 
     }
-
-
-
-
-
 }

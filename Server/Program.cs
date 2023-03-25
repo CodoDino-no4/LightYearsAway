@@ -8,8 +8,7 @@
             var server = new BasicServer();
 
             server.Init();
-            Packet sendPacket = new Packet("Leave");
-            server.StartLoop(sendPacket.MakeBytes());
+            server.StartLoop();
             Packet recvPacket = new Packet();
             server.RecievedBytes();
             Console.WriteLine("Server Listening...");

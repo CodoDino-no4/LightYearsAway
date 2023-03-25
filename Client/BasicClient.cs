@@ -11,6 +11,8 @@ namespace Client
         private byte[] buffer;
         private ArraySegment<byte> bufferSegment;
 
+        private Packet packet;
+
         public void Init(IPAddress ip, int port)
         {
             buffer = new byte[1024];
@@ -21,9 +23,11 @@ namespace Client
             udpClient.EnableBroadcast = true;
             udpClient.DontFragment = true;
 
+            packet = new Packet();
+
         }
 
-        public void StartLoop(byte[] data)
+        public void StartLoop()
         {
             _ = Task.Factory.StartNew(async () =>
             {
@@ -31,11 +35,11 @@ namespace Client
                 {
                     while (true)
                     {
-                        await Send(data);
+                        await Send(packet.MakeBytes("Join", "1", "FromClient"));
                         Console.WriteLine("Message sent to the broadcast address");
 
                         bufferSegment = udpClient.Receive(ref serverEndPoint);
-                        Console.WriteLine($"Recieved packets from {serverEndPoint}: {Encoding.UTF8.GetString(buffer)}");
+                        Console.WriteLine($"Recieved packets from {serverEndPoint}: {Encoding.UTF8.GetString(bufferSegment)}");
 
                     }
 

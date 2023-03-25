@@ -57,10 +57,7 @@ namespace Client
                         break;
                     }
 
-                    Packet packet = new Packet("Join");
-                    byte[] data = packet.MakeBytes();
-
-                    client.StartLoop(data);
+                    client.StartLoop();
 
                     Console.WriteLine("Client Started");
 
@@ -69,8 +66,10 @@ namespace Client
 
             }
 
-            using (var game = new LYA.LYA())
-                game.Run();
+            Console.ReadLine();
+
+            //using (var game = new LYA.LYA())
+            //    game.Run();
         }
     }
 }

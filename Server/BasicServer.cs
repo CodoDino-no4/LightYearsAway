@@ -16,7 +16,9 @@ namespace Server
         private byte[] buffer;
         private ArraySegment<byte> bufferSegment;
         private bool disposedValue;
-        private ArrayList conns;
+        private Dictionary<IPAddress, int> conns;
+
+        private Packet packet;
 
         public void Init()
         {
@@ -24,18 +26,21 @@ namespace Server
 
             buffer = new byte[1024];
             bufferSegment = new ArraySegment<byte>(buffer);
-            conns = new ArrayList();
+            conns = new Dictionary<IPAddress, int>();
 
             udpServer = new UdpClient(PORT);
             udpServer.EnableBroadcast = true;
             udpServer.DontFragment = true;
+
             remoteEndpoint = new IPEndPoint(IPAddress.Broadcast, PORT);
+
+            packet = new Packet();
 
             Console.WriteLine("Server successfully intialised");
 
         }
 
-        public void StartLoop(byte[] data)
+        public void StartLoop()
         {
             _ = Task.Factory.StartNew(async () =>
             {
@@ -44,11 +49,11 @@ namespace Server
                     while (true)
                     {
                         Console.WriteLine("Waiting to recieve packets");
-                        bufferSegment = udpServer.Receive(ref remoteEndpoint); // not recieving from laptop, remoteEndPoint is wrong? pauses after doing this once but unpauses when computer client is stered? Remote endpoint changes from 104 to 101 when computer clinet connects?
+                        bufferSegment = udpServer.Receive(ref remoteEndpoint);
 
                         Console.WriteLine($"Received packets from {remoteEndpoint}: {Encoding.UTF8.GetString(bufferSegment)}");
 
-                        await SendTo(data, remoteEndpoint); //it can recieve its own packets
+                        await SendTo(packet.MakeBytes("Join", "1", "FromServer"), remoteEndpoint);
                     }
                 }
                 catch (SocketException e)
