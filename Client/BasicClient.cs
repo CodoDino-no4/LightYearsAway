@@ -6,7 +6,7 @@ namespace Client
 {
     public class BasicClient
     {
-        private Socket udpClient;
+        private UdpClient udpClient;
         private IPEndPoint serverEndPoint;
         private byte[] buffer;
         private ArraySegment<byte> bufferSegment;
@@ -17,10 +17,10 @@ namespace Client
 
             serverEndPoint = new IPEndPoint(ip, port);
 
-            udpClient = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            udpClient = new UdpClient(Int32.Parse("11001"));
             udpClient.EnableBroadcast = true;
             udpClient.DontFragment = true;
-            udpClient.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.PacketInformation, true);
+
         }
 
         public void StartLoop(byte[] data)
@@ -34,8 +34,7 @@ namespace Client
                         await Send(data);
                         Console.WriteLine("Message sent to the broadcast address");
 
-                        await Recieve(buffer);
-                        bufferSegment = new ArraySegment<byte>(buffer);
+                        bufferSegment = udpClient.Receive(ref serverEndPoint);
                         Console.WriteLine($"Recieved packets from {serverEndPoint}: {Encoding.UTF8.GetString(buffer)}");
 
                     }
@@ -55,13 +54,7 @@ namespace Client
 
         public async Task Send(byte[] data)
         {
-            var s = new ArraySegment<byte>(data);
-            _ = await udpClient.SendToAsync(s, serverEndPoint);
-        }
-
-        public async Task Recieve(byte[] data)
-        {
-            _ = await udpClient.ReceiveAsync(data);
+            _ = await udpClient.SendAsync(data, serverEndPoint);
         }
     }
 }
