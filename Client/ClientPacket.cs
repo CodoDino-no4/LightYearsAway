@@ -69,20 +69,16 @@ public class ClientPacket
         cmd = BitConverter.ToInt32(data, 0);
         Console.WriteLine(cmd);
 
-        // Decode the clientId
-        // Length is always 1
-        clientId = BitConverter.ToInt32(data, 4);
-        Console.WriteLine(clientId);
-
         // Decode the payload
         // Length is variable so get the length
-        int dataLen = data.Length - 8;
+        int dataLen = data.Length - 4;
 
         // Copy payload to new array and get the string
-        byte[] dataSegment = new byte[200];
-        Buffer.BlockCopy(data, 8, dataSegment, 0, dataLen);
+        byte[] dataSegment = new byte[dataLen];
+        Buffer.BlockCopy(data, 4, dataSegment, 0, dataLen);
 
         payload = Encoding.UTF8.GetString(dataSegment);
+        Console.WriteLine(payload);
 
     }
 }

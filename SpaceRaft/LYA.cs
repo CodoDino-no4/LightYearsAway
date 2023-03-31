@@ -55,7 +55,7 @@ namespace LYA
 						graphics.PreferredBackBufferWidth=2000;
 						graphics.PreferredBackBufferHeight=1000;
 						graphics.IsFullScreen=isFullscreen;
-						customFPS=120;
+						customFPS=60;
 
 						// Better timestep that can be modified
 						graphics.SynchronizeWithVerticalRetrace=false;

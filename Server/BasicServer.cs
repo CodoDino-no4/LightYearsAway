@@ -49,7 +49,7 @@ namespace Server
                         packetRecv.ServerRecvPacket(buffer);
                         Console.WriteLine($"Received packets from {remoteEndpoint}:");
 
-                        await SendTo(packetSent.ServerSendPacket("Join", "FromServer"), remoteEndpoint);
+                        await SendTo(packetSent.ServerSendPacket("Move", "FromServer"), remoteEndpoint);
                         Thread.Sleep(1000);
 
 

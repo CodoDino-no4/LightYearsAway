@@ -66,10 +66,10 @@ namespace Client
 
             }
 
-            //Console.ReadLine();
+            Console.ReadLine();
 
-            using (var game = new LYA.LYA())
-                game.Run();
+            //using (var game = new LYA.LYA())
+            //    game.Run();
         }
     }
 }
