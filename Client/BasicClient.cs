@@ -6,25 +6,28 @@ namespace Client
 {
     public class BasicClient
     {
+        public const int PORT = 11001;
+
         private UdpClient udpClient;
         private IPEndPoint serverEndPoint;
-        private byte[] buffer;
-        private ArraySegment<byte> bufferSegment;
 
-        private Packet packet;
+        private byte[] buffer;
+
+        private ClientPacket packetSent;
+        private ClientPacket packetRecv;
 
         public void Init(IPAddress ip, int port)
         {
-            buffer = new byte[1024];
+            buffer = new byte[512];
 
             serverEndPoint = new IPEndPoint(ip, port);
 
-            udpClient = new UdpClient(Int32.Parse("11001"));
+            udpClient = new UdpClient(PORT);
             udpClient.EnableBroadcast = true;
             udpClient.DontFragment = true;
 
-            packet = new Packet();
-
+            packetSent = new ClientPacket();
+            packetRecv = new ClientPacket();
         }
 
         public void StartLoop()
@@ -35,15 +38,14 @@ namespace Client
                 {
                     while (true)
                     {
-                        await Send(packet.MakeBytes("Join", "1", "FromClient"));
-                        Console.WriteLine("Message sent to the broadcast address");
+                        await Send(packetSent.ClientSendPacket("Join", "8", "FromClient"));
                         Thread.Sleep(1000);
 
-                        bufferSegment = udpClient.Receive(ref serverEndPoint);
-                        Console.WriteLine($"Recieved packets from {serverEndPoint}: {Encoding.UTF8.GetString(bufferSegment)}");
+                        buffer = udpClient.Receive(ref serverEndPoint);
+                        packetRecv.ClientRecvPacket(buffer);
+                        Console.WriteLine($"Recieved packets from {serverEndPoint}:");
 
                     }
-
                 }
                 catch (SocketException e)
                 {

@@ -7,26 +7,21 @@ namespace Server
 {
     public class BasicServer
     {
-
         public const int PORT = 11000;
 
         private UdpClient udpServer;
         private IPEndPoint remoteEndpoint;
 
         private byte[] buffer;
-        private ArraySegment<byte> bufferSegment;
-        private bool disposedValue;
+
         private Dictionary<IPAddress, int> conns;
 
-        private Packet packetSent;
-        private Packet packetRecv;
+        private ServerPacket packetSent;
+        private ServerPacket packetRecv;
 
         public void Init()
         {
-            Console.WriteLine("Server intialisaing...");
-
-            byte[] buffer = new byte[1024];
-            bufferSegment = new ArraySegment<byte>(buffer);
+            buffer = new byte[512];
             conns = new Dictionary<IPAddress, int>();
 
             udpServer = new UdpClient(PORT);
@@ -35,11 +30,10 @@ namespace Server
 
             remoteEndpoint = new IPEndPoint(IPAddress.Broadcast, PORT);
 
-            packetSent = new Packet();
-            packetRecv = new Packet();
+            packetSent = new ServerPacket();
+            packetRecv = new ServerPacket();
 
-            Console.WriteLine("Server successfully intialised");
-
+            Console.WriteLine("Server successfully intialised...");
         }
 
         public void StartLoop()
@@ -50,14 +44,12 @@ namespace Server
                 {
                     while (true)
                     {
-                        Console.WriteLine("Waiting to recieve packets");
+
                         buffer = udpServer.Receive(ref remoteEndpoint);
-                        //packetRecv.MakePacket(buffer);
+                        packetRecv.ServerRecvPacket(buffer);
+                        Console.WriteLine($"Received packets from {remoteEndpoint}:");
 
-                        Console.WriteLine($"Received packets from {remoteEndpoint}: {Encoding.UTF8.GetString(buffer)}");
-
-
-                        await SendTo(packetSent.MakeBytes("Join", "FromServer"), remoteEndpoint);
+                        await SendTo(packetSent.ServerSendPacket("Join", "FromServer"), remoteEndpoint);
                         Thread.Sleep(1000);
 
 
@@ -110,7 +102,7 @@ namespace Server
                 conns.Add(remoteEndpoint.Address, conns.Count() + 1);
             }
 
-            return packetSent.MakeBytes("Join", "Join Response");
+            return packetSent.ServerSendPacket("Join", "Join Response");
         }
 
         public byte[] ClientLeave()
@@ -120,17 +112,17 @@ namespace Server
                 conns.Remove(remoteEndpoint.Address);
             }
 
-            return packetSent.MakeBytes("Leave", "Leave Response"); ;
+            return packetSent.ServerSendPacket("Leave", "Leave Response"); ;
         }
 
         public byte[] ClientMove()
         {
-            return packetSent.MakeBytes("Move", "Move Response");
+            return packetSent.ServerSendPacket("Move", "Move Response");
         }
 
         public byte[] ClientPlace()
         {
-            return packetSent.MakeBytes("Place", "Place Response");
+            return packetSent.ServerSendPacket("Place", "Place Response");
         }
 
         public async Task SendTo(byte[] data, IPEndPoint recipient)

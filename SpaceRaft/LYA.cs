@@ -18,6 +18,7 @@ namespace LYA
 				private GraphicsDeviceManager graphics;
 				private SpriteBatch spriteBatch;
 				private bool isFullscreen;
+				private int customFPS;
 
 				// Camera
 				private Camera camera;
@@ -51,10 +52,15 @@ namespace LYA
 				{
 						// Graphics settings
 						isFullscreen=false;
-						graphics.SynchronizeWithVerticalRetrace=true;
 						graphics.PreferredBackBufferWidth=2000;
 						graphics.PreferredBackBufferHeight=1000;
 						graphics.IsFullScreen=isFullscreen;
+						customFPS=120;
+
+						// Better timestep that can be modified
+						graphics.SynchronizeWithVerticalRetrace=false;
+						IsFixedTimeStep=true;
+						TargetElapsedTime=TimeSpan.FromMilliseconds( 1000.0f/customFPS );
 
 						Window.AllowUserResizing=true;
 						Window.Title="Light-Years Away";
