@@ -3,17 +3,24 @@ using LYA._Camera;
 using LYA.Commands;
 using LYA.Helpers;
 using LYA.Managers;
+using LYA.Networking;
+using LYA.Screens;
 using LYA.Sprites;
 using LYA.Sprites.Background;
 using LYA.Sprites.GUI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Collections;
+using MonoGame.Extended.Screens;
+using MonoGame.Extended.Screens.Transitions;
 
 namespace LYA
 {
 		public class LYA : Game
 		{
+				// Startup
+				private bool isLoaded = false;
+
 				// Graphics
 				private GraphicsDeviceManager graphics;
 				private SpriteBatch spriteBatch;
@@ -25,7 +32,7 @@ namespace LYA
 				private Effect bgInfinateShader;
 
 				// Managers
-				private BGManager bgManager;
+				private ScreenManager screenManager;
 
 				// Textures
 				private Texture2D bg1, bg2;
@@ -38,6 +45,9 @@ namespace LYA
 				private Deque<BaseSprite> sprites;
 				private Deque<BaseSprite> uiSprites;
 
+				// Networking
+				public ClientManager clientManager;
+
 				public LYA()
 				{
 						// Graphics manager
@@ -46,6 +56,13 @@ namespace LYA
 						// Content directory
 						Content.RootDirectory="Content";
 						Globals.Content=Content;
+
+						// Networking
+						clientManager=new ClientManager();
+
+						// Screen Management
+						screenManager=new ScreenManager();
+						Components.Add( screenManager );
 				}
 
 				protected override void Initialize()
@@ -57,7 +74,7 @@ namespace LYA
 						graphics.IsFullScreen=isFullscreen;
 						customFPS=60;
 
-						// Better timestep that can be modified
+						// Timestep/FPS
 						graphics.SynchronizeWithVerticalRetrace=false;
 						IsFixedTimeStep=true;
 						TargetElapsedTime=TimeSpan.FromMilliseconds( 1000.0f/customFPS );
@@ -67,131 +84,52 @@ namespace LYA
 						IsMouseVisible=true;
 
 						graphics.ApplyChanges();
-
+						
 						// Set inital viewport 
 						Globals.ScreenSize=graphics.GraphicsDevice.Viewport.Bounds;
-
-						// Camera
-						camera=new Camera();
-
-						// Managers
-						bgManager=new BGManager();
 
 						// Create a new SpriteBatch
 						spriteBatch=new SpriteBatch( GraphicsDevice );
 						Globals.SpriteBatch=spriteBatch;
 
-						// Sprite List
-						sprites=new Deque<BaseSprite>();
-						uiSprites=new Deque<BaseSprite>();
-
 						base.Initialize();
+
+						//if (!isLoaded)
+						//{
+						//		LoadSplash();
+						//}
+
+						//LoadMainMenu();
+						LoadOuterSpace();
+				}
+
+				private void LoadSplash()
+				{
+						screenManager.LoadScreen( new Splash( this ), new FadeTransition( GraphicsDevice, Color.Black ) );
+				}
+
+				private void LoadMainMenu()
+				{
+						screenManager.LoadScreen( new MainMenu( this ), new FadeTransition( GraphicsDevice, Color.Black ) );
+				}
+
+				private void LoadOuterSpace()
+				{
+						screenManager.LoadScreen( new OuterSpace( this ), new FadeTransition( GraphicsDevice, Color.Black ) );
 				}
 
 				protected override void LoadContent()
 				{
 						InputHelper.Setup( this );
-
-						// Background content
-						bgInfinateShader=Content.Load<Effect>( "infinite" );
-
-						bg1=Globals.Content.Load<Texture2D>( "BG1-320px" );
-						bg2=Globals.Content.Load<Texture2D>( "BG2-320px" );
-						bgManager.AddElement( new BGLayer( bg1 ) );
-						bgManager.AddElement( new BGLayer( bg2 ) );
-
-						// UI content
-						toolBelt=Globals.Content.Load<Texture2D>( "toolbelt-empty" );
-
-						// add sprites to list
-						uiSprites.AddToBack( new Toolbelt( toolBelt ) );
-
-						// Player Astro content
-						astroIdleTex=Globals.Content.Load<Texture2D>( "Astro-Idle" );
-						astro=new Astro( astroIdleTex );
-
-						foundationTex=Globals.Content.Load<Texture2D>( "foundation" );
-
-						// add sprites to list
-						sprites.AddToBack( astro );
-
 				}
 				protected override void Draw( GameTime gameTime )
 				{
-						Matrix projection = Matrix.CreateOrthographicOffCenter(Globals.ScreenSize, 0, 1);
-						Matrix bg_transform = camera.GetBgTransform(bg1);
-						Matrix ui_scale = camera.GetUIScale();
-
-						bgInfinateShader.Parameters[ "view_projection" ].SetValue( Matrix.Identity*projection );
-						bgInfinateShader.Parameters[ "uv_transform" ].SetValue( Matrix.Invert( bg_transform ) );
-
-						////////////////////////////////////////////////
-
-						/* Begin Spritebatch
-						 * Infinate Background */
-
-						Globals.SpriteBatch.Begin( effect: bgInfinateShader, samplerState: SamplerState.PointWrap, transformMatrix: camera.Transform );
-
-						bgManager.Draw();
-
-						Globals.SpriteBatch.End();
-
-						////////////////////////////////////////////////
-
-						/* Begin Spritebatch
-						 * Variable position Sprites */
-
-						Globals.SpriteBatch.Begin( samplerState: SamplerState.PointWrap, transformMatrix: camera.Transform );
-
-						foreach (var sprite in sprites)
-								sprite.Draw( sprites );
-
-						Globals.SpriteBatch.End();
-
-						////////////////////////////////////////////////
-
-						/* Begin Spritebatch
-						 * UI Layer Sprites */
-
-						Globals.SpriteBatch.Begin( samplerState: SamplerState.PointWrap, transformMatrix: ui_scale );
-
-						foreach (var sprite in uiSprites)
-								sprite.Draw( uiSprites );
-
-						Globals.SpriteBatch.End();
-
-						////////////////////////////////////////////////
-
 						base.Draw( gameTime );
 				}
 
 				protected override void Update( GameTime gameTime )
 				{
-						InputHelper.UpdateSetup();
-
-						// Update the camera
-						camera.UpdateCameraInput( CommandManager.PlayerCameraMovement( astro ) );
-
-						//Update BG sprites
-						bgManager.Update();
-
-						CommandManager.Commands( astro, foundationTex, sprites );
-
-						// Update sprites
-						foreach (var sprite in sprites)
-								sprite.Update();
-
-						//Update UI Sprites
-						foreach (var sprite in uiSprites)
-								sprite.Update();
-
-						HasQuit();
-
 						Globals.Update( gameTime, graphics );
-						InputHelper.UpdateCleanup();
-
-						//send/rec packet
-
 						base.Update( gameTime );
 				}
 
@@ -200,10 +138,5 @@ namespace LYA
 						//base.UnloadContent();
 				}
 
-				private void HasQuit()
-				{
-						if (InputBindings.Quit().Pressed())
-								Exit();
-				}
 		}
 }
