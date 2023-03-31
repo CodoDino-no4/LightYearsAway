@@ -40,6 +40,7 @@ namespace LYA
 
 				public LYA()
 				{
+						// Startup
 						isLoading=true;
 						delay=5;
 						timeRemaining=delay;
@@ -57,6 +58,9 @@ namespace LYA
 						// Screen Management
 						screenManager=new ScreenManager();
 						Components.Add( screenManager );
+
+						// Menu
+						isMenuOpen=true;
 				}
 
 				protected override void Initialize()
@@ -88,7 +92,7 @@ namespace LYA
 
 						base.Initialize();
 
-						screenManager.LoadScreen( new Splash( this ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
+						screenManager.LoadScreen( new MainMenu( this ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
 				}
 
 				protected override void LoadContent()
@@ -112,19 +116,19 @@ namespace LYA
 								isMenuOpen=!isMenuOpen;
 						}
 
-						if (isMenuOpen)
-						{
-								screenManager.LoadScreen( new MainMenu( this ), new FadeTransition( GraphicsDevice, Color.Black, 0.5f ) );
-						}
+						//if (isMenuOpen)
+						//{
+						//		screenManager.LoadScreen( new MainMenu( this ), new FadeTransition( GraphicsDevice, Color.Black, 0.5f ) );
+						//}
 
-						if (isLoading)
-						{
-								if (timeRemaining <= Globals.ElapsedSeconds)
-								{			
-										screenManager.LoadScreen( new OuterSpace( this ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
-										isLoading=false;
-								}
-						}
+						//if (isLoading)
+						//{
+						//		if (timeRemaining<=Globals.ElapsedSeconds)
+						//		{
+						//				screenManager.LoadScreen( new MainMenu( this ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
+						//				isLoading=false;
+						//		}
+						//}
 
 						base.Update( gameTime );
 
