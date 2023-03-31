@@ -22,8 +22,6 @@ namespace LYA.Screens
 {
 		public class OuterSpace : GameScreen
 		{
-				// Graphics
-				private GraphicsDeviceManager graphics;
 
 				// Camera
 				private Camera camera;
@@ -50,13 +48,6 @@ namespace LYA.Screens
 				{
 						// Camera
 						camera=new Camera();
-				}
-
-				private new LYA Game => (LYA) base.Game;
-
-				public override void LoadContent()
-				{
-						base.LoadContent();
 
 						// Managers
 						bgManager=new BGManager();
@@ -64,6 +55,13 @@ namespace LYA.Screens
 						// Sprite List
 						sprites=new Deque<BaseSprite>();
 						uiSprites=new Deque<BaseSprite>();
+				}
+
+				private new LYA Game => (LYA) base.Game;
+
+				public override void LoadContent()
+				{
+						base.LoadContent();
 
 						// Background content
 						bgInfinateShader=Content.Load<Effect>( "infinite" );
@@ -138,8 +136,6 @@ namespace LYA.Screens
 
 				public override void Update( GameTime gameTime )
 				{
-						InputHelper.UpdateSetup();
-
 						// Update the camera
 						camera.UpdateCameraInput( CommandManager.PlayerCameraMovement( astro ) );
 
@@ -156,9 +152,9 @@ namespace LYA.Screens
 						foreach (var sprite in uiSprites)
 								sprite.Update();
 
-						InputHelper.UpdateCleanup();
-
 						//send/rec packet
+
+						Console.WriteLine( Globals.ElapsedSeconds );
 
 				}
 		}

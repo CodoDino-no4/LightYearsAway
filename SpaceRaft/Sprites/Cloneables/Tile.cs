@@ -25,7 +25,6 @@ namespace LYA.Sprites.Cloneables
 						Rectangle=new Rectangle( -Texture.Width, -Texture.Height, Texture.Width, Texture.Width );
 						Origin=new Vector2( Rectangle.Width/2, Rectangle.Height/2 );
 						Texture=texture;
-						Debug.WriteLine( "Rectangle TILE"+Rectangle );
 				}
 
 				public override void Update()

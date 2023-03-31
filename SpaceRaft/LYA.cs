@@ -19,7 +19,9 @@ namespace LYA
 		public class LYA : Game
 		{
 				// Startup
-				private bool isLoaded = false;
+				private bool isLoading;
+				private float delay;
+				private float timeRemaining;
 
 				// Graphics
 				private GraphicsDeviceManager graphics;
@@ -27,29 +29,21 @@ namespace LYA
 				private bool isFullscreen;
 				private int customFPS;
 
-				// Camera
-				private Camera camera;
-				private Effect bgInfinateShader;
-
 				// Managers
 				private ScreenManager screenManager;
-
-				// Textures
-				private Texture2D bg1, bg2;
-				private Texture2D astroIdleTex;
-				private Texture2D toolBelt;
-				private Texture2D foundationTex;
-
-				// Sprite Objects
-				public Astro astro;
-				private Deque<BaseSprite> sprites;
-				private Deque<BaseSprite> uiSprites;
 
 				// Networking
 				public ClientManager clientManager;
 
+				// Menu
+				private bool isMenuOpen;
+
 				public LYA()
 				{
+						isLoading=true;
+						delay=5;
+						timeRemaining=delay;
+
 						// Graphics manager
 						graphics=new GraphicsDeviceManager( this );
 
@@ -94,33 +88,13 @@ namespace LYA
 
 						base.Initialize();
 
-						//if (!isLoaded)
-						//{
-						//		LoadSplash();
-						//}
-
-						//LoadMainMenu();
-						LoadOuterSpace();
-				}
-
-				private void LoadSplash()
-				{
-						screenManager.LoadScreen( new Splash( this ), new FadeTransition( GraphicsDevice, Color.Black ) );
-				}
-
-				private void LoadMainMenu()
-				{
-						screenManager.LoadScreen( new MainMenu( this ), new FadeTransition( GraphicsDevice, Color.Black ) );
-				}
-
-				private void LoadOuterSpace()
-				{
-						screenManager.LoadScreen( new OuterSpace( this ), new FadeTransition( GraphicsDevice, Color.Black ) );
+						screenManager.LoadScreen( new Splash( this ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
 				}
 
 				protected override void LoadContent()
 				{
 						InputHelper.Setup( this );
+
 				}
 				protected override void Draw( GameTime gameTime )
 				{
@@ -129,8 +103,32 @@ namespace LYA
 
 				protected override void Update( GameTime gameTime )
 				{
+						InputHelper.UpdateSetup();
+
 						Globals.Update( gameTime, graphics );
+
+						if (InputBindings.Menu().Pressed())
+						{
+								isMenuOpen=!isMenuOpen;
+						}
+
+						if (isMenuOpen)
+						{
+								screenManager.LoadScreen( new MainMenu( this ), new FadeTransition( GraphicsDevice, Color.Black, 0.5f ) );
+						}
+
+						if (isLoading)
+						{
+								if (timeRemaining <= Globals.ElapsedSeconds)
+								{			
+										screenManager.LoadScreen( new OuterSpace( this ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
+										isLoading=false;
+								}
+						}
+
 						base.Update( gameTime );
+
+						InputHelper.UpdateCleanup();
 				}
 
 				protected override void UnloadContent()

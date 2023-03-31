@@ -25,7 +25,7 @@ namespace LYA.Helpers
 
 				public static void Update( GameTime gameTime, GraphicsDeviceManager graphics )
 				{
-						ElapsedSeconds=(float) gameTime.ElapsedGameTime.TotalSeconds;
+						ElapsedSeconds=(float) gameTime.TotalGameTime.TotalSeconds;
 
 						ScreenSize=graphics.GraphicsDevice.Viewport.Bounds;
 				}

@@ -16,14 +16,19 @@ namespace LYA.Screens
 
 				private new LYA Game => (LYA) base.Game;
 
+				public override void LoadContent()
+				{
+						base.LoadContent();
+				}
+
 				public override void Draw( GameTime gameTime )
 				{
-						throw new NotImplementedException();
+
 				}
 
 				public override void Update( GameTime gameTime )
 				{
-						throw new NotImplementedException();
+						
 				}
 		}
 }
