@@ -35,7 +35,33 @@ namespace LYA.Networking
 						packetRecv=new PacketFormer();
 				}
 
-				public void StartLoop()
+				public void JoinServer()
+				{
+						_=Task.Factory.StartNew( async () =>
+						{
+								try
+								{
+												await Send( packetSent.ClientSendPacket( "Join", "0", "Join Request" ) );
+												Thread.Sleep( 1000 );
+
+												buffer=udpClient.Receive( ref serverEndPoint );
+												packetRecv.ClientRecvPacket( buffer );
+												Console.WriteLine( $"Recieved packets from {serverEndPoint}:" );
+
+								}
+								catch (SocketException e)
+								{
+										Console.WriteLine( e );
+
+								}
+								finally
+								{
+										udpClient.Close();
+								}
+						} );
+				}
+
+				public void StartLoop( byte[] data)
 				{
 						_=Task.Factory.StartNew( async () =>
 						{
@@ -43,7 +69,7 @@ namespace LYA.Networking
 								{
 										while (true)
 										{
-												await Send( packetSent.ClientSendPacket( "Join", "8", "FromClient" ) );
+												await Send(data);
 												Thread.Sleep( 1000 );
 
 												buffer=udpClient.Receive( ref serverEndPoint );

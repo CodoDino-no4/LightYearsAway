@@ -1,25 +1,26 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended.Screens;
+using Myra.Graphics2D.UI;
+using Myra;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Myra;
-using Myra.Graphics2D.UI;
-using static System.Net.Mime.MediaTypeNames;
-using System.Data.Common;
-using MonoGame.Extended.Screens.Transitions;
-using LYA.Helpers;
+using LYA.Networking;
+using System.Net;
 
 namespace LYA.Screens
 {
-		internal class MainMenu : GameScreen
+		public class MultiMenu : GameScreen
 		{
 				private Desktop desktop;
 				private Grid grid;
+				ClientManager clientManager;
+				string ipAddress;
+				string port;
 
-				public MainMenu( Game game ) : base( game )
+				public MultiMenu( Game game ) : base( game )
 				{
 				}
 
@@ -30,12 +31,13 @@ namespace LYA.Screens
 						base.LoadContent();
 
 						MyraEnvironment.Game=Game;
+						clientManager = new ClientManager();
 
-						grid = new Grid
+						grid=new Grid
 						{
-								ShowGridLines = true,
-								RowSpacing = 50,
-								ColumnSpacing = 50
+								ShowGridLines=true,
+								RowSpacing=50,
+								ColumnSpacing=50
 						};
 
 						grid.ColumnsProportions.Add( new Proportion( ProportionType.Auto ) );
@@ -45,40 +47,55 @@ namespace LYA.Screens
 
 						// Labels
 
-						grid.Widgets.Add( DrawLabel("title", "Light-Years Away", 2, 1) );
+						grid.Widgets.Add( DrawLabel( "title", "Light-Years Away Multiplayer", 2, 1 ) );
+						grid.Widgets.Add( DrawLabel( "ip-input", "Enter Server IP Addess: ", 2, 2 ) );
+						grid.Widgets.Add( DrawLabel( "port-input", "Enter Server Port: ", 2, 3 ) );
+
+						// Inputs
+
+						var ip = new TextBox
+						{
+								GridColumn = 3,
+								GridRow = 2,
+								HorizontalAlignment = HorizontalAlignment.Center,
+						};
+
+						var port = new TextBox
+						{
+								GridColumn = 3,
+								GridRow = 3,
+								HorizontalAlignment = HorizontalAlignment.Center,
+						};
 
 						// Buttons
 
-						var playBtn = new TextButton
+						var connBtn = new TextButton
 						{
-								GridColumn = 2,
-								GridRow = 2,
-								Text = "Play",
+								GridColumn = 3,
+								GridRow = 4,
+								Text = "Connect",
 								HorizontalAlignment = HorizontalAlignment.Center,
 						};
 
-						playBtn.Click+=( s, a ) =>
+						connBtn.Click+=( s, a ) =>
 						{
-								//screenManager.LoadScreen( new MainMenu( this.Game ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
-						};
+								try
+								{
+										clientManager.Init( IPAddress.Parse( "192.168.1.255" ), Int32.Parse( "11000" ) );
+										clientManager.JoinServer();
+								}
+								catch { 
 
-						var multiBtn = new TextButton
-						{
-								GridColumn = 2,
-								GridRow = 3,
-								Text = "Multiplayer",
-								HorizontalAlignment = HorizontalAlignment.Center,
-						};
+										var errBox = Dialog.CreateMessageBox("Error", "Server Address Not Found");
+										errBox.ShowModal( desktop );
+								}
 
-						multiBtn.Click+=( s, a ) =>
-						{
-								Globals.ScreenManager.LoadScreen( new MultiMenu( this.Game ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
 						};
 
 						var exitBtn = new TextButton
 						{
-								GridColumn = 2,
-								GridRow = 4,
+								GridColumn = 3,
+								GridRow = 5,
 								Text = "Exit",
 								HorizontalAlignment = HorizontalAlignment.Center,
 						};
@@ -88,9 +105,7 @@ namespace LYA.Screens
 								Game.Exit();
 						};
 
-
-						grid.Widgets.Add( playBtn );
-						grid.Widgets.Add( multiBtn );
+						grid.Widgets.Add( connBtn );
 						grid.Widgets.Add( exitBtn );
 
 						// Add it to the desktop
@@ -100,7 +115,7 @@ namespace LYA.Screens
 						};
 				}
 
-				private Label DrawLabel(string id, string text, int column, int row)
+				private Label DrawLabel( string id, string text, int column, int row )
 				{
 						var label = new Label
 						{
@@ -121,7 +136,7 @@ namespace LYA.Screens
 
 				public override void Update( GameTime gameTime )
 				{
-						
+
 				}
 		}
 }

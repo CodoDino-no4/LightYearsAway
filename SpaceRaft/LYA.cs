@@ -57,7 +57,8 @@ namespace LYA
 
 						// Screen Management
 						screenManager=new ScreenManager();
-						Components.Add( screenManager );
+						Globals.ScreenManager = screenManager;
+						Components.Add( Globals.ScreenManager );
 
 						// Menu
 						isMenuOpen=true;
@@ -92,7 +93,7 @@ namespace LYA
 
 						base.Initialize();
 
-						screenManager.LoadScreen( new MainMenu( this ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
+						Globals.ScreenManager.LoadScreen( new MainMenu( this ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
 				}
 
 				protected override void LoadContent()
@@ -109,7 +110,7 @@ namespace LYA
 				{
 						InputHelper.UpdateSetup();
 
-						Globals.Update( gameTime, graphics );
+						Globals.Update( gameTime, graphics, screenManager );
 
 						if (InputBindings.Menu().Pressed())
 						{
