@@ -106,5 +106,15 @@ namespace LYA.Helpers
 						return keyList;
 				}
 
+				public static ICondition Menu()
+				{
+						keyList=
+						new AnyCondition(
+								new KeyboardCondition( Keys.Escape )
+						);
+
+						return keyList;
+				}
+
 		}
 }

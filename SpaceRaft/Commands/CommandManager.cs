@@ -53,7 +53,6 @@ namespace LYA.Commands
 								astro.Direction.X=moveRight.direction;
 						}
 
-						Debug.WriteLine( astro.Direction );
 						return astro.Position;
 				}
 

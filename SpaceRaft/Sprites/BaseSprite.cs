@@ -32,7 +32,6 @@ namespace LYA.Sprites
 						set
 						{
 								rectangle=value;
-								Debug.WriteLine( "Rectangle SET"+rectangle );
 						}
 				}
 

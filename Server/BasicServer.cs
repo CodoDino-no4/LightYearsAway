@@ -15,9 +15,13 @@ namespace Server
         private byte[] buffer;
 
         private Dictionary<IPAddress, int> conns;
+        private int clientId = 0;
 
         private ServerPacket packetSent;
         private ServerPacket packetRecv;
+
+        // Tick rate
+        private TimeSpan deltaTime;
 
         public void Init()
         {
@@ -33,6 +37,8 @@ namespace Server
             packetSent = new ServerPacket();
             packetRecv = new ServerPacket();
 
+            deltaTime = TimeSpan.FromMilliseconds( 1000.0f/ 60 );
+
             Console.WriteLine("Server successfully intialised...");
         }
 
@@ -47,46 +53,41 @@ namespace Server
 
                         buffer = udpServer.Receive(ref remoteEndpoint);
                         packetRecv.ServerRecvPacket(buffer);
-                        Console.WriteLine($"Received packets from {remoteEndpoint}:");
 
-                        await SendTo(packetSent.ServerSendPacket("Move", "FromServer"), remoteEndpoint);
+                        //Join Resp
+                        if (packetRecv.cmd == 1)
+                        {
+                            byte[] joinResp = ClientJoin();
+                            await SendTo(joinResp, remoteEndpoint);
+                        };
+
+                        // Leave Resp
+                        if (packetRecv.cmd == 2)
+                        {
+                            byte[] leaveResp = ClientLeave();
+                            await SendTo(leaveResp, remoteEndpoint);
+                        };
+
+                        // Move Resp
+                        if (packetRecv.cmd == 3)
+                        {
+                            byte[] moveResp = ClientMove();
+                            await SendTo(moveResp, remoteEndpoint);
+                        };
+
+                        // Place Resp
+                        if (packetRecv.cmd == 4)
+                        {
+                            byte[] placeResp = ClientPlace();
+                            await SendTo(placeResp, remoteEndpoint);
+                        };
+
                         Thread.Sleep(1000);
-
-
-                        //// Join Resp
-                        //if (Convert.ToInt32(bufferSegment) == 1)
-                        //{
-                        //    byte[] joinResp = ClientJoin();
-                        //    await SendTo(joinResp, remoteEndpoint);
-                        //};
-
-                        //// Leave Resp
-                        //if (Convert.ToInt32(bufferSegment) == 2)
-                        //{
-                        //    byte[] leaveResp = ClientLeave();
-                        //    await SendTo(leaveResp, remoteEndpoint);
-                        //};
-
-                        //// Move Resp
-                        //if (Convert.ToInt32(bufferSegment) == 3)
-                        //{
-                        //    byte[] moveResp = ClientMove();
-                        //    await SendTo(moveResp, remoteEndpoint);
-                        //};
-
-                        //// Place Resp
-                        //if (Convert.ToInt32(bufferSegment) == 4)
-                        //{
-                        //    byte[] placeResp = ClientPlace();
-                        //    await SendTo(placeResp, remoteEndpoint);
-                        //};
-
-
                     }
                 }
-                catch (SocketException e)
+                catch (SocketException err)
                 {
-                    Console.WriteLine(e);
+                    Console.WriteLine(err);
                 }
                 finally
                 {
@@ -100,9 +101,10 @@ namespace Server
             if (!conns.ContainsKey(remoteEndpoint.Address))
             {
                 conns.Add(remoteEndpoint.Address, conns.Count() + 1);
+                clientId = conns.GetValueOrDefault(remoteEndpoint.Address);
             }
 
-            return packetSent.ServerSendPacket("Join", "Join Response");
+            return packetSent.ServerSendPacket("Join", $"Client ID: {clientId}");
         }
 
         public byte[] ClientLeave()
@@ -112,7 +114,7 @@ namespace Server
                 conns.Remove(remoteEndpoint.Address);
             }
 
-            return packetSent.ServerSendPacket("Leave", "Leave Response"); ;
+            return packetSent.ServerSendPacket("Leave", $"Client ID: {clientId}"); ;
         }
 
         public byte[] ClientMove()
