@@ -86,17 +86,18 @@ namespace LYA.Screens
 								{
 										clientManager.Init( IPAddress.Parse( "192.168.1.255" ), Int32.Parse( "11000" ) );
 
-										HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
-										builder.Services.AddWindowsService( options =>
-										{
-												options.ServiceName=".NET Joke Service";
-										} );
+										// Thread 1
+										/// Sends the join request and coninues listening in loop
+										
+										//HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
+										//builder.Services.AddWindowsService( options =>
+										//{
+										//		options.ServiceName=".NET SyncService";
+										//} );
 
 
-										if (clientManager.isInit)
-										{
-												Globals.ScreenManager.LoadScreen( new OuterSpace( this.Game ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
-										}
+										// Thread 2
+										Globals.ScreenManager.LoadScreen( new OuterSpace( this.Game ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
 								}
 								catch { 
 
