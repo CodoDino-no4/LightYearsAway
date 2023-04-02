@@ -28,6 +28,11 @@ namespace LYA.Helpers
 						get; set;
 				}
 
+				public static int MaxPlayers
+				{
+						get; set;
+				}
+
 				public static void Update( GameTime gameTime, GraphicsDeviceManager graphics, ScreenManager screenManager )
 				{
 						ElapsedSeconds=(float) gameTime.TotalGameTime.TotalSeconds;

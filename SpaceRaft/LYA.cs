@@ -90,10 +90,11 @@ namespace LYA
 						// Create a new SpriteBatch
 						spriteBatch=new SpriteBatch( GraphicsDevice );
 						Globals.SpriteBatch=spriteBatch;
+						Globals.MaxPlayers=8;
 
 						base.Initialize();
 
-						Globals.ScreenManager.LoadScreen( new MainMenu( this ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
+						Globals.ScreenManager.LoadScreen( new MainMenu( this ), new FadeTransition( GraphicsDevice, Color.Black, 3 ) );
 				}
 
 				protected override void LoadContent()
@@ -119,14 +120,14 @@ namespace LYA
 
 						//if (isMenuOpen)
 						//{
-						//		screenManager.LoadScreen( new MainMenu( this ), new FadeTransition( GraphicsDevice, Color.Black, 0.5f ) );
+						//		screenManager.LoadScreen( new MainMenu( this ), new FadeTransition( GraphicsDevice, Color.Black, 3 ) );
 						//}
 
 						//if (isLoading)
 						//{
 						//		if (timeRemaining<=Globals.ElapsedSeconds)
 						//		{
-						//				screenManager.LoadScreen( new MainMenu( this ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
+						//				screenManager.LoadScreen( new MainMenu( this ), new FadeTransition( GraphicsDevice, Color.Black, 3 ) );
 						//				isLoading=false;
 						//		}
 						//}

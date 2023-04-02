@@ -9,6 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 using LYA.Networking;
 using System.Net;
+using LYA.Helpers;
+using MonoGame.Extended.Screens.Transitions;
+using Microsoft.Extensions.Hosting;
 
 namespace LYA.Screens
 {
@@ -82,7 +85,18 @@ namespace LYA.Screens
 								try
 								{
 										clientManager.Init( IPAddress.Parse( "192.168.1.255" ), Int32.Parse( "11000" ) );
-										clientManager.JoinServer();
+
+										HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
+										builder.Services.AddWindowsService( options =>
+										{
+												options.ServiceName=".NET Joke Service";
+										} );
+
+
+										if (clientManager.isInit)
+										{
+												Globals.ScreenManager.LoadScreen( new OuterSpace( this.Game ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
+										}
 								}
 								catch { 
 

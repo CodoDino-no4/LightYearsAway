@@ -20,13 +20,13 @@ namespace LYA.Networking
 				}
 
 				// Current cmd
-				private int cmd = 0;
+				public int cmd = 0;
 
 				// Client unique ID
-				private int clientId;
+				public int clientId;
 
 				// Payload sent within packetSent
-				private string payload;
+				public string payload;
 
 				//Creates an instance of packetSent
 				public PacketFormer()

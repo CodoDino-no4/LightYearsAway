@@ -59,7 +59,7 @@ namespace LYA.Screens
 
 						playBtn.Click+=( s, a ) =>
 						{
-								//screenManager.LoadScreen( new MainMenu( this.Game ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
+								Globals.ScreenManager.LoadScreen( new OuterSpace( this.Game ), new FadeTransition( GraphicsDevice, Color.Black, 3 ) );
 						};
 
 						var multiBtn = new TextButton
@@ -72,7 +72,7 @@ namespace LYA.Screens
 
 						multiBtn.Click+=( s, a ) =>
 						{
-								Globals.ScreenManager.LoadScreen( new MultiMenu( this.Game ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
+								Globals.ScreenManager.LoadScreen( new MultiMenu( this.Game ), new FadeTransition( GraphicsDevice, Color.Black, 3 ) );
 						};
 
 						var exitBtn = new TextButton
