@@ -1,53 +1,83 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using LYA.Helpers;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace LYA.Networking
 {
-		public class SyncService : BackgroundService
+		public class SyncService
 		{
 				private ClientManager clientManager;
+				private PacketFormer packetSent;
+				private PacketFormer packetRecv;
+
+				private byte[] buffer;
+				private string clientData;
+				public bool isInit = false;
+
+				private Thread thread;
+				public BackgroundWorker worker;
 
 				public SyncService( ClientManager clientManager )
 				{
 						this.clientManager = clientManager;
+						worker = new BackgroundWorker();
 				}
 
-				protected override async Task ExecuteAsync( CancellationToken stoppingToken )
+				public void InitializeWorker()
 				{
-						try
-						{
-								while (!stoppingToken.IsCancellationRequested)
-								{
-										clientManager.JoinServer();
-										//clientManager.StartLoop();
+						worker.DoWork+=
+								new DoWorkEventHandler( Worker_DoWork );
 
-										await Task.Delay( TimeSpan.FromMinutes( 1 ), stoppingToken );
-								}
-						}
-						catch (TaskCanceledException)
-						{
-								// When the stopping token is canceled, for example, a call made from services.msc,
-								// we shouldn't exit with a non-zero exit code. In other words, this is expected...
-						}
-						catch (Exception ex)
-						{
-								Console.WriteLine( ex.Message );
+						worker.RunWorkerCompleted+=
+								new RunWorkerCompletedEventHandler(
+						Worker_RunWorkerCompleted );
 
-								// Terminates this process and returns an exit code to the operating system.
-								// This is required to avoid the 'BackgroundServiceExceptionBehavior', which
-								// performs one of two scenarios:
-								// 1. When set to "Ignore": will do nothing at all, errors cause zombie services.
-								// 2. When set to "StopHost": will cleanly stop the host, and log errors.
-								//
-								// In order for the Windows Service Management system to leverage configured
-								// recovery options, we need to terminate the process with a non-zero exit code.
-								Environment.Exit( 1 );
+						worker.ProgressChanged+=
+								new ProgressChangedEventHandler(
+						Worker_ProgressChanged );
+
+				}
+
+				public void Worker_DoWork( object sender, DoWorkEventArgs e )
+				{
+						clientManager.JoinServer();
+						//clientManager.MessageLoop();
+
+						//Check if there is a request to cancel the process
+						if (worker.CancellationPending)
+						{
+								e.Cancel=true;
+								worker.ReportProgress( 0 );
+								return;
 						}
 				}
+				public void Worker_ProgressChanged( object sender, ProgressChangedEventArgs e )
+				{
+
+				}
+
+				public void Worker_RunWorkerCompleted( object sender, RunWorkerCompletedEventArgs e )
+				{
+						if (e.Cancelled)
+						{
+								Console.WriteLine("Process was cancelled");
+						}
+						else if (e.Error!=null)
+						{
+								Console.WriteLine("There was an error running the process. The thread aborted");
+						}
+						else
+						{
+								Console.WriteLine("Process was completed");
+						}
+				}
+
 		}
 }

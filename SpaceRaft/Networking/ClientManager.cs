@@ -17,17 +17,21 @@ namespace LYA.Networking
 				private UdpClient udpClient;
 				private IPEndPoint serverEndPoint;
 				
-				private byte[] buffer;
+				private byte[] recvBuff;
+				private byte[] sendBuff;
 				private string clientData;
-				private int clientId;
-				public bool isInit = false;
+				public bool isInit;
 
+				private PacketFormer packetJoin;
 				private PacketFormer packetSent;
 				private PacketFormer packetRecv;
 
 				public void Init( IPAddress ip, int port )
 				{
-						buffer=new byte[ 512 ];
+						isInit=false;
+
+						recvBuff=new byte[ 512 ];
+						sendBuff=new byte[ 512 ];
 
 						serverEndPoint=new IPEndPoint( ip, port );
 
@@ -35,63 +39,57 @@ namespace LYA.Networking
 						udpClient.EnableBroadcast=true;
 						udpClient.DontFragment=true;
 
-						packetSent=new PacketFormer();
+						packetJoin=new PacketFormer();
 						packetRecv=new PacketFormer();
+						packetSent=new PacketFormer();
 
 				}
 
-				public void JoinServer()
+				public async void JoinServer()
 				{
-						_=Task.Factory.StartNew( async () =>
+						try
 						{
-								try
-								{
-										await Send( packetSent.ClientSendPacket( "Join", "0", "Join Request" ) );
-										Thread.Sleep( 1000 );
+								packetJoin.ClientSendPacket( "Join", 0, "" );
 
-										buffer=udpClient.Receive( ref serverEndPoint );
-										packetRecv.ClientRecvPacket( buffer );
-										clientData=packetRecv.payload;
-										clientId=Int32.Parse( clientData.Split( ':' ).Last() );
-										packetSent.clientId=clientId;
+								await Send( packetJoin.byteStream );
+								Thread.Sleep( 1000 );
 
-										isInit=true;
+								recvBuff=udpClient.Receive( ref serverEndPoint );
+								packetRecv.ClientRecvPacket( recvBuff );
+								clientData=packetRecv.payload;
+								Globals.clientId=Int32.Parse( clientData.Split( ':' ).First() );
+								Globals.playerCount=Int32.Parse( clientData.Split( ':' ).Last() );
 
-								}
-								catch (SocketException e)
-								{
-										Console.WriteLine( e );
-								}
-						} );
+								isInit=true;
+
+						}
+						catch (SocketException e)
+						{
+								Console.WriteLine( e );
+						}
 				}
 
-				public void StartLoop( byte[] data)
+				public async void MessageLoop()
 				{
-						_=Task.Factory.StartNew( async () =>
+						try
 						{
-								try
-								{
-										while (true)
-										{
-												await Send(data);
-												Thread.Sleep( 1000 );
+								sendBuff=packetSent.byteStream;
 
-												buffer=udpClient.Receive( ref serverEndPoint );
-												packetRecv.ClientRecvPacket( buffer );
-												Console.WriteLine( $"Recieved packets from {serverEndPoint}:" );
-
-										}
-								}
-								catch (SocketException e)
+								if (packetSent.byteStream!=sendBuff)
 								{
-										Console.WriteLine( e );
+										await Send( packetSent.byteStream );
+								}
 
-								}
-								finally
-								{
-										udpClient.Close();
-								}
-						} );
+								recvBuff=udpClient.Receive( ref serverEndPoint ); // Hangs here as the recieving packet is already sent
+								packetRecv.ClientRecvPacket( recvBuff );
+								Console.WriteLine( $"Recieved packets from {serverEndPoint}:" );
+
+						}
+						catch (SocketException e)
+						{
+								Console.WriteLine( e );
+
+						}
 				}
 
 				public async Task Send( byte[] data )

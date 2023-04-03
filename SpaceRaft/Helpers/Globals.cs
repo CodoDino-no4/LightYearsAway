@@ -33,6 +33,22 @@ namespace LYA.Helpers
 						get; set;
 				}
 
+				public static int clientId
+				{
+						get; set;
+				}
+
+				public static int playerCount
+				{
+						get; set;
+				}
+
+				public static bool isMulti
+				{
+						get; set;
+				}
+
+
 				public static void Update( GameTime gameTime, GraphicsDeviceManager graphics, ScreenManager screenManager )
 				{
 						ElapsedSeconds=(float) gameTime.TotalGameTime.TotalSeconds;

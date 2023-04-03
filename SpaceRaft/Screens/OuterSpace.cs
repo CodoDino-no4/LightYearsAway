@@ -81,10 +81,16 @@ namespace LYA.Screens
 						astroIdleTex=Globals.Content.Load<Texture2D>( "Astro-Idle" );
 						astro=new Astro( astroIdleTex );
 
-						foundationTex=Globals.Content.Load<Texture2D>( "foundation" );
+						Globals.playerCount=2;
+						for (var i = 1; Globals.playerCount<i; i++)
+						{
+								sprites.AddToBack( new Astro(astroIdleTex) );
+						}
 
 						// add sprites to list
 						sprites.AddToBack( astro );
+
+						foundationTex=Globals.Content.Load<Texture2D>( "foundation" );
 				}
 
 				public override void Draw( GameTime gameTime )
@@ -151,11 +157,6 @@ namespace LYA.Screens
 						//Update UI Sprites
 						foreach (var sprite in uiSprites)
 								sprite.Update();
-
-						//send/rec packet
-
-						Console.WriteLine( Globals.ElapsedSeconds );
-
 				}
 		}
 }

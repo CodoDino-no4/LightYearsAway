@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using SharpDX;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,30 +30,32 @@ namespace LYA.Networking
 				// Payload sent within packetSent
 				public string payload;
 
+				// 
+				public byte[] byteStream;
+
 				//Creates an instance of packetSent
 				public PacketFormer()
 				{
-
 				}
 
 				// Converts data into an array of bytes
-				public byte[] ClientSendPacket( string command, string clientId, string data )
+				public void ClientSendPacket( string command, int id, string data )
 				{
 						// Set packet data
 						cmd=(int) (Command) Enum.Parse( typeof( Command ), command, true );
-						this.clientId=Int32.Parse( clientId );
+						clientId=id;
 						payload=data;
 
-						// Byte stream
+						// Data stream as list of bytes
 						List<byte> dataStream = new List<byte>();
 
 						// Add the command
-						dataStream.AddRange( BitConverter.GetBytes( this.cmd ) );
+						dataStream.AddRange( BitConverter.GetBytes( cmd ) );
 
 						// Add client ID
 						if (this.clientId!=0)
 						{
-								dataStream.AddRange( BitConverter.GetBytes( this.clientId ) );
+								dataStream.AddRange( BitConverter.GetBytes( clientId ) );
 						}
 						else
 								dataStream.AddRange( BitConverter.GetBytes( 0 ) );
@@ -59,12 +63,14 @@ namespace LYA.Networking
 						// Add data
 						if (data!=null)
 						{
-								dataStream.AddRange( Encoding.UTF8.GetBytes( this.payload ) );
+								dataStream.AddRange( Encoding.UTF8.GetBytes( payload ) );
 						}
 						else
 								dataStream.AddRange( BitConverter.GetBytes( 0 ) );
 
-						return dataStream.ToArray();
+						byteStream=new byte[dataStream.Count];
+						// Final result
+						byteStream=dataStream.ToArray();
 				}
 
 				// converts the bytes into a Packet
@@ -85,6 +91,29 @@ namespace LYA.Networking
 
 						payload=Encoding.UTF8.GetString( dataSegment );
 						Console.WriteLine( payload );
+
+				}
+
+				public List<byte> Vector2Ser(Vector2 vector)
+				{
+						List<byte> bytes = new List<byte>();
+
+						float x = vector.X;
+						float y = vector.Y;
+
+						bytes.AddRange( Encoding.UTF8.GetBytes( vector.ToString() ) );
+
+						return bytes;
+				}
+
+				public Vector2 Vector2Deser( byte[] vector )
+				{
+						Vector2 result = new Vector2();
+
+						result.X=BitConverter.ToSingle( vector, 0 );
+						result.Y=BitConverter.ToSingle( vector, 2 );
+
+						return result;
 
 				}
 

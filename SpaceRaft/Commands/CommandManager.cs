@@ -1,4 +1,5 @@
 ﻿using LYA.Helpers;
+using LYA.Networking;
 using LYA.Sprites;
 using LYA.Sprites.Cloneables;
 using Microsoft.Xna.Framework;
@@ -16,10 +17,10 @@ namespace LYA.Commands
 
 				}
 
+				private static PacketFormer packet=new PacketFormer();
+
 				public static Vector2 PlayerCameraMovement( Astro astro )
 				{
-						//reset direction??? 
-						//astro.Direction= Vector2.Zero;
 
 						if (InputBindings.Up().Held())
 						{
@@ -53,6 +54,7 @@ namespace LYA.Commands
 								astro.Direction.X=moveRight.direction;
 						}
 
+						packet.ClientSendPacket( "Move", Globals.clientId, "Move Request" );
 						return astro.Position;
 				}
 
@@ -66,6 +68,8 @@ namespace LYA.Commands
 								};
 								var place = new PlaceCommand(astro, tile, sprites);
 								place.Execute();
+
+								packet.ClientSendPacket( "Place", Globals.clientId, "Place Request" );
 
 						}
 				}

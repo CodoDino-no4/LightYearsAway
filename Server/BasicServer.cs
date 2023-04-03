@@ -104,7 +104,7 @@ namespace Server
                 clientId = conns.GetValueOrDefault(remoteEndpoint.Address);
             }
 
-            return packetSent.ServerSendPacket("Join", $"Client ID: {clientId}");
+            return packetSent.ServerSendPacket("Join", $"{clientId}:{conns.Count()}");
         }
 
         public byte[] ClientLeave()
@@ -114,7 +114,7 @@ namespace Server
                 conns.Remove(remoteEndpoint.Address);
             }
 
-            return packetSent.ServerSendPacket("Leave", $"Client ID: {clientId}"); ;
+            return packetSent.ServerSendPacket("Leave", $"{clientId}:{conns.Count()}");
         }
 
         public byte[] ClientMove()

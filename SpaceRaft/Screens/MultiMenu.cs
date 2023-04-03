@@ -12,35 +12,63 @@ using System.Net;
 using LYA.Helpers;
 using MonoGame.Extended.Screens.Transitions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using System;
+using System.Linq;
 
 namespace LYA.Screens
 {
 		public class MultiMenu : GameScreen
 		{
+				ClientManager clientManager;
+
 				private Desktop desktop;
 				private Grid grid;
-				ClientManager clientManager;
+				private Panel panel;
+
 				string ipAddress;
 				string port;
 
-				public MultiMenu( Game game ) : base( game )
+				public MultiMenu( Game game, ClientManager clientManager ) : base( game )
 				{
+						this.clientManager = clientManager;
 				}
 
 				private new LYA Game => (LYA) base.Game;
+
+				public override void Initialize()
+				{
+						desktop=new Desktop
+						{
+								HasExternalTextInput=true
+						};
+
+						// Provide that text input
+						Game.Window.TextInput+=( s, a ) =>
+						{
+								desktop.OnChar( a.Character );
+						};
+
+						base.Initialize();
+				}
 
 				public override void LoadContent()
 				{
 						base.LoadContent();
 
 						MyraEnvironment.Game=Game;
-						clientManager = new ClientManager();
 
 						grid=new Grid
 						{
 								ShowGridLines=true,
 								RowSpacing=50,
 								ColumnSpacing=50
+						};
+
+						panel=new Panel()
+						{
+
 						};
 
 						grid.ColumnsProportions.Add( new Proportion( ProportionType.Auto ) );
@@ -82,29 +110,23 @@ namespace LYA.Screens
 
 						connBtn.Click+=( s, a ) =>
 						{
+
 								try
 								{
+										// Initalise connection to server
 										clientManager.Init( IPAddress.Parse( "192.168.1.255" ), Int32.Parse( "11000" ) );
+										clientManager.JoinServer();
+										Globals.isMulti=true;
 
-										// Thread 1
-										/// Sends the join request and coninues listening in loop
-										
-										//HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
-										//builder.Services.AddWindowsService( options =>
-										//{
-										//		options.ServiceName=".NET SyncService";
-										//} );
-
-
-										// Thread 2
+										// Start game
 										Globals.ScreenManager.LoadScreen( new OuterSpace( this.Game ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
 								}
-								catch { 
+								catch
+								{
 
 										var errBox = Dialog.CreateMessageBox("Error", "Server Address Not Found");
 										errBox.ShowModal( desktop );
 								}
-
 						};
 
 						var exitBtn = new TextButton
@@ -124,10 +146,7 @@ namespace LYA.Screens
 						grid.Widgets.Add( exitBtn );
 
 						// Add it to the desktop
-						desktop=new Desktop
-						{
-								Root=grid
-						};
+						desktop.Root=grid;
 				}
 
 				private Label DrawLabel( string id, string text, int column, int row )

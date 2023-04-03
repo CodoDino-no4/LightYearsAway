@@ -73,7 +73,7 @@ namespace LYA
 						graphics.IsFullScreen=isFullscreen;
 						customFPS=60;
 
-						// Timestep/FPS
+						// Timestep
 						graphics.SynchronizeWithVerticalRetrace=false;
 						IsFixedTimeStep=true;
 						TargetElapsedTime=TimeSpan.FromMilliseconds( 1000.0f/customFPS );
@@ -91,10 +91,11 @@ namespace LYA
 						spriteBatch=new SpriteBatch( GraphicsDevice );
 						Globals.SpriteBatch=spriteBatch;
 						Globals.MaxPlayers=8;
+						Globals.playerCount=3;
 
 						base.Initialize();
 
-						Globals.ScreenManager.LoadScreen( new MainMenu( this ), new FadeTransition( GraphicsDevice, Color.Black, 3 ) );
+						Globals.ScreenManager.LoadScreen( new MainMenu( this, clientManager ), new FadeTransition( GraphicsDevice, Color.Black, 3 ) );
 				}
 
 				protected override void LoadContent()
@@ -135,6 +136,11 @@ namespace LYA
 						base.Update( gameTime );
 
 						InputHelper.UpdateCleanup();
+
+						if (Globals.isMulti)
+						{
+								clientManager.MessageLoop();
+						}
 				}
 
 				protected override void UnloadContent()

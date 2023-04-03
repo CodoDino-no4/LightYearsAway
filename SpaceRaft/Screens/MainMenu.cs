@@ -11,16 +11,20 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Data.Common;
 using MonoGame.Extended.Screens.Transitions;
 using LYA.Helpers;
+using LYA.Networking;
 
 namespace LYA.Screens
 {
 		internal class MainMenu : GameScreen
 		{
+				private ClientManager clientManager;
+				
 				private Desktop desktop;
 				private Grid grid;
 
-				public MainMenu( Game game ) : base( game )
+				public MainMenu( Game game, ClientManager clientManager ) : base( game )
 				{
+						this.clientManager = clientManager;
 				}
 
 				private new LYA Game => (LYA) base.Game;
@@ -60,6 +64,7 @@ namespace LYA.Screens
 						playBtn.Click+=( s, a ) =>
 						{
 								Globals.ScreenManager.LoadScreen( new OuterSpace( this.Game ), new FadeTransition( GraphicsDevice, Color.Black, 3 ) );
+								Globals.isMulti=false;
 						};
 
 						var multiBtn = new TextButton
@@ -72,7 +77,7 @@ namespace LYA.Screens
 
 						multiBtn.Click+=( s, a ) =>
 						{
-								Globals.ScreenManager.LoadScreen( new MultiMenu( this.Game ), new FadeTransition( GraphicsDevice, Color.Black, 3 ) );
+								Globals.ScreenManager.LoadScreen( new MultiMenu( this.Game, clientManager ), new FadeTransition( GraphicsDevice, Color.Black, 3 ) );
 						};
 
 						var exitBtn = new TextButton
