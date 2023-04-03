@@ -82,7 +82,7 @@ namespace LYA.Screens
 						astro=new Astro( astroIdleTex );
 
 						Globals.playerCount=2;
-						for (var i = 1; Globals.playerCount<i; i++)
+						for (var i = 1; Globals.playerCount>i; i++)
 						{
 								sprites.AddToBack( new Astro(astroIdleTex) );
 						}
