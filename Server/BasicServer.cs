@@ -24,7 +24,7 @@ namespace Server
         private byte[] sendBuff;
         private byte[] recvBuff;
 
-        private Dictionary<IPAddress, int> conns;
+        private Dictionary<IPEndPoint, int> conns;
         private int clientId = 0;
 
         private ServerPacket packetSent;
@@ -41,14 +41,14 @@ namespace Server
             sendBuff = new byte[512];
             recvBuff = new byte[512];
 
-            conns = new Dictionary<IPAddress, int>();
+            conns = new Dictionary<IPEndPoint, int>();
 
             udpServer = new UdpClient(PORT);
+            udpServer.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
             udpServer.EnableBroadcast = true;
             udpServer.DontFragment = true;
 
             remoteEndpoint = new IPEndPoint(IPAddress.Any, PORT);
-            //remoteClient = new UdpClient(remoteEndpoint);  
 
             packetSent = new ServerPacket();
             packetRecv = new ServerPacket();
@@ -80,7 +80,7 @@ namespace Server
                         packetRecv.ServerRecvPacket(recvBuff);
 
                         //Join Resp
-                        if (packetRecv.cmd == 1)
+                        if (packetRecv.cmd == 1) // for second player either unreachable or no response given
                         {
                             byte[] joinResp = ClientJoin(res.RemoteEndPoint);
                             await udpServer.SendAsync(joinResp, res.RemoteEndPoint);
@@ -89,7 +89,7 @@ namespace Server
                         // Leave Resp
                         if (packetRecv.cmd == 2)
                         {
-                            byte[] leaveResp = ClientLeave();
+                            byte[] leaveResp = ClientLeave(res.RemoteEndPoint);
                             await udpServer.SendAsync(leaveResp, res.RemoteEndPoint);
                         };
 
@@ -112,10 +112,10 @@ namespace Server
                 {
                     Console.WriteLine(err);
                 }
-                finally
-                {
-                    udpServer.Close();
-                }
+                //finally
+                //{
+                //    udpServer.Close();
+                //}
             });
 
         }
@@ -127,20 +127,20 @@ namespace Server
 
         public byte[] ClientJoin(IPEndPoint ep)
         {
-            if (!conns.ContainsKey(ep.Address))
+            if (!conns.ContainsKey(ep))
             {
-                conns.Add(ep.Address, conns.Count() + 1);
-                clientId = conns.GetValueOrDefault(ep.Address);
+                conns.Add(ep, conns.Count() + 1);
+                clientId = conns.GetValueOrDefault(ep);
             }
 
             return packetSent.ServerSendPacket("Join", $"{clientId}:{conns.Count()}");
         }
 
-        public byte[] ClientLeave()
+        public byte[] ClientLeave(IPEndPoint ep)
         {
-            if (conns.ContainsKey(remoteEndpoint.Address))
+            if (conns.ContainsKey(ep))
             {
-                conns.Remove(remoteEndpoint.Address);
+                conns.Remove(ep);
             }
 
             return packetSent.ServerSendPacket("Leave", $"{clientId}:{conns.Count()}");

@@ -32,10 +32,19 @@ namespace LYA.Networking
 
 						serverEndPoint=new IPEndPoint( ip, port );
 
-						udpClient=new UdpClient( PORT );
-						udpClient.EnableBroadcast=true;
-						udpClient.DontFragment=true;
-						udpClient.Connect( serverEndPoint );
+						try
+						{
+								udpClient=new UdpClient();
+								udpClient.Client.SetSocketOption( SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true );
+								udpClient.ExclusiveAddressUse=false;
+								udpClient.EnableBroadcast=true;
+								udpClient.DontFragment=true;
+
+								udpClient.Connect( serverEndPoint );
+						}
+						catch {
+								Debug.WriteLine( "ERROR ON UDPCLIENT" );
+						}
 
 						packetJoin=new PacketFormer();
 						packetRecv=new PacketFormer();
@@ -84,6 +93,7 @@ namespace LYA.Networking
 										recvBuff=res.Buffer;
 										packetRecv.ClientRecvPacket( recvBuff );
 										Debug.WriteLine( $"Recieved packets {recvBuff}:" );
+
 
 								}
 								catch (SocketException e)

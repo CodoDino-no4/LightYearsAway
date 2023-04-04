@@ -131,7 +131,7 @@ namespace LYA
 
 						if (Globals.isMulti)
 						{
-								clientManager.MessageLoop();
+								//clientManager.MessageLoop();
 						}
 				}
 
