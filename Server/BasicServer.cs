@@ -56,28 +56,28 @@ namespace Server
                         if (packetRecv.cmd == 1)
                         {
                             byte[] joinResp = ClientJoin();
-                            await SendTo(joinResp, remoteEndpoint);
+                            await udpServer.SendAsync(joinResp, remoteEndpoint);
                         };
 
                         // Leave Resp
                         if (packetRecv.cmd == 2)
                         {
                             byte[] leaveResp = ClientLeave();
-                            await SendTo(leaveResp, remoteEndpoint);
+                            await udpServer.SendAsync(leaveResp, remoteEndpoint);
                         };
 
                         // Move Resp
                         if (packetRecv.cmd == 3)
                         {
                             byte[] moveResp = ClientMove();
-                            await SendTo(moveResp, remoteEndpoint);
+                            await udpServer.SendAsync(moveResp, remoteEndpoint);
                         };
 
                         // Place Resp
                         if (packetRecv.cmd == 4)
                         {
                             byte[] placeResp = ClientPlace();
-                            await SendTo(placeResp, remoteEndpoint);
+                            await udpServer.SendAsync(placeResp, remoteEndpoint);
                         };
 
                         Thread.Sleep(1000);
@@ -123,12 +123,6 @@ namespace Server
         public byte[] ClientPlace()
         {
             return packetSent.ServerSendPacket("Place", "Place Response");
-        }
-
-        public async Task SendTo(byte[] data, IPEndPoint recipient)
-        {
-            var s = new ArraySegment<byte>(data);
-            await udpServer.SendAsync(data, recipient);
         }
     }
 }

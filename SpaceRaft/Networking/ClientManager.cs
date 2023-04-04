@@ -1,4 +1,5 @@
 ﻿using LYA.Helpers;
+using SharpFont;
 using System.Net;
 using System.Net.Sockets;
 
@@ -43,16 +44,17 @@ namespace LYA.Networking
 
 				public async void JoinServer()
 				{
-						_=Task.Run( async () =>
+						_=Task.Factory.StartNew( async () =>
 						{
 								try
 								{
 										packetJoin.ClientSendPacket( "Join", 0, null );
 
-										await Send( packetJoin.byteStream );
-										Thread.Sleep( 1000 );
+										await udpClient.SendAsync( packetJoin.byteStream );
 
-										recvBuff=udpClient.Receive( ref serverEndPoint );
+										var res = await udpClient.ReceiveAsync();
+										recvBuff=res.Buffer;
+
 										packetRecv.ClientRecvPacket( recvBuff );
 										clientData=packetRecv.payload;
 										Globals.clientId=Int32.Parse( clientData.Split( ':' ).First() );
@@ -65,26 +67,26 @@ namespace LYA.Networking
 								{
 										Console.WriteLine( e );
 								}
-
-						} );
+						});
 				}
 
 				public async void MessageLoop()
 				{
-						_=Task.Run( async () =>
+						_=Task.Factory.StartNew( async () =>
 						{
 								try
 								{
-										sendBuff=packetSent.byteStream;
+										//sendBuff=packetSent.byteStream;
 
-										if (packetSent.byteStream!=sendBuff)
-										{
-												await Send( packetSent.byteStream );
-										}
+										//if (packetSent.byteStream!=sendBuff)
+										//{
+												await udpClient.SendAsync( packetSent.byteStream );
+										//}
 
-										var data = await udpClient.ReceiveAsync();
+										var res = await udpClient.ReceiveAsync();
+										recvBuff=res.Buffer;
 										packetRecv.ClientRecvPacket( recvBuff );
-										Console.WriteLine( $"Recieved packets from {serverEndPoint}:" );
+										Console.WriteLine( $"Recieved packets {recvBuff}:" );
 
 								}
 								catch (SocketException e)
@@ -93,12 +95,7 @@ namespace LYA.Networking
 
 								}
 
-						} );
-				}
-
-				public async Task Send( byte[] data )
-				{
-						_=await udpClient.SendAsync( data, serverEndPoint );
+						});
 				}
 		}
 }
