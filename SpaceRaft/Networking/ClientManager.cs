@@ -1,5 +1,6 @@
 ﻿using LYA.Helpers;
 using SharpFont;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 
@@ -44,16 +45,13 @@ namespace LYA.Networking
 
 				public async void JoinServer()
 				{
-						_=Task.Factory.StartNew( async () =>
+						_=Task.Factory.StartNew( () =>
 						{
 								try
 								{
-										packetJoin.ClientSendPacket( "Join", 0, null );
+										udpClient.Send( packetJoin.ClientSendPacket( "Join", 0, null ));
 
-										await udpClient.SendAsync( packetJoin.byteStream );
-
-										var res = await udpClient.ReceiveAsync();
-										recvBuff=res.Buffer;
+										recvBuff = udpClient.Receive(ref serverEndPoint);
 
 										packetRecv.ClientRecvPacket( recvBuff );
 										clientData=packetRecv.payload;
@@ -61,11 +59,12 @@ namespace LYA.Networking
 										Globals.playerCount=Int32.Parse( clientData.Split( ':' ).Last() );
 
 										isInit=true;
+										Debug.WriteLine( "join server complete", isInit );
 
 								}
 								catch (SocketException e)
 								{
-										Console.WriteLine( e );
+										Debug.WriteLine( e );
 								}
 						});
 				}
@@ -76,25 +75,22 @@ namespace LYA.Networking
 						{
 								try
 								{
-										//sendBuff=packetSent.byteStream;
-
-										//if (packetSent.byteStream!=sendBuff)
-										//{
-												await udpClient.SendAsync( packetSent.byteStream );
-										//}
+										if (isInit)
+										{
+												await udpClient.SendAsync( packetSent.ClientSendPacket("Move", Globals.clientId, "This is a test") ); ;
+										}
 
 										var res = await udpClient.ReceiveAsync();
 										recvBuff=res.Buffer;
 										packetRecv.ClientRecvPacket( recvBuff );
-										Console.WriteLine( $"Recieved packets {recvBuff}:" );
+										Debug.WriteLine( $"Recieved packets {recvBuff}:" );
 
 								}
 								catch (SocketException e)
 								{
-										Console.WriteLine( e );
+										Debug.WriteLine( e );
 
 								}
-
 						});
 				}
 		}

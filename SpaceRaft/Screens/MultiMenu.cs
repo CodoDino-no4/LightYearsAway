@@ -105,7 +105,7 @@ namespace LYA.Screens
 								try
 								{
 										// Initalise connection to server
-										clientManager.Init( IPAddress.Parse( "192.168.1.255" ), Int32.Parse( "11000" ) );
+										clientManager.Init( IPAddress.Parse( "192.168.1.101" ), Int32.Parse( "11000" ) );
 										clientManager.JoinServer();
 										Globals.isMulti=true;
 

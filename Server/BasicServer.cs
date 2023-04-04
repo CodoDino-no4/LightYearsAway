@@ -1,5 +1,8 @@
 ﻿using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Text;
+using System.Threading;
 
 namespace Server
 {
@@ -8,9 +11,18 @@ namespace Server
         public const int PORT = 11000;
 
         private UdpClient udpServer;
-        private IPEndPoint remoteEndpoint;
+        public struct Client
+        {
+            public UdpClient socket;
+            public IPEndPoint ep;
+        }
 
-        private byte[] buffer;
+        private UdpClient remoteClient;
+        private IPEndPoint remoteEndpoint;
+        private Client client;
+
+        private byte[] sendBuff;
+        private byte[] recvBuff;
 
         private Dictionary<IPAddress, int> conns;
         private int clientId = 0;
@@ -18,19 +30,25 @@ namespace Server
         private ServerPacket packetSent;
         private ServerPacket packetRecv;
 
+        public bool messageRec = false;
+
         // Tick rate
         private TimeSpan deltaTime;
+        private Timer tickTimer;
 
         public void Init()
         {
-            buffer = new byte[512];
+            sendBuff = new byte[512];
+            recvBuff = new byte[512];
+
             conns = new Dictionary<IPAddress, int>();
 
             udpServer = new UdpClient(PORT);
             udpServer.EnableBroadcast = true;
             udpServer.DontFragment = true;
 
-            remoteEndpoint = new IPEndPoint(IPAddress.Broadcast, PORT);
+            remoteEndpoint = new IPEndPoint(IPAddress.Any, PORT);
+            //remoteClient = new UdpClient(remoteEndpoint);  
 
             packetSent = new ServerPacket();
             packetRecv = new ServerPacket();
@@ -40,47 +58,54 @@ namespace Server
             Console.WriteLine("Server successfully intialised...");
         }
 
+        public void TickRate(object stateInfo) 
+        {
+            //if tickTimer hits delta time interval 
+            tickTimer.Change(0, deltaTime.Milliseconds);
+        }
+
         public void StartLoop()
         {
             _ = Task.Factory.StartNew(async () =>
             {
                 try
                 {
+                    tickTimer = new Timer(new TimerCallback(TickRate));
+
                     while (true)
                     {
 
-                        buffer = udpServer.Receive(ref remoteEndpoint);
-                        packetRecv.ServerRecvPacket(buffer);
+                        var res = await udpServer.ReceiveAsync();
+                        recvBuff = res.Buffer;
+                        packetRecv.ServerRecvPacket(recvBuff);
 
                         //Join Resp
                         if (packetRecv.cmd == 1)
                         {
-                            byte[] joinResp = ClientJoin();
-                            await udpServer.SendAsync(joinResp, remoteEndpoint);
+                            byte[] joinResp = ClientJoin(res.RemoteEndPoint);
+                            await udpServer.SendAsync(joinResp, res.RemoteEndPoint);
                         };
 
                         // Leave Resp
                         if (packetRecv.cmd == 2)
                         {
                             byte[] leaveResp = ClientLeave();
-                            await udpServer.SendAsync(leaveResp, remoteEndpoint);
+                            await udpServer.SendAsync(leaveResp, res.RemoteEndPoint);
                         };
 
                         // Move Resp
                         if (packetRecv.cmd == 3)
                         {
                             byte[] moveResp = ClientMove();
-                            await udpServer.SendAsync(moveResp, remoteEndpoint);
+                            await udpServer.SendAsync(moveResp, res.RemoteEndPoint);
                         };
 
                         // Place Resp
                         if (packetRecv.cmd == 4)
                         {
                             byte[] placeResp = ClientPlace();
-                            await udpServer.SendAsync(placeResp, remoteEndpoint);
+                            await udpServer.SendAsync(placeResp, res.RemoteEndPoint);
                         };
-
-                        Thread.Sleep(1000);
                     }
                 }
                 catch (SocketException err)
@@ -94,12 +119,18 @@ namespace Server
             });
 
         }
-        public byte[] ClientJoin()
+
+        public void IncomingData(IAsyncResult res)
         {
-            if (!conns.ContainsKey(remoteEndpoint.Address))
+            messageRec = true;
+        }
+
+        public byte[] ClientJoin(IPEndPoint ep)
+        {
+            if (!conns.ContainsKey(ep.Address))
             {
-                conns.Add(remoteEndpoint.Address, conns.Count() + 1);
-                clientId = conns.GetValueOrDefault(remoteEndpoint.Address);
+                conns.Add(ep.Address, conns.Count() + 1);
+                clientId = conns.GetValueOrDefault(ep.Address);
             }
 
             return packetSent.ServerSendPacket("Join", $"{clientId}:{conns.Count()}");

@@ -6,8 +6,8 @@ public class ServerPacket
     private enum Command
     {
         Null,   // Default
-        Join,   // A client joins the server
-        Leave,  // A client leaves the server
+        Join,   // A Client joins the server
+        Leave,  // A Client leaves the server
         Move,   // Astro movement
         Place,  // PLace a tile
 
