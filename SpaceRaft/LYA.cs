@@ -131,8 +131,9 @@ namespace LYA
 
 						if (Globals.isMulti)
 						{
-								//clientManager.MessageLoop();
+								clientManager.MessageLoop();
 						}
+
 				}
 
 				protected override void UnloadContent()

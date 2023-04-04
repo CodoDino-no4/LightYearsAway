@@ -16,6 +16,8 @@ namespace LYA.Sprites
 
 				public Vector2 Direction;
 
+				public int clientId;
+
 				public Astro( Texture2D texture ) : base( texture )
 				{
 						state=State.swim;

@@ -11,15 +11,9 @@ namespace Server
         public const int PORT = 11000;
 
         private UdpClient udpServer;
-        public struct Client
-        {
-            public UdpClient socket;
-            public IPEndPoint ep;
-        }
 
         private UdpClient remoteClient;
         private IPEndPoint remoteEndpoint;
-        private Client client;
 
         private byte[] sendBuff;
         private byte[] recvBuff;
@@ -74,6 +68,27 @@ namespace Server
 
                     while (true)
                     {
+
+                        //check all connections in conns are still avalible
+                        //if not remove them from conns
+
+                        //foreach (var client in conns)
+                        //{
+
+                        //    remoteClient = new UdpClient();
+                        //    remoteClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+                        //    remoteClient.ExclusiveAddressUse = false;
+                        //    remoteClient.Connect(client.Key);
+
+                        //    bool part1 = remoteClient.Client.Poll(1000, SelectMode.SelectRead);
+                        //    bool part2 = (remoteClient.Available == 0);
+
+                        //    if (part1 && part2)
+                        //    {
+                        //        //not connected
+                        //        ClientLeave(client.Key);
+                        //    }
+                        //}
 
                         var res = await udpServer.ReceiveAsync();
                         recvBuff = res.Buffer;

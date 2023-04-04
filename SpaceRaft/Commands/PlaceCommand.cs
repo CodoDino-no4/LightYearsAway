@@ -13,8 +13,8 @@ namespace LYA.Commands
 
 				private Tile tile;
 
-				private Deque<BaseSprite> sprites;
-				public PlaceCommand( Astro astro, Tile tile, Deque<BaseSprite> sprites ) : base()
+				private Bag<BaseSprite> sprites;
+				public PlaceCommand( Astro astro, Tile tile, Bag<BaseSprite> sprites ) : base()
 				{
 						direction=astro.Direction;
 						position=astro.Position;
@@ -32,7 +32,7 @@ namespace LYA.Commands
 						if (direction.X==-1) //left
 								tile.Position.X-=10;
 
-						sprites.AddToFront( (BaseSprite) tile.Clone() );
+						sprites.Add( (BaseSprite) tile.Clone() );
 				}
 		}
 }

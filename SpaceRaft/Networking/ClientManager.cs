@@ -39,7 +39,7 @@ namespace LYA.Networking
 								udpClient.ExclusiveAddressUse=false;
 								udpClient.EnableBroadcast=true;
 								udpClient.DontFragment=true;
-
+						
 								udpClient.Connect( serverEndPoint );
 						}
 						catch {
@@ -59,17 +59,6 @@ namespace LYA.Networking
 								try
 								{
 										udpClient.Send( packetJoin.ClientSendPacket( "Join", 0, null ));
-
-										recvBuff = udpClient.Receive(ref serverEndPoint);
-
-										packetRecv.ClientRecvPacket( recvBuff );
-										clientData=packetRecv.payload;
-										Globals.clientId=Int32.Parse( clientData.Split( ':' ).First() );
-										Globals.playerCount=Int32.Parse( clientData.Split( ':' ).Last() );
-
-										isInit=true;
-										Debug.WriteLine( "join server complete", isInit );
-
 								}
 								catch (SocketException e)
 								{
@@ -86,14 +75,22 @@ namespace LYA.Networking
 								{
 										if (isInit)
 										{
-												await udpClient.SendAsync( packetSent.ClientSendPacket("Move", Globals.clientId, "This is a test") ); ;
+												await udpClient.SendAsync( packetSent.ClientSendPacket("Move", Globals.clientId, "This is a test") );
 										}
 
 										var res = await udpClient.ReceiveAsync();
 										recvBuff=res.Buffer;
 										packetRecv.ClientRecvPacket( recvBuff );
-										Debug.WriteLine( $"Recieved packets {recvBuff}:" );
 
+										// Join response
+										if (packetRecv.cmd==1)
+										{
+												clientData=packetRecv.payload;
+												Globals.clientId=Int32.Parse( clientData.Split( ':' ).First() );
+												Globals.playerCount=Int32.Parse( clientData.Split( ':' ).Last() );
+												isInit=true;
+												Debug.WriteLine( "join server complete", isInit );
+										}
 
 								}
 								catch (SocketException e)

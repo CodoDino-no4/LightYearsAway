@@ -33,9 +33,11 @@ namespace LYA.Screens
 				public Astro astro;
 				private Deque<BaseSprite> sprites;
 				private Deque<BaseSprite> uiSprites;
+				private Bag<BaseSprite> tileSprites;
 
 				// Networking
 				public ClientManager clientManager;
+				int tmpCount;
 
 				public OuterSpace( Game game ) : base( game )
 				{
@@ -48,6 +50,7 @@ namespace LYA.Screens
 						// Sprite List
 						sprites=new Deque<BaseSprite>();
 						uiSprites=new Deque<BaseSprite>();
+						tileSprites = new Bag<BaseSprite>();
 				}
 
 				private new LYA Game => (LYA) base.Game;
@@ -72,12 +75,10 @@ namespace LYA.Screens
 
 						// Player Astro content
 						astroIdleTex=Globals.Content.Load<Texture2D>( "Astro-Idle" );
-						astro=new Astro( astroIdleTex );
-
-						for (var i = 1; Globals.playerCount>i; i++)
+						astro=new Astro( astroIdleTex )
 						{
-								sprites.AddToBack( new Astro( astroIdleTex ) );
-						}
+								clientId=1
+						};
 
 						// add sprites to list
 						sprites.AddToBack( astro );
@@ -112,6 +113,9 @@ namespace LYA.Screens
 
 						Globals.SpriteBatch.Begin( samplerState: SamplerState.PointWrap, transformMatrix: camera.Transform );
 
+						foreach (var sprite in tileSprites)
+								sprite.Draw( sprites );
+
 						foreach (var sprite in sprites)
 								sprite.Draw( sprites );
 
@@ -134,13 +138,21 @@ namespace LYA.Screens
 
 				public override void Update( GameTime gameTime )
 				{
+						if (tmpCount!=Globals.playerCount)
+						{
+								for (var i = 1; Globals.playerCount>i; i++)
+								{
+										sprites.AddToFront( new Astro( astroIdleTex ) );
+							  }
+						}
+
 						// Update the camera
 						camera.UpdateCameraInput( CommandManager.PlayerCameraMovement( astro ) );
 
 						//Update BG sprites
 						bgManager.Update();
 
-						CommandManager.Commands( astro, foundationTex, sprites );
+						CommandManager.Commands( astro, foundationTex, tileSprites);
 
 						// Update sprites
 						foreach (var sprite in sprites)
@@ -149,6 +161,9 @@ namespace LYA.Screens
 						//Update UI Sprites
 						foreach (var sprite in uiSprites)
 								sprite.Update();
+
+						// Temp player count set
+						tmpCount = Globals.playerCount;
 				}
 		}
 }
