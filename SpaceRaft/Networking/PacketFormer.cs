@@ -1,14 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
-using SharpDX;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace LYA.Networking
 {
-		public  class PacketFormer
+		public class PacketFormer
 		{
 				// Command types
 				private enum Command
@@ -68,7 +63,7 @@ namespace LYA.Networking
 						else
 								dataStream.AddRange( BitConverter.GetBytes( 0 ) );
 
-						byteStream=new byte[dataStream.Count];
+						byteStream=new byte[ dataStream.Count ];
 						// Final result
 						byteStream=dataStream.ToArray();
 				}
@@ -94,7 +89,7 @@ namespace LYA.Networking
 
 				}
 
-				public List<byte> Vector2Ser(Vector2 vector)
+				public List<byte> Vector2Ser( Vector2 vector )
 				{
 						List<byte> bytes = new List<byte>();
 

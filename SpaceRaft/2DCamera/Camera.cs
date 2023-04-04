@@ -2,7 +2,6 @@
 using LYA.Helpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 
 namespace LYA._Camera
 {

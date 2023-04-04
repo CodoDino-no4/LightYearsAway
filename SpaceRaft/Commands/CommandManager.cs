@@ -5,7 +5,6 @@ using LYA.Sprites.Cloneables;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Collections;
-using System.Diagnostics;
 
 namespace LYA.Commands
 {

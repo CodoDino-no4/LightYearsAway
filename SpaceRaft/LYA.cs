@@ -1,16 +1,9 @@
 ﻿using Apos.Input;
-using LYA._Camera;
-using LYA.Commands;
 using LYA.Helpers;
-using LYA.Managers;
 using LYA.Networking;
 using LYA.Screens;
-using LYA.Sprites;
-using LYA.Sprites.Background;
-using LYA.Sprites.GUI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Collections;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
 
@@ -57,7 +50,7 @@ namespace LYA
 
 						// Screen Management
 						screenManager=new ScreenManager();
-						Globals.ScreenManager = screenManager;
+						Globals.ScreenManager=screenManager;
 						Components.Add( Globals.ScreenManager );
 
 						// Menu
@@ -83,7 +76,7 @@ namespace LYA
 						IsMouseVisible=true;
 
 						graphics.ApplyChanges();
-						
+
 						// Set inital viewport 
 						Globals.ScreenSize=graphics.GraphicsDevice.Viewport.Bounds;
 
@@ -91,7 +84,6 @@ namespace LYA
 						spriteBatch=new SpriteBatch( GraphicsDevice );
 						Globals.SpriteBatch=spriteBatch;
 						Globals.MaxPlayers=8;
-						Globals.playerCount=3;
 
 						base.Initialize();
 

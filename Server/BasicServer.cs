@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
-using System.Text;
 
 namespace Server
 {
@@ -37,7 +35,7 @@ namespace Server
             packetSent = new ServerPacket();
             packetRecv = new ServerPacket();
 
-            deltaTime = TimeSpan.FromMilliseconds( 1000.0f/ 60 );
+            deltaTime = TimeSpan.FromMilliseconds(1000.0f / 60);
 
             Console.WriteLine("Server successfully intialised...");
         }

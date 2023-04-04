@@ -1,13 +1,4 @@
-﻿using LYA.Helpers;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace LYA.Networking
 {
@@ -26,8 +17,8 @@ namespace LYA.Networking
 
 				public SyncService( ClientManager clientManager )
 				{
-						this.clientManager = clientManager;
-						worker = new BackgroundWorker();
+						this.clientManager=clientManager;
+						worker=new BackgroundWorker();
 				}
 
 				public void InitializeWorker()
@@ -67,15 +58,15 @@ namespace LYA.Networking
 				{
 						if (e.Cancelled)
 						{
-								Console.WriteLine("Process was cancelled");
+								Console.WriteLine( "Process was cancelled" );
 						}
 						else if (e.Error!=null)
 						{
-								Console.WriteLine("There was an error running the process. The thread aborted");
+								Console.WriteLine( "There was an error running the process. The thread aborted" );
 						}
 						else
 						{
-								Console.WriteLine("Process was completed");
+								Console.WriteLine( "Process was completed" );
 						}
 				}
 

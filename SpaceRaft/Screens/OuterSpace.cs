@@ -1,22 +1,15 @@
-﻿using LYA.Helpers;
+﻿using LYA._Camera;
+using LYA.Commands;
+using LYA.Helpers;
 using LYA.Managers;
+using LYA.Networking;
+using LYA.Sprites;
 using LYA.Sprites.Background;
 using LYA.Sprites.GUI;
-using LYA.Sprites;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Screens;
-using MonoGame.Extended.Sprites;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LYA.Networking;
 using MonoGame.Extended.Collections;
-using Apos.Input;
-using LYA.Commands;
-using LYA._Camera;
+using MonoGame.Extended.Screens;
 
 namespace LYA.Screens
 {
@@ -81,10 +74,9 @@ namespace LYA.Screens
 						astroIdleTex=Globals.Content.Load<Texture2D>( "Astro-Idle" );
 						astro=new Astro( astroIdleTex );
 
-						Globals.playerCount=2;
 						for (var i = 1; Globals.playerCount>i; i++)
 						{
-								sprites.AddToBack( new Astro(astroIdleTex) );
+								sprites.AddToBack( new Astro( astroIdleTex ) );
 						}
 
 						// add sprites to list

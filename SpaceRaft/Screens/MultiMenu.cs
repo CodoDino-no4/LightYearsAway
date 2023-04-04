@@ -1,21 +1,12 @@
-﻿using Microsoft.Xna.Framework;
-using MonoGame.Extended.Screens;
-using Myra.Graphics2D.UI;
-using Myra;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LYA.Helpers;
 using LYA.Networking;
-using System.Net;
-using LYA.Helpers;
-using MonoGame.Extended.Screens.Transitions;
-using Microsoft.Extensions.Hosting;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using System;
-using System.Linq;
+using MonoGame.Extended.Screens;
+using MonoGame.Extended.Screens.Transitions;
+using Myra;
+using Myra.Graphics2D.UI;
+using System.Net;
 
 namespace LYA.Screens
 {
@@ -32,7 +23,7 @@ namespace LYA.Screens
 
 				public MultiMenu( Game game, ClientManager clientManager ) : base( game )
 				{
-						this.clientManager = clientManager;
+						this.clientManager=clientManager;
 				}
 
 				private new LYA Game => (LYA) base.Game;

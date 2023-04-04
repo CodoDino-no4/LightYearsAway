@@ -1,10 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using MonoGame.Extended.Screens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LYA.Screens
 {
@@ -22,12 +17,12 @@ namespace LYA.Screens
 				}
 				public override void Draw( GameTime gameTime )
 				{
-						
+
 				}
 
 				public override void Update( GameTime gameTime )
 				{
-						
+
 				}
 		}
 }

@@ -53,7 +53,7 @@ public class ServerPacket
 
     // converts the bytes into a Packet Object
     public void ServerRecvPacket(byte[] data)
-    {   
+    {
         // Decode the cmd
         // Length is always 1
         cmd = BitConverter.ToInt32(data, 0);

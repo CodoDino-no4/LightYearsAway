@@ -1,30 +1,23 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LYA.Helpers;
+using LYA.Networking;
+using Microsoft.Xna.Framework;
 using MonoGame.Extended.Screens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MonoGame.Extended.Screens.Transitions;
 using Myra;
 using Myra.Graphics2D.UI;
-using static System.Net.Mime.MediaTypeNames;
-using System.Data.Common;
-using MonoGame.Extended.Screens.Transitions;
-using LYA.Helpers;
-using LYA.Networking;
 
 namespace LYA.Screens
 {
 		internal class MainMenu : GameScreen
 		{
 				private ClientManager clientManager;
-				
+
 				private Desktop desktop;
 				private Grid grid;
 
 				public MainMenu( Game game, ClientManager clientManager ) : base( game )
 				{
-						this.clientManager = clientManager;
+						this.clientManager=clientManager;
 				}
 
 				private new LYA Game => (LYA) base.Game;
@@ -35,11 +28,11 @@ namespace LYA.Screens
 
 						MyraEnvironment.Game=Game;
 
-						grid = new Grid
+						grid=new Grid
 						{
-								ShowGridLines = true,
-								RowSpacing = 50,
-								ColumnSpacing = 50
+								ShowGridLines=true,
+								RowSpacing=50,
+								ColumnSpacing=50
 						};
 
 						grid.ColumnsProportions.Add( new Proportion( ProportionType.Auto ) );
@@ -49,7 +42,7 @@ namespace LYA.Screens
 
 						// Labels
 
-						grid.Widgets.Add( DrawLabel("title", "Light-Years Away", 2, 1) );
+						grid.Widgets.Add( DrawLabel( "title", "Light-Years Away", 2, 1 ) );
 
 						// Buttons
 
@@ -105,7 +98,7 @@ namespace LYA.Screens
 						};
 				}
 
-				private Label DrawLabel(string id, string text, int column, int row)
+				private Label DrawLabel( string id, string text, int column, int row )
 				{
 						var label = new Label
 						{
@@ -126,7 +119,7 @@ namespace LYA.Screens
 
 				public override void Update( GameTime gameTime )
 				{
-						
+
 				}
 		}
 }
