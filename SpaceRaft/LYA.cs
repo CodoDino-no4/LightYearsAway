@@ -87,7 +87,7 @@ namespace LYA
 
 						base.Initialize();
 
-						Globals.ScreenManager.LoadScreen( new MainMenu( this, clientManager ), new FadeTransition( GraphicsDevice, Color.Black, 3 ) );
+						Globals.ScreenManager.LoadScreen( new Splash( this ), new FadeTransition( GraphicsDevice, Color.Black, 1 ) );
 				}
 
 				protected override void LoadContent()
@@ -116,14 +116,14 @@ namespace LYA
 						//		screenManager.LoadScreen( new MainMenu( this ), new FadeTransition( GraphicsDevice, Color.Black, 3 ) );
 						//}
 
-						//if (isLoading)
-						//{
-						//		if (timeRemaining<=Globals.ElapsedSeconds)
-						//		{
-						//				screenManager.LoadScreen( new MainMenu( this ), new FadeTransition( GraphicsDevice, Color.Black, 3 ) );
-						//				isLoading=false;
-						//		}
-						//}
+						if (isLoading)
+						{
+								if (timeRemaining<=Globals.ElapsedSeconds)
+								{
+										isLoading=false;
+										screenManager.LoadScreen( new MainMenu( this, clientManager ), new FadeTransition( GraphicsDevice, Color.Black, 1 ) );
+								}
+						}
 
 						base.Update( gameTime );
 
