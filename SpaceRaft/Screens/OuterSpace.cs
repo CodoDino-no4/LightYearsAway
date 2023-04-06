@@ -39,13 +39,16 @@ namespace LYA.Screens
 				public ClientManager clientManager;
 				int tmpCount;
 
-				public OuterSpace( Game game ) : base( game )
+				public OuterSpace( Game game, ClientManager clientManager ) : base( game )
 				{
 						// Camera
 						camera=new Camera();
 
 						// Managers
 						bgManager=new BGManager();
+
+						// Networking
+						this.clientManager=clientManager;
 
 						// Sprite List
 						sprites=new Deque<BaseSprite>();
@@ -138,9 +141,9 @@ namespace LYA.Screens
 
 				public override void Update( GameTime gameTime )
 				{
-						if (tmpCount!=Globals.playerCount)
+						if (tmpCount!=Globals.PlayerCount)
 						{
-								for (var i = 1; Globals.playerCount>i; i++)
+								for (var i = 1; Globals.PlayerCount>i; i++)
 								{
 										sprites.AddToFront( new Astro( astroIdleTex ) );
 							  }
@@ -163,7 +166,7 @@ namespace LYA.Screens
 								sprite.Update();
 
 						// Temp player count set
-						tmpCount = Globals.playerCount;
+						tmpCount = Globals.PlayerCount;
 				}
 		}
 }

@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Diagnostics;
+using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
@@ -68,28 +69,6 @@ namespace Server
 
                     while (true)
                     {
-
-                        //check all connections in conns are still avalible
-                        //if not remove them from conns
-
-                        //foreach (var client in conns)
-                        //{
-
-                        //    remoteClient = new UdpClient();
-                        //    remoteClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-                        //    remoteClient.ExclusiveAddressUse = false;
-                        //    remoteClient.Connect(client.Key);
-
-                        //    bool part1 = remoteClient.Client.Poll(1000, SelectMode.SelectRead);
-                        //    bool part2 = (remoteClient.Available == 0);
-
-                        //    if (part1 && part2)
-                        //    {
-                        //        //not connected
-                        //        ClientLeave(client.Key);
-                        //    }
-                        //}
-
                         var res = await udpServer.ReceiveAsync();
                         recvBuff = res.Buffer;
                         packetRecv.ServerRecvPacket(recvBuff);

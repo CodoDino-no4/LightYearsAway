@@ -58,7 +58,7 @@ namespace LYA.Networking
 						{
 								try
 								{
-										udpClient.Send( packetJoin.ClientSendPacket( "Join", 0, null ));
+										udpClient.Send( packetSent.ClientSendPacket( "Join", 0, null ));
 								}
 								catch (SocketException e)
 								{
@@ -67,7 +67,22 @@ namespace LYA.Networking
 						});
 				}
 
-				public async void MessageLoop()
+				public async void LeaveServer()
+				{
+						_=Task.Factory.StartNew( () =>
+						{
+								try
+								{
+										udpClient.Send( packetSent.ClientSendPacket( "Leave", Globals.ClientId, null ) );
+								}
+								catch (SocketException e)
+								{
+										Debug.WriteLine( e );
+								}
+						} );
+				}
+
+				public async void MessageLoop( byte[] packet)
 				{
 						_=Task.Factory.StartNew( async () =>
 						{
@@ -75,7 +90,7 @@ namespace LYA.Networking
 								{
 										if (isInit)
 										{
-												await udpClient.SendAsync( packetSent.ClientSendPacket("Move", Globals.clientId, "This is a test") );
+												await udpClient.SendAsync( packet );
 										}
 
 										var res = await udpClient.ReceiveAsync();
@@ -86,17 +101,29 @@ namespace LYA.Networking
 										if (packetRecv.cmd==1)
 										{
 												clientData=packetRecv.payload;
-												Globals.clientId=Int32.Parse( clientData.Split( ':' ).First() );
-												Globals.playerCount=Int32.Parse( clientData.Split( ':' ).Last() );
-												isInit=true;
-												Debug.WriteLine( "join server complete", isInit );
+
+												if (Globals.ClientId==0)
+												{
+														Globals.ClientId=Int32.Parse( clientData.Split( ':' ).First() );
+														isInit=true;
+														Debug.WriteLine( "join server complete", isInit );
+												}
+
+												Globals.PlayerCount=Int32.Parse( clientData.Split( ':' ).Last() );
 										}
 
+										if (packetRecv.cmd==2)
+										{
+												clientData = packetRecv.payload;
+												Int32.Parse( clientData.Split( ':' ).First() );
+												Globals.PlayerCount=Int32.Parse( clientData.Split( ':' ).Last() );
+
+
+										}
 								}
 								catch (SocketException e)
 								{
 										Debug.WriteLine( e );
-
 								}
 						});
 				}

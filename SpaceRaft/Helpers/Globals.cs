@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LYA.Networking;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Screens;
@@ -33,17 +34,22 @@ namespace LYA.Helpers
 						get; set;
 				}
 
-				public static int clientId
+				public static int ClientId
 				{
 						get; set;
 				}
 
-				public static int playerCount
+				public static int PlayerCount
 				{
 						get; set;
 				}
 
-				public static bool isMulti
+				public static bool IsMulti
+				{
+						get; set;
+				}
+
+				public static PacketFormer Packet
 				{
 						get; set;
 				}

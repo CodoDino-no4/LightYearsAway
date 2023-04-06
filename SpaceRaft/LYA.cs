@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
+using System.Diagnostics;
 
 namespace LYA
 {
@@ -27,6 +28,7 @@ namespace LYA
 
 				// Networking
 				public ClientManager clientManager;
+				private byte[] tmpData;
 
 				// Menu
 				private bool isMenuOpen;
@@ -47,6 +49,8 @@ namespace LYA
 
 						// Networking
 						clientManager=new ClientManager();
+						Globals.Packet=new PacketFormer();
+						tmpData=new byte[ 512 ];
 
 						// Screen Management
 						screenManager=new ScreenManager();
@@ -59,6 +63,8 @@ namespace LYA
 
 				protected override void Initialize()
 				{
+						base.Initialize();
+
 						// Graphics settings
 						isFullscreen=false;
 						graphics.PreferredBackBufferWidth=2000;
@@ -85,15 +91,14 @@ namespace LYA
 						Globals.SpriteBatch=spriteBatch;
 						Globals.MaxPlayers=8;
 
-						base.Initialize();
-
 						Globals.ScreenManager.LoadScreen( new Splash( this ), new FadeTransition( GraphicsDevice, Color.Black, 1 ) );
 				}
 
 				protected override void LoadContent()
 				{
-						InputHelper.Setup( this );
+						base.LoadContent();
 
+						InputHelper.Setup( this );
 				}
 				protected override void Draw( GameTime gameTime )
 				{
@@ -125,15 +130,33 @@ namespace LYA
 								}
 						}
 
-						base.Update( gameTime );
-
 						InputHelper.UpdateCleanup();
 
-						if (Globals.isMulti)
+						// Networking loop
+						if (Globals.IsMulti)
 						{
-								clientManager.MessageLoop();
+								if (Globals.Packet.sendData!= null && !tmpData.SequenceEqual( Globals.Packet.sendData ))
+								{
+										clientManager.MessageLoop( Globals.Packet.sendData );
+								}
+
+								if (Globals.Packet.sendData!=null)
+								{
+										tmpData=Globals.Packet.sendData;
+								}
+								else { 
+								
+										tmpData=new byte[ 512 ];
+								}
 						}
 
+
+						base.Update( gameTime );
+				}
+
+				protected override void OnExiting( Object sender, EventArgs args )
+				{
+						clientManager.LeaveServer();
 				}
 
 				protected override void UnloadContent()

@@ -25,15 +25,19 @@ namespace LYA.Networking
 				// Payload sent within packetSent
 				public string payload;
 
+				// Datastream
+				public byte[] sendData;
+
 				//Creates an instance of packetSent
 				public PacketFormer()
 				{
+						sendData = new byte[512];
 				}
 
 				// Converts data into an array of bytes
 				public byte[] ClientSendPacket( string command, int id, string data )
 				{
-						// Set packet data
+						// Set Packet data
 						cmd=(int) (Command) Enum.Parse( typeof( Command ), command, true );
 						clientId=id;
 						payload=data;
@@ -61,6 +65,7 @@ namespace LYA.Networking
 								dataStream.AddRange( BitConverter.GetBytes( 0 ) );
 
 						// Final result
+						sendData = dataStream.ToArray();
 						return dataStream.ToArray();
 				}
 

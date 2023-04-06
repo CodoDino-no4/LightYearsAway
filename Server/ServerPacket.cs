@@ -9,7 +9,8 @@ public class ServerPacket
         Join,   // A Client joins the server
         Leave,  // A Client leaves the server
         Move,   // Astro movement
-        Place,  // PLace a tile
+        Place,  // Place a tile
+        Check, // Check if a client is connected
 
     }
 
@@ -57,12 +58,12 @@ public class ServerPacket
         // Decode the cmd
         // Length is always 1
         cmd = BitConverter.ToInt32(data, 0);
-        Console.WriteLine(cmd);
+        Console.WriteLine($"command: {cmd}");
 
         // Decode the clientId
         // Length is always 1
         clientId = BitConverter.ToInt32(data, 4);
-        Console.WriteLine(clientId);
+        Console.WriteLine($"clientID: {clientId}");
 
         // Decode the payload
         // Length is variable so get the length
@@ -73,7 +74,20 @@ public class ServerPacket
         Buffer.BlockCopy(data, 8, dataSegment, 0, dataLen);
 
         payload = Encoding.UTF8.GetString(dataSegment);
-        Console.WriteLine(payload);
+        Decode();
+        Console.WriteLine($"payload: {payload}");
+
+    }
+
+    public void Decode()
+    {
+        string split1 = payload.Split(' ').First();
+        string split2 = payload.Split(' ').Last();
+
+        string removeX = payload.Split(':')[0];
+        string x = payload.Split(':')[1];
+        string y = payload.Split(':')[0];
+
 
     }
 }

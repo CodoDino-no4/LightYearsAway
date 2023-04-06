@@ -5,6 +5,8 @@ using LYA.Sprites.Cloneables;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Collections;
+using System;
+using System.Diagnostics;
 
 namespace LYA.Commands
 {
@@ -16,10 +18,9 @@ namespace LYA.Commands
 
 				}
 
-				private static PacketFormer packet=new PacketFormer();
-
-				public static Vector2 PlayerCameraMovement( Astro astro )
+				public static Vector2 PlayerCameraMovement( Astro astro)
 				{
+						Vector2 tmpPosition = astro.Position;
 
 						if (InputBindings.Up().Held())
 						{
@@ -53,29 +54,48 @@ namespace LYA.Commands
 								astro.Direction.X=moveRight.direction;
 						}
 
-						packet.ClientSendPacket( "Move", Globals.clientId, "Move Request" );
+						if (tmpPosition!=astro.Position)
+						{
+								Globals.Packet.ClientSendPacket( "Move", Globals.ClientId, astro.Position.ToString() );
+						}
+
 						return astro.Position;
 				}
 
-				public static void PlaceTile( Astro astro, Texture2D tileTex, Bag<BaseSprite> sprites )
+				public static void PlaceTile( Astro astro, Texture2D tileTex, Bag<BaseSprite> sprites)
 				{
+						bool emptyPos = true;
+
 						if (InputBindings.Place().Pressed())
 						{
 								Tile tile = new Tile(tileTex)
 								{
 										Position = astro.Position
 								};
-								var place = new PlaceCommand(astro, tile, sprites);
-								place.Execute();
 
-								packet.ClientSendPacket( "Place", Globals.clientId, "Place Request" );
+								foreach (var sprite in sprites)
+								{
+										if (sprite.Position==tile.Position)
+										{
+												emptyPos=false;
+										}
+								}
+								if (emptyPos)
+								{
+										var place = new PlaceCommand(astro, tile, sprites);
+										place.Execute();
+										Globals.Packet.ClientSendPacket( "Place", Globals.ClientId, astro.Position.ToString() );
+								}
+								else {
 
+										Debug.WriteLine( "Tile already placed here" );
+								}
 						}
 				}
 
-				public static void Commands( Astro astro, Texture2D tileTex, Bag<BaseSprite> sprites )
+				public static void Commands( Astro astro, Texture2D tileTex, Bag<BaseSprite> sprites)
 				{
-						PlaceTile( astro, tileTex, sprites );
+						PlaceTile( astro, tileTex, sprites);
 				}
 		}
 }
