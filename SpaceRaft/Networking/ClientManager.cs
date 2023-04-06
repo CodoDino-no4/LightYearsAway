@@ -1,4 +1,5 @@
 ﻿using LYA.Helpers;
+using Microsoft.Xna.Framework;
 using SharpFont;
 using System.Diagnostics;
 using System.Net;
@@ -17,6 +18,11 @@ namespace LYA.Networking
 				private byte[] recvBuff;
 				private byte[] sendBuff;
 				private string clientData;
+
+				// Store encoded coordinates
+				public Vector2 coords;
+
+				// Has initalised and joined server
 				public bool isInit;
 
 				private PacketFormer packetJoin;
@@ -46,34 +52,52 @@ namespace LYA.Networking
 								Debug.WriteLine( "ERROR ON UDPCLIENT" );
 						}
 
-						packetJoin=new PacketFormer();
+						packetJoin = new PacketFormer();
 						packetRecv=new PacketFormer();
 						packetSent=new PacketFormer();
+
+						JoinServer();
 
 				}
 
 				public async void JoinServer()
 				{
-						_=Task.Factory.StartNew( () =>
+						try
 						{
-								try
+								udpClient.Send(Globals.Packet.ClientSendPacket( "Join", Globals.ClientId, "" ) );
+
+								var res = udpClient.Receive(ref serverEndPoint);
+								recvBuff=res;
+								packetJoin.ClientRecvPacket( recvBuff );
+
+								// Join response parse
+								if (packetJoin.cmd==1)
 								{
-										udpClient.Send( packetSent.ClientSendPacket( "Join", 0, null ));
+										if (Globals.ClientId==0)
+										{
+												Globals.ClientId=packetJoin.clientId;
+												isInit=true;
+												Debug.WriteLine( "join server complete", isInit );
+										}
+
+										Globals.PlayerCount=Int32.Parse( packetJoin.payload);
 								}
-								catch (SocketException e)
-								{
-										Debug.WriteLine( e );
-								}
-						});
+						}
+						catch (SocketException e)
+						{
+								Debug.WriteLine( e );
+						}
+
+						Globals.IsMulti=true;
 				}
 
 				public async void LeaveServer()
 				{
-						_=Task.Factory.StartNew( () =>
+						_=Task.Factory.StartNew(() =>
 						{
 								try
 								{
-										udpClient.Send( packetSent.ClientSendPacket( "Leave", Globals.ClientId, null ) );
+										udpClient.Send( Globals.Packet.ClientSendPacket("Leave", Globals.ClientId, "" ));
 								}
 								catch (SocketException e)
 								{
@@ -81,8 +105,45 @@ namespace LYA.Networking
 								}
 						} );
 				}
+				public Vector2 Decode()
+				{
+						if (packetRecv.cmd==3||packetRecv.cmd==4)
+						{
+								if (packetRecv.payload !=null)
+								{
+										string remCurlys = packetRecv.payload.Substring(1, packetRecv.payload.Length - 2); //"0:{X:0 Y:-6}"
+										string xPair = remCurlys.Split(' ').First();
+										string yPair = remCurlys.Split(' ').Last();
 
-				public async void MessageLoop( byte[] packet)
+										string xValue = xPair.Split(":").Last();
+										string yValue = yPair.Split(":").Last();
+
+										int x = Int32.Parse(xValue);
+										int y = Int32.Parse(yValue);
+
+										coords=new Vector2( x, y );
+
+								}
+								
+						}
+								return coords;
+				}
+
+				//public void Serialize( BinaryWriter writer )
+				//{
+				//		writer.Write( position.X );
+				//		writer.Write( position.Y );
+				//		writer.Write( speed );
+				//}
+
+				//public void Deserialize( BinaryReader reader )
+				//{
+				//		position.X=reader.ReadSingle();
+				//		position.Y=reader.ReadSingle();
+				//		speed=reader.ReadSingle();
+				//}
+
+				public async void MessageLoop()
 				{
 						_=Task.Factory.StartNew( async () =>
 						{
@@ -90,36 +151,31 @@ namespace LYA.Networking
 								{
 										if (isInit)
 										{
-												await udpClient.SendAsync( packet );
+												await udpClient.SendAsync( Globals.Packet.sendData );
 										}
 
 										var res = await udpClient.ReceiveAsync();
 										recvBuff=res.Buffer;
 										packetRecv.ClientRecvPacket( recvBuff );
 
-										// Join response
+										// Join response parse
 										if (packetRecv.cmd==1)
 										{
-												clientData=packetRecv.payload;
-
-												if (Globals.ClientId==0)
+												if (Globals.ClientId>0)
 												{
-														Globals.ClientId=Int32.Parse( clientData.Split( ':' ).First() );
+														Globals.PlayerCount=Int32.Parse( packetRecv.payload);
 														isInit=true;
-														Debug.WriteLine( "join server complete", isInit );
 												}
-
-												Globals.PlayerCount=Int32.Parse( clientData.Split( ':' ).Last() );
 										}
 
+										// Leave response parse
 										if (packetRecv.cmd==2)
 										{
-												clientData = packetRecv.payload;
-												Int32.Parse( clientData.Split( ':' ).First() );
-												Globals.PlayerCount=Int32.Parse( clientData.Split( ':' ).Last() );
-
-
+												//packetRecv.clientId;
+												Globals.PlayerCount=Int32.Parse( packetRecv.payload);
 										}
+
+
 								}
 								catch (SocketException e)
 								{

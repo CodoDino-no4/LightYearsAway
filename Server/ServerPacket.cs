@@ -30,7 +30,7 @@ public class ServerPacket
     }
 
     // Converts server payload into a byte stream
-    public byte[] ServerSendPacket(string command, string data)
+    public byte[] ServerSendPacket(string command, int clientId, string data)
     {
         // Byte stream
         List<byte> byteStream = new List<byte>();
@@ -40,6 +40,14 @@ public class ServerPacket
 
         // Add the cmd to the datastream
         byteStream.AddRange(BitConverter.GetBytes(cmdTmp));
+
+        // Add client ID
+        if (clientId != 0)
+        {
+            byteStream.AddRange(BitConverter.GetBytes(clientId));
+        }
+        else
+            byteStream.AddRange(BitConverter.GetBytes(0));
 
         // Add payload
         if (data != null)
@@ -74,20 +82,7 @@ public class ServerPacket
         Buffer.BlockCopy(data, 8, dataSegment, 0, dataLen);
 
         payload = Encoding.UTF8.GetString(dataSegment);
-        Decode();
+
         Console.WriteLine($"payload: {payload}");
-
-    }
-
-    public void Decode()
-    {
-        string split1 = payload.Split(' ').First();
-        string split2 = payload.Split(' ').Last();
-
-        string removeX = payload.Split(':')[0];
-        string x = payload.Split(':')[1];
-        string y = payload.Split(':')[0];
-
-
     }
 }

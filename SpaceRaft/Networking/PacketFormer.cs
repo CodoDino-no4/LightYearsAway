@@ -31,42 +31,39 @@ namespace LYA.Networking
 				//Creates an instance of packetSent
 				public PacketFormer()
 				{
-						sendData = new byte[512];
 				}
 
 				// Converts data into an array of bytes
 				public byte[] ClientSendPacket( string command, int id, string data )
 				{
 						// Set Packet data
-						cmd=(int) (Command) Enum.Parse( typeof( Command ), command, true );
-						clientId=id;
-						payload=data;
+						int cmdParsed =(int) (Command) Enum.Parse( typeof( Command ), command, true );
 
 						// Data stream as list of bytes
-						List<byte> dataStream = new List<byte>();
+						List<byte> byteStream = new List<byte>();
 
 						// Add the command
-						dataStream.AddRange( BitConverter.GetBytes( cmd ) );
+						byteStream.AddRange( BitConverter.GetBytes( cmdParsed ) );
 
 						// Add client ID
-						if (this.clientId!=0)
+						if (id!=0)
 						{
-								dataStream.AddRange( BitConverter.GetBytes( clientId ) );
+								byteStream.AddRange( BitConverter.GetBytes( id ) );
 						}
 						else
-								dataStream.AddRange( BitConverter.GetBytes( 0 ) );
+								byteStream.AddRange( BitConverter.GetBytes( 0 ) );
 
 						// Add data
 						if (data!=null)
 						{
-								dataStream.AddRange( Encoding.UTF8.GetBytes( payload ) );
+								byteStream.AddRange( Encoding.UTF8.GetBytes( data ) );
 						}
 						else
-								dataStream.AddRange( BitConverter.GetBytes( 0 ) );
+								byteStream.AddRange( BitConverter.GetBytes( 0 ) );
 
 						// Final result
-						sendData = dataStream.ToArray();
-						return dataStream.ToArray();
+						sendData = byteStream.ToArray();
+						return byteStream.ToArray();
 				}
 
 				// converts the bytes into a Packet
@@ -75,43 +72,21 @@ namespace LYA.Networking
 						// Decode the cmd
 						// Length is always 1
 						cmd=BitConverter.ToInt32( data, 0 );
-						Console.WriteLine( cmd );
+
+						// Decode the clientId
+						// Length is always 1
+						clientId=BitConverter.ToInt32( data, 4 );
 
 						// Decode the payload
 						// Length is variable so get the length
-						int dataLen = data.Length - 4;
+						int dataLen = data.Length - 8;
 
 						// Copy payload to new array and get the string
 						byte[] dataSegment = new byte[dataLen];
-						Buffer.BlockCopy( data, 4, dataSegment, 0, dataLen );
+						Buffer.BlockCopy( data, 8, dataSegment, 0, dataLen );
 
 						payload=Encoding.UTF8.GetString( dataSegment );
-						Console.WriteLine( payload );
 
 				}
-
-				public List<byte> Vector2Ser( Vector2 vector )
-				{
-						List<byte> bytes = new List<byte>();
-
-						float x = vector.X;
-						float y = vector.Y;
-
-						bytes.AddRange( Encoding.UTF8.GetBytes( vector.ToString() ) );
-
-						return bytes;
-				}
-
-				public Vector2 Vector2Deser( byte[] vector )
-				{
-						Vector2 result = new Vector2();
-
-						result.X=BitConverter.ToSingle( vector, 0 );
-						result.Y=BitConverter.ToSingle( vector, 2 );
-
-						return result;
-
-				}
-
 		}
 }

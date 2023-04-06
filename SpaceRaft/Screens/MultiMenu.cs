@@ -106,9 +106,11 @@ namespace LYA.Screens
 								{
 										// Initalise connection to server
 										clientManager.Init( IPAddress.Parse( "192.168.1.101" ), Int32.Parse( "11000" ) );
-										clientManager.JoinServer();
-										Globals.IsMulti=true;
-										grid.Widgets.Add(DrawLabel( "success", "SUCCESS", 2, 5 ));
+
+										if (clientManager.isInit)
+										{
+												grid.Widgets.Add(DrawLabel( "success", "SUCCESS", 2, 5 ));
+										}
 
 										// Start game
 										Globals.ScreenManager.LoadScreen( new OuterSpace( this.Game, clientManager ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );

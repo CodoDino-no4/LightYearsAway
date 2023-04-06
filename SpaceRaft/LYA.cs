@@ -137,7 +137,7 @@ namespace LYA
 						{
 								if (Globals.Packet.sendData!= null && !tmpData.SequenceEqual( Globals.Packet.sendData ))
 								{
-										clientManager.MessageLoop( Globals.Packet.sendData );
+										clientManager.MessageLoop();
 								}
 
 								if (Globals.Packet.sendData!=null)
@@ -148,6 +148,8 @@ namespace LYA
 								
 										tmpData=new byte[ 512 ];
 								}
+
+								//var serverData = clientManager.Decode();
 						}
 
 

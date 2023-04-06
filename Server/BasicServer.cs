@@ -106,10 +106,6 @@ namespace Server
                 {
                     Console.WriteLine(err);
                 }
-                //finally
-                //{
-                //    udpServer.Close();
-                //}
             });
 
         }
@@ -127,7 +123,7 @@ namespace Server
                 clientId = conns.GetValueOrDefault(ep);
             }
 
-            return packetSent.ServerSendPacket("Join", $"{clientId}:{conns.Count()}");
+            return packetSent.ServerSendPacket("Join", clientId, $"{conns.Count()}");
         }
 
         public byte[] ClientLeave(IPEndPoint ep)
@@ -137,17 +133,17 @@ namespace Server
                 conns.Remove(ep);
             }
 
-            return packetSent.ServerSendPacket("Leave", $"{clientId}:{conns.Count()}");
+            return packetSent.ServerSendPacket("Leave", packetRecv.clientId, conns.Count().ToString());
         }
 
         public byte[] ClientMove()
         {
-            return packetSent.ServerSendPacket("Move", "Move Response");
+            return packetSent.ServerSendPacket("Move", packetRecv.clientId, packetRecv.payload);
         }
 
         public byte[] ClientPlace()
         {
-            return packetSent.ServerSendPacket("Place", "Place Response");
+            return packetSent.ServerSendPacket("Place", packetRecv.clientId, packetRecv.payload);
         }
     }
 }
