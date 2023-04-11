@@ -9,24 +9,22 @@ namespace LYA.Networking
 {
 		public class ClientManager
 		{
-				public const int PORT = 11001;
-
+				// Socket Setup
 				private UdpClient udpClient;
 				private IPEndPoint serverEndPoint;
 
+				// Buffers
 				private byte[] recvBuff;
-				private byte[] sendBuff;
 				private byte[] tmpData;
-				private string clientData;
 
-				// Store encoded coordinates
-				public Vector2 coords;
+				// Recieved and decoded coordinates
+				public KeyValuePair<Vector2, int> astroCoords;
+				public KeyValuePair<Vector2, int> tileCoords;
 
 				// Has initalised and joined server
 				public bool isInit;
 
 				private PacketFormer packetJoin;
-				private PacketFormer packetSent;
 				private PacketFormer packetRecv;
 
 				public void Init( IPAddress ip, int port )
@@ -34,7 +32,6 @@ namespace LYA.Networking
 						isInit=false;
 
 						recvBuff=new byte[ 512 ];
-						sendBuff=new byte[ 512 ];
 						tmpData=new byte[ 512 ];
 
 						try
@@ -55,7 +52,6 @@ namespace LYA.Networking
 
 						packetJoin = new PacketFormer();
 						packetRecv=new PacketFormer();
-						packetSent=new PacketFormer();
 
 						JoinServer();
 
@@ -96,7 +92,7 @@ namespace LYA.Networking
 						Globals.IsMulti=true;
 				}
 
-				public async void LeaveServer()
+				public void LeaveServer()
 				{
 						_=Task.Factory.StartNew(() =>
 						{
@@ -112,6 +108,8 @@ namespace LYA.Networking
 				}
 				public Vector2 Decode()
 				{
+						Vector2 coords = new Vector2();
+
 						if (packetRecv.cmd==3||packetRecv.cmd==4)
 						{
 								if (packetRecv.payload !=null)
@@ -127,11 +125,9 @@ namespace LYA.Networking
 										int y = Int32.Parse(yValue);
 
 										coords=new Vector2( x, y );
-
 								}
-								
 						}
-								return coords;
+									return coords;
 				}
 
 				//public void Serialize( BinaryWriter writer )
@@ -148,7 +144,7 @@ namespace LYA.Networking
 				//		speed=reader.ReadSingle();
 				//}
 
-				public async void MessageLoop()
+				public void MessageLoop()
 				{
 						_=Task.Factory.StartNew( async () =>
 						{
@@ -197,13 +193,19 @@ namespace LYA.Networking
 												// Move response parse
 												if (packetRecv.cmd==3)
 												{
-
+														if (packetRecv.clientId!=Globals.ClientId)
+														{
+																//astroCoords = Decode( packetRecv.payload );
+														}
 												}
 
 												// Place response parse
 												if (packetRecv.cmd==4)
 												{
-
+														if (packetRecv.clientId!=Globals.ClientId)
+														{
+																//tileCoords = Decode( packetRecv.payload );
+														}
 												}
 
 										}

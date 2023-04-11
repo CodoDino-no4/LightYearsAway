@@ -162,11 +162,15 @@ namespace LYA.Screens
 
 						// Update sprites
 						foreach (var sprite in sprites)
+						{
 								sprite.Update();
+						}
 
 						//Update UI Sprites
 						foreach (var sprite in uiSprites)
+						{
 								sprite.Update();
+						}
 
 						// Temp player count set
 						tmpCount = Globals.PlayerCount;

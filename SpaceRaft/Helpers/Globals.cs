@@ -22,10 +22,11 @@ namespace LYA.Helpers
 				{
 						get; set;
 				}
-				public static float ElapsedSeconds
+				public static ClientManager ClientManager
 				{
 						get; set;
 				}
+
 				public static Rectangle ScreenSize
 				{
 						get; set;
@@ -57,14 +58,9 @@ namespace LYA.Helpers
 				}
 
 
-				public static void Update( GameTime gameTime, GraphicsDeviceManager graphics, ScreenManager screenManager )
+				public static void Update( GraphicsDeviceManager graphics)
 				{
-						ElapsedSeconds=(float) gameTime.TotalGameTime.TotalSeconds;
-
 						ScreenSize=graphics.GraphicsDevice.Viewport.Bounds;
-
-						ScreenManager=screenManager;
-
 				}
 		}
 }

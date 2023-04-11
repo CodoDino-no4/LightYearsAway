@@ -24,7 +24,6 @@ namespace LYA
 				private int customFPS;
 
 				// Managers
-				private ScreenManager screenManager;
 
 				// Networking
 				public ClientManager clientManager;
@@ -51,8 +50,7 @@ namespace LYA
 						Globals.Packet=new PacketFormer();
 
 						// Screen Management
-						screenManager=new ScreenManager();
-						Globals.ScreenManager=screenManager;
+						Globals.ScreenManager=new ScreenManager();
 						Components.Add( Globals.ScreenManager );
 
 						// Menu
@@ -107,7 +105,7 @@ namespace LYA
 				{
 						InputHelper.UpdateSetup();
 
-						Globals.Update( gameTime, graphics, screenManager );
+						Globals.Update(graphics);
 
 						if (InputBindings.Menu().Pressed())
 						{
@@ -121,10 +119,10 @@ namespace LYA
 
 						if (isLoading)
 						{
-								if (timeRemaining<=Globals.ElapsedSeconds)
+								if (timeRemaining<=(float) gameTime.TotalGameTime.TotalSeconds)
 								{
 										isLoading=false;
-										screenManager.LoadScreen( new MainMenu( this, clientManager ), new FadeTransition( GraphicsDevice, Color.Black, 1 ) );
+										Globals.ScreenManager.LoadScreen( new MainMenu( this, clientManager ), new FadeTransition( GraphicsDevice, Color.Black, 1 ) );
 								}
 						}
 
