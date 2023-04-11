@@ -3,7 +3,8 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
+using System.Timers;
+using Timer = System.Timers.Timer;
 
 namespace Server
 {
@@ -28,8 +29,10 @@ namespace Server
         public bool messageRec = false;
 
         // Tick rate
-        private TimeSpan deltaTime;
         private Timer tickTimer;
+        private TimeSpan deltaTime;
+        private DateTime currentTime;
+        private bool onInterval;
 
         public void Init()
         {
@@ -49,14 +52,10 @@ namespace Server
             packetRecv = new ServerPacket();
 
             deltaTime = TimeSpan.FromMilliseconds(1000.0f / 60);
+            currentTime = DateTime.Now;
+            onInterval = false;
 
             Console.WriteLine("Server successfully intialised...");
-        }
-
-        public void TickRate(object stateInfo) 
-        {
-            //if tickTimer hits delta time interval 
-            tickTimer.Change(0, deltaTime.Milliseconds);
         }
 
         public void StartLoop()
@@ -65,10 +64,11 @@ namespace Server
             {
                 try
                 {
-                    tickTimer = new Timer(new TimerCallback(TickRate));
-
-                    while (true)
-                    {
+                    tickTimer = new Timer();
+                    tickTimer.Interval = deltaTime.TotalMilliseconds;
+                    tickTimer.Enabled = true;
+                    tickTimer.Elapsed += async (object source, ElapsedEventArgs e) =>
+                    { 
                         var res = await udpServer.ReceiveAsync();
                         recvBuff = res.Buffer;
                         packetRecv.ServerRecvPacket(recvBuff);
@@ -100,7 +100,7 @@ namespace Server
                             byte[] placeResp = ClientPlace();
                             await udpServer.SendAsync(placeResp, res.RemoteEndPoint);
                         };
-                    }
+                    };
                 }
                 catch (SocketException err)
                 {

@@ -165,10 +165,9 @@ namespace LYA.Networking
 										// Join response parse
 										if (packetRecv.cmd==1)
 										{
-												if (Globals.ClientId>0)
+												if (Globals.ClientId!=0)
 												{
 														Globals.PlayerCount=Int32.Parse( packetRecv.payload);
-														isInit=true;
 												}
 										}
 
