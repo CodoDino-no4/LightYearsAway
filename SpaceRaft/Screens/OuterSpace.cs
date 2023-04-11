@@ -80,7 +80,7 @@ namespace LYA.Screens
 						astroIdleTex=Globals.Content.Load<Texture2D>( "Astro-Idle" );
 						astro=new Astro( astroIdleTex )
 						{
-								clientId=1
+								clientId=Globals.ClientId
 						};
 
 						// add sprites to list
@@ -143,13 +143,13 @@ namespace LYA.Screens
 				{
 						if (tmpCount!=Globals.PlayerCount)
 						{
-								for (var i = 1; Globals.PlayerCount>i; i++)
-								{
-										sprites.AddToFront( new Astro( astroIdleTex )
+										if (Globals.PlayerCount>1)
 										{
-												clientId = Globals.ClientId
-										});
-							  }
+												sprites.AddToFront( new Astro( astroIdleTex )
+												{
+														clientId=Globals.PlayerCount
+												});
+										}
 						}
 
 						// Update the camera

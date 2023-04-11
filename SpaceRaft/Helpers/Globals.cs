@@ -2,7 +2,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Collections;
 using MonoGame.Extended.Screens;
+using System.Net;
 
 namespace LYA.Helpers
 {
@@ -39,12 +41,12 @@ namespace LYA.Helpers
 						get; set;
 				}
 
-				public static int PlayerCount
+				public static bool IsMulti
 				{
 						get; set;
 				}
 
-				public static bool IsMulti
+				public static int PlayerCount
 				{
 						get; set;
 				}

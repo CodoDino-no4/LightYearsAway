@@ -1,6 +1,6 @@
 ﻿using LYA.Helpers;
 using Microsoft.Xna.Framework;
-using SharpFont;
+using MonoGame.Extended.Collections;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
@@ -37,10 +37,10 @@ namespace LYA.Networking
 						sendBuff=new byte[ 512 ];
 						tmpData=new byte[ 512 ];
 
-						serverEndPoint=new IPEndPoint( ip, port );
-
 						try
 						{
+								serverEndPoint=new IPEndPoint( ip, port );
+
 								udpClient=new UdpClient();
 								udpClient.Client.SetSocketOption( SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true );
 								udpClient.ExclusiveAddressUse=false;
@@ -50,7 +50,7 @@ namespace LYA.Networking
 								udpClient.Connect( serverEndPoint );
 						}
 						catch {
-								Debug.WriteLine( "ERROR ON UDPCLIENT" );
+								Debug.WriteLine( "ERROR ON INITALISING UDPCLIENT" );
 						}
 
 						packetJoin = new PacketFormer();
@@ -65,7 +65,7 @@ namespace LYA.Networking
 				{
 						try
 						{
-								udpClient.Send(Globals.Packet.ClientSendPacket( "Join", 0, "" ) );
+								udpClient.Send(Globals.Packet.ClientSendPacket( "Join", 0, udpClient.Client.LocalEndPoint.ToString() ) );
 
 								var res = udpClient.Receive(ref serverEndPoint);
 								recvBuff=res;
@@ -75,10 +75,12 @@ namespace LYA.Networking
 								if (packetJoin.cmd==1)
 								{
 										Globals.ClientId=packetJoin.clientId;
+										Globals.PlayerCount=packetJoin.clientId;
 										isInit=true;
 										Debug.WriteLine( "join server complete" );
 
-										Globals.PlayerCount=Int32.Parse( packetJoin.payload);
+
+										// Prevent sending join data more than once
 										Globals.Packet.sendData=null;
 								}
 						}
@@ -182,15 +184,26 @@ namespace LYA.Networking
 												{
 														if (Globals.ClientId!=0)
 														{
-																Globals.PlayerCount=Int32.Parse( packetRecv.payload );
+																Globals.PlayerCount++;
 														}
 												}
 
 												// Leave response parse
 												if (packetRecv.cmd==2)
 												{
-														//packetRecv.clientId;
-														Globals.PlayerCount=Int32.Parse( packetRecv.payload );
+														Globals.PlayerCount--;
+												}
+
+												// Move response parse
+												if (packetRecv.cmd==3)
+												{
+
+												}
+
+												// Place response parse
+												if (packetRecv.cmd==4)
+												{
+
 												}
 
 										}

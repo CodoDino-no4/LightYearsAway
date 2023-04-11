@@ -109,11 +109,6 @@ namespace Server
 
         }
 
-        public void IncomingData(IAsyncResult res)
-        {
-            messageRec = true;
-        }
-
         public async Task sendToAll(byte[] data)
         {
             foreach (var client in conns)
