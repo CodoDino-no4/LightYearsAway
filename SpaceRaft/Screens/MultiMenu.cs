@@ -101,7 +101,6 @@ namespace LYA.Screens
 
 						connBtn.Click+=( s, a ) =>
 						{
-
 								try
 								{
 										// Initalise connection to server
@@ -109,15 +108,17 @@ namespace LYA.Screens
 
 										if (clientManager.isInit)
 										{
-												grid.Widgets.Add(DrawLabel( "success", "SUCCESS", 2, 5 ));
-										}
+												grid.Widgets.Add( DrawLabel( "success", "SUCCESS", 2, 5 ) );
 
-										// Start game
-										Globals.ScreenManager.LoadScreen( new OuterSpace( this.Game, clientManager ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
+												// Start game
+												Globals.ScreenManager.LoadScreen( new OuterSpace( this.Game, clientManager ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
+										}
+										else {
+												grid.Widgets.Add( DrawLabel( "fail", "UNREACHABLE SERVER PORT", 2, 5 ) );
+										}
 								}
 								catch
 								{
-
 										var errBox = Dialog.CreateMessageBox("Error", "Server Address Not Found");
 										errBox.ShowModal( desktop );
 								}

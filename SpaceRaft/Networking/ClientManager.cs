@@ -60,7 +60,7 @@ namespace LYA.Networking
 
 				}
 
-				public async void JoinServer()
+				public void JoinServer()
 				{
 						try
 						{
@@ -85,7 +85,11 @@ namespace LYA.Networking
 						}
 						catch (SocketException e)
 						{
-								Debug.WriteLine( e );
+								if (e.SocketErrorCode.ToString()=="ConnectionReset")
+								{
+										isInit=false;
+										Debug.WriteLine( "The server port is unreachable" );
+								}
 						}
 
 						Globals.IsMulti=true;
