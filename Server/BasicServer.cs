@@ -31,8 +31,6 @@ namespace Server
         // Tick rate
         private Timer tickTimer;
         private TimeSpan deltaTime;
-        private DateTime currentTime;
-        private bool onInterval;
 
         public void Init()
         {
@@ -52,8 +50,6 @@ namespace Server
             packetRecv = new ServerPacket();
 
             deltaTime = TimeSpan.FromMilliseconds(1000.0f / 60);
-            currentTime = DateTime.Now;
-            onInterval = false;
 
             Console.WriteLine("Server successfully intialised...");
         }
@@ -77,34 +73,37 @@ namespace Server
                         if (packetRecv.cmd == 1) // for second player either unreachable or no response given
                         {
                             byte[] joinResp = ClientJoin(res.RemoteEndPoint);
-                            await udpServer.SendAsync(joinResp, res.RemoteEndPoint);
+                            await sendToAll(joinResp);
                         };
 
                         // Leave Resp
                         if (packetRecv.cmd == 2)
                         {
                             byte[] leaveResp = ClientLeave(res.RemoteEndPoint);
-                            await udpServer.SendAsync(leaveResp, res.RemoteEndPoint);
+                            await sendToAll(leaveResp);
                         };
 
                         // Move Resp
                         if (packetRecv.cmd == 3)
                         {
                             byte[] moveResp = ClientMove();
-                            await udpServer.SendAsync(moveResp, res.RemoteEndPoint);
+                            await sendToAll(moveResp);
                         };
 
                         // Place Resp
                         if (packetRecv.cmd == 4)
                         {
                             byte[] placeResp = ClientPlace();
-                            await udpServer.SendAsync(placeResp, res.RemoteEndPoint);
+                            await sendToAll(placeResp);
                         };
                     };
                 }
-                catch (SocketException err)
+                catch (SocketException e)
                 {
-                    Console.WriteLine(err);
+                    if (e.SocketErrorCode.ToString() == "ConnectionReset")
+                    {
+                        Debug.WriteLine("The client is unreachable");
+                    }
                 }
             });
 
@@ -115,6 +114,14 @@ namespace Server
             messageRec = true;
         }
 
+        public async Task sendToAll(byte[] data)
+        {
+            foreach (var client in conns)
+            {
+                _ = await udpServer.SendAsync(data, client.Key);        
+            }
+        }
+
         public byte[] ClientJoin(IPEndPoint ep)
         {
             if (!conns.ContainsKey(ep))
@@ -123,7 +130,7 @@ namespace Server
                 clientId = conns.GetValueOrDefault(ep);
             }
 
-            return packetSent.ServerSendPacket("Join", clientId, $"{conns.Count()}");
+            return packetSent.ServerSendPacket("Join", clientId, conns.Count().ToString());
         }
 
         public byte[] ClientLeave(IPEndPoint ep)

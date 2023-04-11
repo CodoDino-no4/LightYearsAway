@@ -28,7 +28,6 @@ namespace LYA
 
 				// Networking
 				public ClientManager clientManager;
-				private byte[] tmpData;
 
 				// Menu
 				private bool isMenuOpen;
@@ -50,7 +49,6 @@ namespace LYA
 						// Networking
 						clientManager=new ClientManager();
 						Globals.Packet=new PacketFormer();
-						tmpData=new byte[ 512 ];
 
 						// Screen Management
 						screenManager=new ScreenManager();
@@ -130,29 +128,15 @@ namespace LYA
 								}
 						}
 
-						InputHelper.UpdateCleanup();
-
 						// Networking loop
 						if (Globals.IsMulti)
 						{
-								if (Globals.Packet.sendData!= null && !tmpData.SequenceEqual( Globals.Packet.sendData ))
-								{
-										clientManager.MessageLoop();
-								}
-
-								if (Globals.Packet.sendData!=null)
-								{
-										tmpData=Globals.Packet.sendData;
-								}
-								else { 
-								
-										tmpData=new byte[ 512 ];
-								}
+								clientManager.MessageLoop();
 
 								//var serverData = clientManager.Decode();
 						}
 
-
+						InputHelper.UpdateCleanup();
 						base.Update( gameTime );
 				}
 

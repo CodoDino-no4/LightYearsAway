@@ -9,7 +9,6 @@ namespace LYA.Networking
 {
 		public class ClientManager
 		{
-
 				public const int PORT = 11001;
 
 				private UdpClient udpClient;
@@ -17,6 +16,7 @@ namespace LYA.Networking
 
 				private byte[] recvBuff;
 				private byte[] sendBuff;
+				private byte[] tmpData;
 				private string clientData;
 
 				// Store encoded coordinates
@@ -35,6 +35,7 @@ namespace LYA.Networking
 
 						recvBuff=new byte[ 512 ];
 						sendBuff=new byte[ 512 ];
+						tmpData=new byte[ 512 ];
 
 						serverEndPoint=new IPEndPoint( ip, port );
 
@@ -64,7 +65,7 @@ namespace LYA.Networking
 				{
 						try
 						{
-								udpClient.Send(Globals.Packet.ClientSendPacket( "Join", Globals.ClientId, "" ) );
+								udpClient.Send(Globals.Packet.ClientSendPacket( "Join", 0, "" ) );
 
 								var res = udpClient.Receive(ref serverEndPoint);
 								recvBuff=res;
@@ -73,14 +74,12 @@ namespace LYA.Networking
 								// Join response parse
 								if (packetJoin.cmd==1)
 								{
-										if (Globals.ClientId==0)
-										{
-												Globals.ClientId=packetJoin.clientId;
-												isInit=true;
-												Debug.WriteLine( "join server complete", isInit );
-										}
+										Globals.ClientId=packetJoin.clientId;
+										isInit=true;
+										Debug.WriteLine( "join server complete" );
 
 										Globals.PlayerCount=Int32.Parse( packetJoin.payload);
+										Globals.Packet.sendData=null;
 								}
 						}
 						catch (SocketException e)
@@ -155,34 +154,55 @@ namespace LYA.Networking
 								{
 										if (isInit)
 										{
-												await udpClient.SendAsync( Globals.Packet.sendData );
-										}
-
-										var res = await udpClient.ReceiveAsync();
-										recvBuff=res.Buffer;
-										packetRecv.ClientRecvPacket( recvBuff );
-
-										// Join response parse
-										if (packetRecv.cmd==1)
-										{
-												if (Globals.ClientId!=0)
+												if (Globals.Packet.sendData!=null&&!tmpData.SequenceEqual( Globals.Packet.sendData ))
 												{
-														Globals.PlayerCount=Int32.Parse( packetRecv.payload);
+														await udpClient.SendAsync( Globals.Packet.sendData );
 												}
-										}
 
-										// Leave response parse
-										if (packetRecv.cmd==2)
-										{
-												//packetRecv.clientId;
-												Globals.PlayerCount=Int32.Parse( packetRecv.payload);
-										}
+												if (Globals.Packet.sendData!=null)
+												{
+														tmpData=Globals.Packet.sendData;
+												}
+												else
+												{
+														tmpData=new byte[ 512 ];
+												}
 
+												//var serverData = clientManager.Decode();
+
+
+
+												var res = await udpClient.ReceiveAsync();
+
+												recvBuff=res.Buffer;
+												packetRecv.ClientRecvPacket( recvBuff );
+
+												// Join response parse
+												if (packetRecv.cmd==1)
+												{
+														if (Globals.ClientId!=0)
+														{
+																Globals.PlayerCount=Int32.Parse( packetRecv.payload );
+														}
+												}
+
+												// Leave response parse
+												if (packetRecv.cmd==2)
+												{
+														//packetRecv.clientId;
+														Globals.PlayerCount=Int32.Parse( packetRecv.payload );
+												}
+
+										}
 
 								}
 								catch (SocketException e)
 								{
-										Debug.WriteLine( e );
+										if (e.SocketErrorCode.ToString()=="ConnectionReset")
+										{
+												isInit=false;
+												Debug.WriteLine( "The server port is unreachable" );
+										}
 								}
 						});
 				}

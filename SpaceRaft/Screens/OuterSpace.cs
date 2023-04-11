@@ -145,7 +145,10 @@ namespace LYA.Screens
 						{
 								for (var i = 1; Globals.PlayerCount>i; i++)
 								{
-										sprites.AddToFront( new Astro( astroIdleTex ) );
+										sprites.AddToFront( new Astro( astroIdleTex )
+										{
+												clientId = Globals.ClientId
+										});
 							  }
 						}
 
