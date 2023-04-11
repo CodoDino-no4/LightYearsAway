@@ -1,5 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LYA.Helpers;
+using LYA.Sprites.Cloneables;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Collections;
 
 namespace LYA.Sprites
 {
@@ -22,6 +25,15 @@ namespace LYA.Sprites
 				{
 						state=State.swim;
 						Direction=Vector2.Zero;
+				}
+
+				public void Draw( Deque<Astro> sprites )
+				{
+						foreach (BaseSprite sprite in sprites)
+						{
+								if (Texture!=null)
+										Globals.SpriteBatch.Draw( Texture, Position, Rectangle, Color.White, rotation, Origin, Scale, SpriteEffects.None, 0 );
+						}
 				}
 
 				public override void Update()

@@ -5,6 +5,7 @@ using LYA.Managers;
 using LYA.Networking;
 using LYA.Sprites;
 using LYA.Sprites.Background;
+using LYA.Sprites.Cloneables;
 using LYA.Sprites.GUI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -31,9 +32,9 @@ namespace LYA.Screens
 
 				// Sprite Objects
 				public Astro astro;
-				private Deque<BaseSprite> sprites;
+				private Deque<Astro> astroSprites;
 				private Deque<BaseSprite> uiSprites;
-				private Bag<BaseSprite> tileSprites;
+				private Bag<Tile> tileSprites;
 
 				// Networking
 				public ClientManager clientManager;
@@ -51,9 +52,9 @@ namespace LYA.Screens
 						this.clientManager=clientManager;
 
 						// Sprite List
-						sprites=new Deque<BaseSprite>();
+						astroSprites=new Deque<Astro>();
 						uiSprites=new Deque<BaseSprite>();
-						tileSprites = new Bag<BaseSprite>();
+						tileSprites = new Bag<Tile>();
 				}
 
 				private new LYA Game => (LYA) base.Game;
@@ -73,7 +74,7 @@ namespace LYA.Screens
 						// UI content
 						toolBelt=Globals.Content.Load<Texture2D>( "toolbelt-empty" );
 
-						// add sprites to list
+						// add astroSprites to list
 						uiSprites.AddToBack( new Toolbelt( toolBelt ) );
 
 						// Player Astro content
@@ -83,8 +84,8 @@ namespace LYA.Screens
 								clientId=Globals.ClientId
 						};
 
-						// add sprites to list
-						sprites.AddToBack( astro );
+						// add astroSprites to list
+						astroSprites.AddToBack( astro );
 
 						foundationTex=Globals.Content.Load<Texture2D>( "foundation" );
 				}
@@ -117,10 +118,10 @@ namespace LYA.Screens
 						Globals.SpriteBatch.Begin( samplerState: SamplerState.PointWrap, transformMatrix: camera.Transform );
 
 						foreach (var sprite in tileSprites)
-								sprite.Draw( sprites );
+								sprite.Draw( tileSprites );
 
-						foreach (var sprite in sprites)
-								sprite.Draw( sprites );
+						foreach (var sprite in astroSprites)
+								sprite.Draw( astroSprites );
 
 						Globals.SpriteBatch.End();
 
@@ -145,7 +146,7 @@ namespace LYA.Screens
 						{
 										if (Globals.PlayerCount>1)
 										{
-												sprites.AddToFront( new Astro( astroIdleTex )
+												astroSprites.AddToFront( new Astro( astroIdleTex )
 												{
 														clientId=Globals.PlayerCount
 												});
@@ -155,19 +156,29 @@ namespace LYA.Screens
 						// Update the camera
 						camera.UpdateCameraInput( CommandManager.PlayerCameraMovement( astro ) );
 
-						//Update BG sprites
+						//Update BG astroSprites
 						bgManager.Update();
 
 						CommandManager.Commands( astro, foundationTex, tileSprites);
 
-						// Update sprites
-						foreach (var sprite in sprites)
+						// Update astroSprites
+						foreach (var sprite in astroSprites)
 						{
+								if (sprite.clientId== clientManager.astroCoords.Value) //the clientid)
+								{
+										sprite.Position=clientManager.astroCoords.Key; //the coord
+								}
 								sprite.Update();
 						}
 
 						//Update UI Sprites
 						foreach (var sprite in uiSprites)
+						{
+								sprite.Update();
+						}
+
+						//Update tile Sprites
+						foreach (var sprite in tileSprites)
 						{
 								sprite.Update();
 						}

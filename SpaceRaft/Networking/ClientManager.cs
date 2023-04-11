@@ -166,10 +166,6 @@ namespace LYA.Networking
 														tmpData=new byte[ 512 ];
 												}
 
-												//var serverData = clientManager.Decode();
-
-
-
 												var res = await udpClient.ReceiveAsync();
 
 												recvBuff=res.Buffer;
@@ -195,7 +191,7 @@ namespace LYA.Networking
 												{
 														if (packetRecv.clientId!=Globals.ClientId)
 														{
-																//astroCoords = Decode( packetRecv.payload );
+																astroCoords=new KeyValuePair<Vector2, int>( Decode(), packetRecv.clientId );
 														}
 												}
 
@@ -204,12 +200,10 @@ namespace LYA.Networking
 												{
 														if (packetRecv.clientId!=Globals.ClientId)
 														{
-																//tileCoords = Decode( packetRecv.payload );
+																tileCoords=new KeyValuePair<Vector2, int>( Decode(), packetRecv.clientId );
 														}
 												}
-
 										}
-
 								}
 								catch (SocketException e)
 								{

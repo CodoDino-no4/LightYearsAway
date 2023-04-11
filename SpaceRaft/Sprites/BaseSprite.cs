@@ -48,9 +48,7 @@ namespace LYA.Sprites
 						{
 								if (Texture!=null)
 										Globals.SpriteBatch.Draw( Texture, Position, Rectangle, Color.White, rotation, Origin, Scale, SpriteEffects.None, 0 );
-
 						}
-
 				}
 				public virtual void Update()
 				{

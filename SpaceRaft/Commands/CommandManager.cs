@@ -62,7 +62,7 @@ namespace LYA.Commands
 						return astro.Position;
 				}
 
-				public static void PlaceTile( Astro astro, Texture2D tileTex, Bag<BaseSprite> sprites)
+				public static void PlaceTile( Astro astro, Texture2D tileTex, Bag<Tile> sprites)
 				{
 						bool emptyPos = true;
 
@@ -93,7 +93,7 @@ namespace LYA.Commands
 						}
 				}
 
-				public static void Commands( Astro astro, Texture2D tileTex, Bag<BaseSprite> sprites)
+				public static void Commands( Astro astro, Texture2D tileTex, Bag<Tile> sprites)
 				{
 						PlaceTile( astro, tileTex, sprites);
 				}
