@@ -20,40 +20,14 @@ namespace LYA.Commands
 
 				public static Vector2 PlayerCameraMovement( Astro astro)
 				{
+						// Previous Position
 						Vector2 tmpPosition = astro.Position;
 
-						if (InputBindings.Up().Held())
-						{
-								var moveUp = new MoveUpCommand(astro);
-								moveUp.Execute();
-								astro.Position.Y=moveUp.position;
-								astro.Direction.Y=moveUp.direction;
-						}
+						// Execute Command
+						var move = new MoveCommands(astro);
+						move.Execute();
 
-						if (InputBindings.Down().Held())
-						{
-								var moveDown = new MoveDownCommand(astro);
-								moveDown.Execute();
-								astro.Position.Y=moveDown.position;
-								astro.Direction.Y=moveDown.direction;
-						}
-
-						if (InputBindings.Left().Held())
-						{
-								var moveLeft = new MoveLeftCommand(astro);
-								moveLeft.Execute();
-								astro.Position.X=moveLeft.position;
-								astro.Direction.X=moveLeft.direction;
-						}
-
-						if (InputBindings.Right().Held())
-						{
-								var moveRight = new MoveRightCommand(astro);
-								moveRight.Execute();
-								astro.Position.X=moveRight.position;
-								astro.Direction.X=moveRight.direction;
-						}
-
+						// Send Packet
 						if (tmpPosition!=astro.Position)
 						{
 								Globals.Packet.ClientSendPacket( "Move", Globals.ClientId, astro.Position.ToString() );

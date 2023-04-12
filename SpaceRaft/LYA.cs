@@ -140,7 +140,10 @@ namespace LYA
 
 				protected override void OnExiting( Object sender, EventArgs args )
 				{
-						clientManager.LeaveServer();
+						if (Globals.IsMulti)
+						{
+								clientManager.LeaveServer();
+						}
 				}
 
 				protected override void UnloadContent()
