@@ -162,13 +162,17 @@ namespace LYA.Screens
 						CommandManager.Commands( astro, foundationTex, tileSprites);
 
 						// Update astroSprites
-						foreach (var sprite in astroSprites)
+
+						if (Globals.IsMulti)
 						{
-								if (sprite.clientId==clientManager.astroCoords.Value) //the clientid)
+								foreach (var sprite in astroSprites)
 								{
-										sprite.Position=clientManager.astroCoords.Key; //the coord
+										if (sprite.clientId==clientManager.astroCoords.Value) //the clientid)
+										{
+												sprite.Position=clientManager.astroCoords.Key; //the coord
+										}
+										sprite.Update();
 								}
-								sprite.Update();
 						}
 
 						//Update UI Sprites

@@ -5,7 +5,7 @@
 				[STAThread]
 				public static void Main()
 				{
-						using (var game = new LYA(false))
+						using (var game = new LYA())
 								game.Run();
 				}
 		}

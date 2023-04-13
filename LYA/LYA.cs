@@ -2,43 +2,43 @@
 using LYA.Helpers;
 using LYA.Networking;
 using LYA.Screens;
+using LYA.Testing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
 using System.Diagnostics;
+using System.Net;
 
 namespace LYA
 {
 		public class LYA : Game
 		{
 				// Startup
-				private bool isLoading;
-				private float delay;
-				private float timeRemaining;
+				public bool isLoading = false;
+				public float delay;
+				public float timeRemaining;
 
 				// Graphics
-				private GraphicsDeviceManager graphics;
-				private SpriteBatch spriteBatch;
-				private bool isFullscreen;
-				private int customFPS;
+				public GraphicsDeviceManager graphics;
+				public SpriteBatch spriteBatch;
+				public bool isFullscreen;
+				public int customFPS;
 
-				// Testing
-				private bool isHeadless = false;
+				//Screens
+				public OuterSpace outerSpace;
+				public MultiMenu multiMenu;
+				public MainMenu mainMenu;
+				public Splash splash;
 
 				// Networking
 				public ClientManager clientManager;
 
 				// Menu
-				private bool isMenuOpen;
+				public bool isMenuOpen;
 
-				public LYA( bool isHeadless )
+				public LYA()
 				{
-						//Testing
-						this.isHeadless = isHeadless;
-
-						// Startup
-						isLoading=true;
 						delay=5;
 						timeRemaining=delay;
 
@@ -53,7 +53,6 @@ namespace LYA
 						clientManager=new ClientManager();
 						Globals.Packet=new PacketFormer();
 
-
 						// Screen Management
 						Globals.ScreenManager=new ScreenManager();
 						Components.Add( Globals.ScreenManager );
@@ -65,6 +64,12 @@ namespace LYA
 				protected override void Initialize()
 				{
 						base.Initialize();
+
+						// Ignore irellevant screens when testing
+						if (!Globals.testing)
+						{
+								isLoading=true;
+						}
 
 						// Graphics settings
 						isFullscreen=false;
@@ -92,7 +97,14 @@ namespace LYA
 						Globals.SpriteBatch=spriteBatch;
 						Globals.MaxPlayers=8;
 
-						Globals.ScreenManager.LoadScreen( new Splash( this ), new FadeTransition( GraphicsDevice, Color.Black, 1 ) );
+						if (Globals.testing)
+						{
+								Globals.ScreenManager.LoadScreen( outerSpace = new OuterSpace(this, clientManager), new FadeTransition( GraphicsDevice, Color.Black, 1 ) );
+						}
+						else { 
+								Globals.ScreenManager.LoadScreen( splash = new Splash( this ), new FadeTransition( GraphicsDevice, Color.Black, 1 ) );
+						}
+
 				}
 
 				protected override void LoadContent()
@@ -111,6 +123,15 @@ namespace LYA
 						InputHelper.UpdateSetup();
 
 						Globals.Update(graphics);
+
+						// Testing values to store
+						if (Globals.testing)
+						{
+								var astroPos = outerSpace.astro.Position;
+
+								Assertions.Update(astroPos);
+
+						}
 
 						if (InputBindings.Menu().Pressed())
 						{
@@ -135,8 +156,6 @@ namespace LYA
 						if (Globals.IsMulti)
 						{
 								clientManager.MessageLoop();
-
-								//var serverData = clientManager.Decode();
 						}
 
 						InputHelper.UpdateCleanup();

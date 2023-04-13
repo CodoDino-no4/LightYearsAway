@@ -8,7 +8,7 @@ using Myra.Graphics2D.UI;
 
 namespace LYA.Screens
 {
-		internal class MainMenu : GameScreen
+		public class MainMenu : GameScreen
 		{
 				private ClientManager clientManager;
 

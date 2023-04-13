@@ -52,6 +52,11 @@ namespace LYA.Helpers
 						get; set;
 				}
 
+				public static bool testing
+				{
+						get; set;
+				}
+
 				public static PacketFormer Packet
 				{
 						get; set;
