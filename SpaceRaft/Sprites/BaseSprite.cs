@@ -2,17 +2,18 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace LYA.Sprites
 {
 		public class BaseSprite
 		{
+
 				public Texture2D Texture;
 
 				public Vector2 Origin;
+
 				public Vector2 Position;
+
 				public float Scale;
 				protected float rotation;
 				public bool InScene;
@@ -30,7 +31,6 @@ namespace LYA.Sprites
 						set
 						{
 								rectangle=value;
-								Debug.WriteLine( "Rectangle SET"+rectangle );
 						}
 				}
 
@@ -48,9 +48,7 @@ namespace LYA.Sprites
 						{
 								if (Texture!=null)
 										Globals.SpriteBatch.Draw( Texture, Position, Rectangle, Color.White, rotation, Origin, Scale, SpriteEffects.None, 0 );
-
 						}
-
 				}
 				public virtual void Update()
 				{

@@ -1,6 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LYA.Networking;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Collections;
+using MonoGame.Extended.Screens;
+using System.Net;
 
 namespace LYA.Helpers
 {
@@ -14,19 +18,48 @@ namespace LYA.Helpers
 				{
 						get; set;
 				}
-				public static float ElapsedSeconds
+				public static ScreenManager ScreenManager
 				{
 						get; set;
 				}
+				public static ClientManager ClientManager
+				{
+						get; set;
+				}
+
 				public static Rectangle ScreenSize
 				{
 						get; set;
 				}
 
-				public static void Update( GameTime gameTime, GraphicsDeviceManager graphics )
+				public static int MaxPlayers
 				{
-						ElapsedSeconds=(float) gameTime.ElapsedGameTime.TotalSeconds;
+						get; set;
+				}
 
+				public static int ClientId
+				{
+						get; set;
+				}
+
+				public static bool IsMulti
+				{
+						get; set;
+				}
+
+				public static int PlayerCount
+				{
+						get; set;
+				}
+
+				public static PacketFormer Packet
+				{
+						get; set;
+				}
+
+
+				public static void Update( GraphicsDeviceManager graphics)
+				{
 						ScreenSize=graphics.GraphicsDevice.Viewport.Bounds;
 				}
 		}

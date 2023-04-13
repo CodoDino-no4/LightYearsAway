@@ -1,6 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LYA.Helpers;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Diagnostics;
+using MonoGame.Extended.Collections;
 
 namespace LYA.Sprites.Cloneables
 {
@@ -25,7 +26,15 @@ namespace LYA.Sprites.Cloneables
 						Rectangle=new Rectangle( -Texture.Width, -Texture.Height, Texture.Width, Texture.Width );
 						Origin=new Vector2( Rectangle.Width/2, Rectangle.Height/2 );
 						Texture=texture;
-						Debug.WriteLine( "Rectangle TILE"+Rectangle );
+				}
+
+				public void Draw( Bag<Tile> sprites )
+				{
+						foreach (BaseSprite sprite in sprites)
+						{
+								if (Texture!=null)
+										Globals.SpriteBatch.Draw( Texture, Position, Rectangle, Color.White, rotation, Origin, Scale, SpriteEffects.None, 0 );
+						}
 				}
 
 				public override void Update()

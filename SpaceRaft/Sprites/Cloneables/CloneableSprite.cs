@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using System;
 
 namespace LYA.Sprites.Cloneables
 {
@@ -12,7 +11,7 @@ namespace LYA.Sprites.Cloneables
 
 				public object Clone()
 				{
-						return this.MemberwiseClone();
+						return MemberwiseClone();
 				}
 		}
 }

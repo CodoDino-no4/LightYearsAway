@@ -1,61 +1,77 @@
 ﻿using Apos.Input;
-using LYA._Camera;
-using LYA.Commands;
 using LYA.Helpers;
-using LYA.Managers;
-using LYA.Sprites;
-using LYA.Sprites.Background;
-using LYA.Sprites.GUI;
+using LYA.Networking;
+using LYA.Screens;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Collections;
-using System.Collections.Generic;
+using MonoGame.Extended.Screens;
+using MonoGame.Extended.Screens.Transitions;
+using System.Diagnostics;
 
 namespace LYA
 {
 		public class LYA : Game
 		{
+				// Startup
+				private bool isLoading;
+				private float delay;
+				private float timeRemaining;
+
 				// Graphics
 				private GraphicsDeviceManager graphics;
 				private SpriteBatch spriteBatch;
 				private bool isFullscreen;
-
-				// Camera
-				private Camera camera;
-				private Effect bgInfinateShader;
+				private int customFPS;
 
 				// Managers
-				private BGManager bgManager;
 
-				// Textures
-				private Texture2D bg1, bg2;
-				private Texture2D astroIdleTex;
-				private Texture2D toolBelt;
-				private Texture2D foundationTex;
+				// Networking
+				public ClientManager clientManager;
 
-				// Sprite Objects
-				public Astro astro;
-				private Deque<BaseSprite> sprites;
-				private Deque<BaseSprite> uiSprites;
+				// Menu
+				private bool isMenuOpen;
 
 				public LYA()
 				{
+						// Startup
+						isLoading=true;
+						delay=5;
+						timeRemaining=delay;
+
 						// Graphics manager
 						graphics=new GraphicsDeviceManager( this );
 
 						// Content directory
 						Content.RootDirectory="Content";
 						Globals.Content=Content;
+
+						// Networking
+						clientManager=new ClientManager();
+						Globals.Packet=new PacketFormer();
+
+						// Screen Management
+						Globals.ScreenManager=new ScreenManager();
+						Components.Add( Globals.ScreenManager );
+
+						// Menu
+						isMenuOpen=true;
 				}
 
 				protected override void Initialize()
 				{
+						base.Initialize();
+
 						// Graphics settings
 						isFullscreen=false;
-						graphics.SynchronizeWithVerticalRetrace=true;
 						graphics.PreferredBackBufferWidth=2000;
 						graphics.PreferredBackBufferHeight=1000;
 						graphics.IsFullScreen=isFullscreen;
+						customFPS=60;
+
+						// Timestep
+						graphics.SynchronizeWithVerticalRetrace=false;
+						IsFixedTimeStep=true;
+						TargetElapsedTime=TimeSpan.FromMilliseconds( 1000.0f/customFPS );
 
 						Window.AllowUserResizing=true;
 						Window.Title="Light-Years Away";
@@ -66,97 +82,22 @@ namespace LYA
 						// Set inital viewport 
 						Globals.ScreenSize=graphics.GraphicsDevice.Viewport.Bounds;
 
-						// Camera
-						camera=new Camera();
-
-						// Managers
-						bgManager=new BGManager();
-
 						// Create a new SpriteBatch
 						spriteBatch=new SpriteBatch( GraphicsDevice );
 						Globals.SpriteBatch=spriteBatch;
+						Globals.MaxPlayers=8;
 
-						// Sprite List
-						sprites=new Deque<BaseSprite>();
-						uiSprites=new Deque<BaseSprite>();
-
-						base.Initialize();
+						Globals.ScreenManager.LoadScreen( new Splash( this ), new FadeTransition( GraphicsDevice, Color.Black, 1 ) );
 				}
 
 				protected override void LoadContent()
 				{
+						base.LoadContent();
+
 						InputHelper.Setup( this );
-
-						// Background content
-						bgInfinateShader=Content.Load<Effect>( "infinite" );
-
-						bg1=Globals.Content.Load<Texture2D>( "BG1-320px" );
-						bg2=Globals.Content.Load<Texture2D>( "BG2-320px" );
-						bgManager.AddElement( new BGLayer( bg1 ) );
-						bgManager.AddElement( new BGLayer( bg2 ) );
-
-						// UI content
-						toolBelt=Globals.Content.Load<Texture2D>( "toolbelt-empty" );
-
-						// add sprites to list
-						uiSprites.AddToBack( new Toolbelt( toolBelt ) );
-
-						// Player Astro content
-						astroIdleTex=Globals.Content.Load<Texture2D>( "Astro-Idle" );
-						astro=new Astro( astroIdleTex );
-
-						foundationTex=Globals.Content.Load<Texture2D>( "foundation" );
-
-						// add sprites to list
-						sprites.AddToBack( astro );
-
 				}
 				protected override void Draw( GameTime gameTime )
 				{
-						Matrix projection = Matrix.CreateOrthographicOffCenter(Globals.ScreenSize, 0, 1);
-						Matrix bg_transform = camera.GetBgTransform(bg1);
-						Matrix ui_scale = camera.GetUIScale();
-
-						bgInfinateShader.Parameters[ "view_projection" ].SetValue( Matrix.Identity*projection );
-						bgInfinateShader.Parameters[ "uv_transform" ].SetValue( Matrix.Invert( bg_transform ) );
-
-						////////////////////////////////////////////////
-
-						/* Begin Spritebatch
-						 * Infinate Background */
-
-						Globals.SpriteBatch.Begin( effect: bgInfinateShader, samplerState: SamplerState.PointWrap, transformMatrix: camera.Transform );
-
-						bgManager.Draw();
-
-						Globals.SpriteBatch.End();
-
-						////////////////////////////////////////////////
-
-						/* Begin Spritebatch
-						 * Variable position Sprites */
-
-						Globals.SpriteBatch.Begin( samplerState: SamplerState.PointWrap, transformMatrix: camera.Transform );
-
-						foreach (var sprite in sprites)
-								sprite.Draw( sprites );
-
-						Globals.SpriteBatch.End();
-
-						////////////////////////////////////////////////
-
-						/* Begin Spritebatch
-						 * UI Layer Sprites */
-
-						Globals.SpriteBatch.Begin( samplerState: SamplerState.PointWrap, transformMatrix: ui_scale );
-
-						foreach (var sprite in uiSprites)
-								sprite.Draw( uiSprites );
-
-						Globals.SpriteBatch.End();
-
-						////////////////////////////////////////////////
-
 						base.Draw( gameTime );
 				}
 
@@ -164,27 +105,45 @@ namespace LYA
 				{
 						InputHelper.UpdateSetup();
 
-						// Update the camera
-						camera.UpdateCameraInput( CommandInput.PlayerCameraMovement( astro ) );
+						Globals.Update(graphics);
 
-						//Update BG sprites
-						bgManager.Update();
+						if (InputBindings.Menu().Pressed())
+						{
+								isMenuOpen=!isMenuOpen;
+						}
 
-						CommandInput.Commands( astro, foundationTex, sprites );
+						//if (isMenuOpen)
+						//{
+						//		screenManager.LoadScreen( new MainMenu( this ), new FadeTransition( GraphicsDevice, Color.Black, 3 ) );
+						//}
 
-						// Update sprites
-						foreach (var sprite in sprites)
-								sprite.Update();
+						if (isLoading)
+						{
+								if (timeRemaining<=(float) gameTime.TotalGameTime.TotalSeconds)
+								{
+										isLoading=false;
+										Globals.ScreenManager.LoadScreen( new MainMenu( this, clientManager ), new FadeTransition( GraphicsDevice, Color.Black, 1 ) );
+								}
+						}
 
-						//Update UI Sprites
-						foreach (var sprite in uiSprites)
-								sprite.Update();
+						// Networking loop
+						if (Globals.IsMulti)
+						{
+								clientManager.MessageLoop();
 
-						HasQuit();
+								//var serverData = clientManager.Decode();
+						}
 
-						Globals.Update( gameTime, graphics );
 						InputHelper.UpdateCleanup();
 						base.Update( gameTime );
+				}
+
+				protected override void OnExiting( Object sender, EventArgs args )
+				{
+						if (Globals.IsMulti)
+						{
+								clientManager.LeaveServer();
+						}
 				}
 
 				protected override void UnloadContent()
@@ -192,10 +151,5 @@ namespace LYA
 						//base.UnloadContent();
 				}
 
-				private void HasQuit()
-				{
-						if (InputBindings.Quit().Pressed())
-								Exit();
-				}
 		}
 }

@@ -9,6 +9,16 @@ namespace LYA.Helpers
 
 				//private static KeyboardCondition bind = new KeyboardCondition(Keys.Up);
 
+				public static bool Input()
+				{
+						if (keyList!=null)
+						{
+								return true;
+						}
+
+						return false;
+				}
+
 				public static ICondition Up()
 				{
 						keyList=
@@ -101,6 +111,16 @@ namespace LYA.Helpers
 						keyList=
 						new AnyCondition(
 								new KeyboardCondition( Keys.E )
+						);
+
+						return keyList;
+				}
+
+				public static ICondition Menu()
+				{
+						keyList=
+						new AnyCondition(
+								new KeyboardCondition( Keys.Escape )
 						);
 
 						return keyList;

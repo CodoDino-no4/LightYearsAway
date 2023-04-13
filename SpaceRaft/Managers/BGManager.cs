@@ -1,7 +1,6 @@
 ﻿using LYA.Helpers;
 using LYA.Sprites;
 using Microsoft.Xna.Framework;
-using System.Collections.Generic;
 
 namespace LYA.Managers
 {
