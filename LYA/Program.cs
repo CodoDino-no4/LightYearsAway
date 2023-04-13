@@ -3,9 +3,9 @@
 		public static class Program
 		{
 				[STAThread]
-				private static void Main()
+				public static void Main()
 				{
-						using (var game = new LYA())
+						using (var game = new LYA(false))
 								game.Run();
 				}
 		}

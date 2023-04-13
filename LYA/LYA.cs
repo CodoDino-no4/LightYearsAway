@@ -23,7 +23,8 @@ namespace LYA
 				private bool isFullscreen;
 				private int customFPS;
 
-				// Managers
+				// Testing
+				private bool isHeadless = false;
 
 				// Networking
 				public ClientManager clientManager;
@@ -31,8 +32,11 @@ namespace LYA
 				// Menu
 				private bool isMenuOpen;
 
-				public LYA()
+				public LYA( bool isHeadless )
 				{
+						//Testing
+						this.isHeadless = isHeadless;
+
 						// Startup
 						isLoading=true;
 						delay=5;
@@ -48,6 +52,7 @@ namespace LYA
 						// Networking
 						clientManager=new ClientManager();
 						Globals.Packet=new PacketFormer();
+
 
 						// Screen Management
 						Globals.ScreenManager=new ScreenManager();
