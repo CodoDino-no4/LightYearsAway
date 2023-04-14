@@ -27,6 +27,8 @@ namespace LYA.Testing.Unit
 			Globals.IsMulti = false;
 
 			game = new LYA();
+			game.SuppressDraw();
+			game.RunOneFrame();
 		}
 
         [TestMethod()]

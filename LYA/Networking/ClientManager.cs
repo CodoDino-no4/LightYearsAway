@@ -106,15 +106,15 @@ namespace LYA.Networking
 								}
 						} );
 				}
-				public Vector2 Decode()
+				public Vector2 Decode(PacketFormer packet)
 				{
 						Vector2 coords = new Vector2();
 
-						if (packetRecv.cmd==3||packetRecv.cmd==4)
+						if (packet.cmd==3||packet.cmd==4)
 						{
-								if (packetRecv.payload !=null)
+								if (packet.payload !=null)
 								{
-										string remCurlys = packetRecv.payload.Substring(1, packetRecv.payload.Length - 2); //"0:{X:0 Y:-6}"
+										string remCurlys = packet.payload.Substring(1, packet.payload.Length - 2); //"0:{X:0 Y:-6}"
 										string xPair = remCurlys.Split(' ').First();
 										string yPair = remCurlys.Split(' ').Last();
 
@@ -191,7 +191,7 @@ namespace LYA.Networking
 												{
 														if (packetRecv.clientId!=Globals.ClientId)
 														{
-																astroCoords=new KeyValuePair<Vector2, int>( Decode(), packetRecv.clientId );
+																astroCoords=new KeyValuePair<Vector2, int>( Decode(packetRecv), packetRecv.clientId );
 														}
 												}
 
@@ -200,7 +200,7 @@ namespace LYA.Networking
 												{
 														if (packetRecv.clientId!=Globals.ClientId)
 														{
-																tileCoords=new KeyValuePair<Vector2, int>( Decode(), packetRecv.clientId );
+																tileCoords=new KeyValuePair<Vector2, int>( Decode(packetRecv), packetRecv.clientId );
 														}
 												}
 										}

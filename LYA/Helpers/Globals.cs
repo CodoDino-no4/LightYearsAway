@@ -22,11 +22,6 @@ namespace LYA.Helpers
 				{
 						get; set;
 				}
-				public static ClientManager ClientManager
-				{
-						get; set;
-				}
-
 				public static Rectangle ScreenSize
 				{
 						get; set;

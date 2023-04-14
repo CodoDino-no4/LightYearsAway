@@ -25,9 +25,10 @@ namespace LYA.Testing.Unit
         public void Setup()
         {
             Globals.testing = true;
-            Globals.IsMulti = false;
 
             game = new LYA();
+            game.SuppressDraw();
+            game.RunOneFrame();
         }
 
         [TestMethod()]

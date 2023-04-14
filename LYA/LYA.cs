@@ -25,6 +25,7 @@ namespace LYA
 				public int customFPS;
 
 				//Screens
+				public ScreenManager screenManager;
 				public OuterSpace outerSpace;
 				public MultiMenu multiMenu;
 				public MainMenu mainMenu;
@@ -53,7 +54,8 @@ namespace LYA
 						Globals.Packet=new PacketFormer();
 
 						// Screen Management
-						Globals.ScreenManager=new ScreenManager();
+						screenManager=new ScreenManager();
+						Globals.ScreenManager=screenManager;
 						Components.Add( Globals.ScreenManager );
 
 						// Menu
@@ -94,6 +96,7 @@ namespace LYA
 						// Create a new SpriteBatch
 						spriteBatch=new SpriteBatch( GraphicsDevice );
 						Globals.SpriteBatch=spriteBatch;
+						Globals.PlayerCount=1;
 						Globals.MaxPlayers=8;
 
 						if (Globals.testing)
@@ -122,17 +125,6 @@ namespace LYA
 						InputHelper.UpdateSetup();
 
 						Globals.Update(graphics);
-
-						// Testing values to store
-						//if (Globals.testing)
-						//{
-						//		if (outerSpace.astro!=null)
-						//		{
-						//				var astroPos = outerSpace.astro.Position;
-						//				Assertions.Update(astroPos);
-
-						//		}
-						//}
 
 						if (InputBindings.Menu().Pressed())
 						{
