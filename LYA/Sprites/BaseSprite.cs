@@ -24,7 +24,7 @@ namespace LYA.Sprites
 				{
 						get
 						{
-								rectangle=new Rectangle( -Texture.Width, -Texture.Height, Texture.Width, Texture.Height );
+								rectangle=new Rectangle( 0, 0, Texture.Width, Texture.Height );
 								return rectangle;
 						}
 

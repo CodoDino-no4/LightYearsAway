@@ -73,10 +73,23 @@ namespace LYA.Screens
 								Globals.ScreenManager.LoadScreen( new MultiMenu( this.Game, clientManager ), new FadeTransition( GraphicsDevice, Color.Black, 1 ) );
 						};
 
-						var exitBtn = new TextButton
+						var testsBtn = new TextButton
 						{
 								GridColumn = 2,
 								GridRow = 4,
+								Text = "Run Tests",
+								HorizontalAlignment = HorizontalAlignment.Center,
+						};
+
+						testsBtn.Click+=( s, a ) =>
+						{
+								///
+						};
+
+						var exitBtn = new TextButton
+						{
+								GridColumn = 2,
+								GridRow = 5,
 								Text = "Exit",
 								HorizontalAlignment = HorizontalAlignment.Center,
 						};
@@ -89,6 +102,7 @@ namespace LYA.Screens
 
 						grid.Widgets.Add( playBtn );
 						grid.Widgets.Add( multiBtn );
+						grid.Widgets.Add( testsBtn );
 						grid.Widgets.Add( exitBtn );
 
 						// Add it to the desktop

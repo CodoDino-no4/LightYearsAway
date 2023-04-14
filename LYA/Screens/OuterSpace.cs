@@ -167,9 +167,9 @@ namespace LYA.Screens
 						{
 								foreach (var sprite in astroSprites)
 								{
-										if (sprite.clientId==clientManager.astroCoords.Value) //the clientid)
+										if (sprite.clientId==clientManager.astroCoords.Value) 
 										{
-												sprite.Position=clientManager.astroCoords.Key; //the coord
+												sprite.Position=clientManager.astroCoords.Key; 
 										}
 										sprite.Update();
 								}

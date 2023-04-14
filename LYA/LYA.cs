@@ -2,7 +2,6 @@
 using LYA.Helpers;
 using LYA.Networking;
 using LYA.Screens;
-using LYA.Testing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Screens;
@@ -125,13 +124,15 @@ namespace LYA
 						Globals.Update(graphics);
 
 						// Testing values to store
-						if (Globals.testing)
-						{
-								var astroPos = outerSpace.astro.Position;
+						//if (Globals.testing)
+						//{
+						//		if (outerSpace.astro!=null)
+						//		{
+						//				var astroPos = outerSpace.astro.Position;
+						//				Assertions.Update(astroPos);
 
-								Assertions.Update(astroPos);
-
-						}
+						//		}
+						//}
 
 						if (InputBindings.Menu().Pressed())
 						{

@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LYA", "LYA\LYA.csproj", "{6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "Server\Server.csproj", "{10D959F1-058C-4D00-AAFE-D7543D89E81C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LYATests", "LYATests\LYATests.csproj", "{D7F16165-BDBB-4D93-9A8C-0ED08342C884}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{10D959F1-058C-4D00-AAFE-D7543D89E81C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10D959F1-058C-4D00-AAFE-D7543D89E81C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10D959F1-058C-4D00-AAFE-D7543D89E81C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7F16165-BDBB-4D93-9A8C-0ED08342C884}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7F16165-BDBB-4D93-9A8C-0ED08342C884}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7F16165-BDBB-4D93-9A8C-0ED08342C884}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7F16165-BDBB-4D93-9A8C-0ED08342C884}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
