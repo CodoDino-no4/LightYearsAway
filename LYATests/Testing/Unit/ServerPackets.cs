@@ -40,6 +40,7 @@ namespace LYA.Testing.Unit
         [TestCleanup()]
         public void CleanUp()
         {
+
             packetDecode = null;
             packetEncode = null;
 

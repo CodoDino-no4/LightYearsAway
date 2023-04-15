@@ -107,12 +107,14 @@ namespace LYA.Testing.Unit
         [TestCleanup()]
         public void CleanUp()
         {
+            game.Exit();
+            game = null;
+
             proc.Kill();
             proc.WaitForExit();
             proc.Dispose();
 
             proc = null;
-            game = null;
             
         }
     }

@@ -67,6 +67,7 @@ namespace LYA.Testing.Unit
         [TestCleanup()]
         public void CleanUp()
         {
+            game.Exit();
             game = null;
 
         }
