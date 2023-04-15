@@ -1,5 +1,6 @@
 ﻿using LYA.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Myra.Graphics2D.UI;
 using System.Diagnostics;
 using System.Net;
 using System.Text;
@@ -33,30 +34,7 @@ namespace LYA.Testing.Unit
             // Setup server exe
             ProcessStartInfo start = new ProcessStartInfo();
 
-            // Get the root dir from current working directory
-            string currentDir = AppContext.BaseDirectory;
-            string[] allDirs = currentDir.Split(Path.DirectorySeparatorChar);
-
-            bool foundRoot = false;
-            List<string> dirList = new List<string>();
-
-            foreach (var dir in allDirs)
-            {
-                if (!foundRoot)
-                {
-                    dirList.Add(dir);
-                }
-
-                if (dir == "SpaceRaftMono")
-                {
-                    foundRoot = true;
-                }
-            }
-
-            dirList.ToArray();
-            string rootDir = string.Join(Path.DirectorySeparatorChar, dirList);
-
-            string fullPath = rootDir + "\\Server\\bin\\Debug\\net7.0-windows\\Server.exe";
+            string fullPath = AppContext.BaseDirectory + "Server.exe";
             start.FileName = fullPath;
 
             proc = Process.Start(start);
