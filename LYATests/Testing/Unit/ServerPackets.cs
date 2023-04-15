@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Xna.Framework;
 using System.Text;
 
 namespace LYA.Testing.Unit
@@ -9,28 +10,39 @@ namespace LYA.Testing.Unit
     [TestClass()]
     public class ServerPackets
     {
+        ServerPacket packetEncode;
+        ServerPacket packetDecode;
+
         [TestMethod()]
         public void PacketEncodeTest()
         {
-            ServerPacket packet = new ServerPacket();
-            packet.ServerSendPacket("Move", 2, "Test");
+            packetEncode = new ServerPacket();
+            packetEncode.ServerSendPacket("Move", 2, "Test");
 
-            Assert.IsTrue(Encoding.UTF8.GetString(packet.sendData) == "\u0003\0\0\0\u0002\0\0\0Test");
+            Assert.IsTrue(Encoding.UTF8.GetString(packetEncode.sendData) == "\u0003\0\0\0\u0002\0\0\0Test");
 
         }
 
         [TestMethod()]
         public void PacketDecodeTest()
         {
-            ServerPacket packet = new ServerPacket();
-            packet.ServerSendPacket("Move", 2, "Test");
-            byte[] data = packet.sendData;
+            packetDecode = new ServerPacket();
+            packetDecode.ServerSendPacket("Move", 2, "Test");
+            byte[] data = packetDecode.sendData;
 
-            packet.ServerRecvPacket(data);
+            packetDecode.ServerRecvPacket(data);
 
-            Assert.IsTrue(packet.cmd == 3);
-            Assert.IsTrue(packet.clientId == 2);
-            Assert.IsTrue(packet.payload == "Test");
+            Assert.IsTrue(packetDecode.cmd == 3);
+            Assert.IsTrue(packetDecode.clientId == 2);
+            Assert.IsTrue(packetDecode.payload == "Test");
+        }
+
+        [TestCleanup()]
+        public void CleanUp()
+        {
+            packetDecode = null;
+            packetEncode = null;
+
         }
     }
 }

@@ -110,6 +110,10 @@ namespace LYA.Testing.Unit
             proc.Kill();
             proc.WaitForExit();
             proc.Dispose();
+
+            proc = null;
+            game = null;
+            
         }
     }
 }

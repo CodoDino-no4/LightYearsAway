@@ -52,5 +52,13 @@ namespace LYA.Testing.Unit
             Assert.IsTrue(ui == Matrix.Identity);
 
         }
+
+
+        [TestCleanup()]
+        public void CleanUp()
+        {
+            game = null;
+
+        }
     }
 }

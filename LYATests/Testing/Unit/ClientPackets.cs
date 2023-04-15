@@ -62,5 +62,13 @@ namespace LYA.Testing.Unit
 
             Assert.IsTrue(game.clientManager.Decode(packet) == new Vector2(20, 20));
         }
+
+
+        [TestCleanup()]
+        public void CleanUp()
+        {
+            game = null;
+
+        }
     }
 }

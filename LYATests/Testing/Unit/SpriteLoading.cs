@@ -78,5 +78,12 @@ namespace LYA.Testing.Unit
             Assert.IsTrue(tile.type == Tile.Type.foundation);
             Assert.IsTrue(tile.Texture.Name == "foundation");
         }
+
+        [TestCleanup()]
+        public void CleanUp()
+        {
+            game = null;
+
+        }
     }
 }
