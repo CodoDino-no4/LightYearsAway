@@ -7,6 +7,7 @@ namespace LYA.Testing.Unit
     /// <summary>
     /// Checks a packet can be endcoded and decoded correctly
     /// </summary>
+    [DoNotParallelize()]
     [TestClass()]
     public class ServerPackets
     {

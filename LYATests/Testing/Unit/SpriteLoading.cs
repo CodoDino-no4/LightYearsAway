@@ -12,6 +12,7 @@ namespace LYA.Testing.Unit
     /// <summary>
     /// All sprites can be loaded with the correct initalisation values
     /// </summary>
+    [DoNotParallelize()]
     [TestClass()]
     public class SpriteLoading
     {

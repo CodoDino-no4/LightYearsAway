@@ -11,6 +11,7 @@ namespace LYA.Testing.Unit
     /// Check the game has initialised and Globals have been set.
     /// Check the game exits gracefully
     /// </summary>
+    [DoNotParallelize()]
     [TestClass()]
     public class Game
     {

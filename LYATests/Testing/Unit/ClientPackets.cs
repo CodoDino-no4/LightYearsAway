@@ -9,12 +9,15 @@ namespace LYA.Testing.Unit
     /// <summary>
     /// Checks a packet can be endcoded and decoded correctly
     /// </summary>
+    
+    [DoNotParallelize()]
     [TestClass()]
     public class ClientPackets
     {
         /// <summary>
         /// Initialises the game and runs one frame
         /// </summary>
+
         private LYA game;
 
         [TestInitialize()]

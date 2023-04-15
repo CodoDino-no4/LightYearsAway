@@ -17,6 +17,7 @@ namespace LYA.Testing.Unit
         /// </summary>
         private LYA game;
 
+        [DoNotParallelize()]
         [TestInitialize()]
         public void Setup()
         {
