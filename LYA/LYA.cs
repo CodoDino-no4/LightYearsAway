@@ -70,8 +70,6 @@ namespace LYA
 						if (!Globals.testing)
 						{
 								isLoading=true;
-						}
-
 						// Graphics settings
 						isFullscreen=false;
 						graphics.PreferredBackBufferWidth=2000;
@@ -89,6 +87,7 @@ namespace LYA
 						IsMouseVisible=true;
 
 						graphics.ApplyChanges();
+						}
 
 						// Set inital viewport 
 						Globals.ScreenSize=graphics.GraphicsDevice.Viewport.Bounds;

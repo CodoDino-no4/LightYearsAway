@@ -24,7 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LYA\LYA.csproj" />
-    <ProjectReference Include="..\Server\Server.csproj" />
   </ItemGroup>
 
 </Project>
