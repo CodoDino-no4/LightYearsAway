@@ -1,6 +1,6 @@
 ﻿namespace Server
 {
-    public static class Program
+    public class Program
     {
         public static void Main()
         {

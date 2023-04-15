@@ -24,7 +24,8 @@ namespace LYA.Networking
 				// Has initalised and joined server
 				public bool isInit;
 
-				private PacketFormer packetJoin;
+				public PacketFormer packetJoin;
+				public PacketFormer packetLeave;
 				private PacketFormer packetRecv;
 
 				public void Init( IPAddress ip, int port )
@@ -51,6 +52,7 @@ namespace LYA.Networking
 						}
 
 						packetJoin = new PacketFormer();
+						packetLeave = new PacketFormer();
 						packetRecv=new PacketFormer();
 
 						JoinServer();
@@ -61,20 +63,19 @@ namespace LYA.Networking
 				{
 						try
 						{
-								udpClient.Send(Globals.Packet.ClientSendPacket( "Join", 0, udpClient.Client.LocalEndPoint.ToString() ) );
+								udpClient.Send(packetJoin.ClientSendPacket( "Join", 0, udpClient.Client.LocalEndPoint.ToString() ) );
 
 								var res = udpClient.Receive(ref serverEndPoint);
 								recvBuff=res;
-								packetJoin.ClientRecvPacket( recvBuff );
+								packetRecv.ClientRecvPacket( recvBuff );
 
 								// Join response parse
-								if (packetJoin.cmd==1)
+								if (packetRecv.cmd==1)
 								{
-										Globals.ClientId=packetJoin.clientId;
-										Globals.PlayerCount=packetJoin.clientId;
+										Globals.ClientId=packetRecv.clientId;
+										Globals.PlayerCount=packetRecv.clientId;
 										isInit=true;
 										Debug.WriteLine( "join server complete" );
-
 
 										// Prevent sending join data more than once
 										Globals.Packet.sendData=null;
@@ -94,17 +95,14 @@ namespace LYA.Networking
 
 				public void LeaveServer()
 				{
-						_=Task.Factory.StartNew(() =>
+						try
 						{
-								try
-								{
-										udpClient.Send( Globals.Packet.ClientSendPacket("Leave", Globals.ClientId, "" ));
-								}
-								catch (SocketException e)
-								{
-										Debug.WriteLine( e );
-								}
-						} );
+								udpClient.Send( packetLeave.ClientSendPacket("Leave", Globals.ClientId, "" ));
+						}
+						catch (SocketException e)
+						{
+								Debug.WriteLine( e );
+						}
 				}
 				public Vector2 Decode(PacketFormer packet)
 				{

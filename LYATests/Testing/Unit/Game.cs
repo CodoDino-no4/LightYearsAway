@@ -11,6 +11,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Net;
 using System.Text;
+using System.Diagnostics;
+using System.Xml.Linq;
+using System.Reflection;
 
 namespace LYA.Testing.Unit
 {
@@ -24,9 +27,13 @@ namespace LYA.Testing.Unit
         /// <summary>
         /// Initialises the game and runs one frame
         /// </summary>
-        LYA game; 
+        LYA game;
+        Process proc;
 
-		[TestInitialize()]
+        string IP = "192.168.1.101";
+        string PORT = "11000";
+
+        [TestInitialize()]
         public void Setup()
         {
             Globals.testing = true;
@@ -35,7 +42,37 @@ namespace LYA.Testing.Unit
             game.SuppressDraw();
             game.RunOneFrame();
 
-            //Server.Program.Main();
+            // Setup server exe
+            ProcessStartInfo start = new ProcessStartInfo();
+
+            // Get the root dir from current working directory
+            string currentDir = AppContext.BaseDirectory;
+            string[] allDirs = currentDir.Split(Path.DirectorySeparatorChar);
+
+            bool foundRoot = false;
+            List<string> dirList = new List<string>();
+
+            foreach (var dir in allDirs)
+            {
+                if (!foundRoot)
+                {
+                    dirList.Add(dir);
+                }
+
+                if (dir == "SpaceRaftMono")
+                {
+                    foundRoot = true;
+                }
+            }
+
+            dirList.ToArray();
+            string rootDir = string.Join(Path.DirectorySeparatorChar, dirList);
+
+            string fullPath = rootDir + "\\Server\\bin\\Debug\\net7.0-windows\\Server.exe";
+            start.FileName = fullPath;
+
+            proc = Process.Start(start);
+            Thread.Sleep(1000);
         }
 
         [TestMethod()]
@@ -47,21 +84,26 @@ namespace LYA.Testing.Unit
             Assert.IsTrue(game.GraphicsDevice.Viewport.Bounds == Globals.ScreenSize);
             Assert.IsTrue(Globals.PlayerCount == 1);
             Assert.IsTrue(Globals.MaxPlayers == 8);
-            Assert.IsTrue(Globals.IsMulti == false);
+        }
+
+        [TestMethod()]
+        public void MultiplayerConnectTest()
+        {      
+            Globals.IsMulti = true;
+
+            game.clientManager.Init(IPAddress.Parse(IP), Int32.Parse(PORT));
+            Assert.IsNotNull(Encoding.UTF8.GetString(game.clientManager.packetJoin.sendData));
         }
 
         [TestMethod()]
         public void MultiplayerExitTest()
         {
             Globals.IsMulti = true;
-            game.clientManager.Init(IPAddress.Parse("192.168.1.101"), Int32.Parse("11000"));
+
+            game.clientManager.Init(IPAddress.Parse(IP), Int32.Parse(PORT));
             game.clientManager.LeaveServer();
 
-            var data = Globals.Packet.sendData;
-            if (data != null)
-            { 
-                Assert.IsTrue(Encoding.UTF8.GetString(data) == "\u0002\0\0\0\u0001\0\0\0");
-            }
+            Assert.IsTrue(Encoding.UTF8.GetString(game.clientManager.packetLeave.sendData) == "\u0002\0\0\0\u0001\0\0\0");
         }
 
         [TestMethod()]
@@ -69,6 +111,17 @@ namespace LYA.Testing.Unit
         {
             Globals.IsMulti = false;
             game.Exit();
+            game.Dispose();
+
+            Assert.IsTrue(game.Components == null);
+        }
+
+        [TestCleanup()]
+        public void CleanUp()
+        {
+            proc.Kill();
+            proc.WaitForExit();
+            proc.Dispose();
         }
     }
 }
