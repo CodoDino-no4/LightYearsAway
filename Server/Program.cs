@@ -3,19 +3,45 @@
     class Program
     {
         static ManualResetEvent _quitEvent = new ManualResetEvent(false);
+        static string path = "C:/Users/Alz/Documents/log.txt";
         public static void Main()
         {
-            Console.CancelKeyPress += (sender, eArgs) => {
-                _quitEvent.Set();
-                eArgs.Cancel = true;
-            };
+            try
+            {
+                if (!File.Exists(path))
+                {
+                    FileStream fs = File.Create(path);
+                }
 
-            var server = new BasicServer();
+                Console.CancelKeyPress += (sender, eArgs) =>
+                {
+                    _quitEvent.Set();
+                    eArgs.Cancel = true;
+                };
 
-            server.Init();
-            server.StartLoop();
+                var server = new BasicServer();
 
-            _quitEvent.WaitOne();
+                server.Init();
+                server.StartLoop();
+
+                _quitEvent.WaitOne();
+                Console.Write("Press Enter to close window ...");
+                Console.Read();
+            }
+            catch (Exception e)
+            {
+                Console.Write("Press Enter to close window ...");
+                Console.Read();
+
+                File.AppendAllText(path, e.InnerException.Message);
+                File.AppendAllText(path, e.Message);
+                File.AppendAllText(path, e.ToString());
+            }
+            finally
+            {
+                Console.Write("Press Enter to close window ...");
+                Console.Read();
+            }
         }
     }
 }

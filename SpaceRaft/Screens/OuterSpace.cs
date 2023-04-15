@@ -144,13 +144,32 @@ namespace LYA.Screens
 				{
 						if (tmpCount!=Globals.PlayerCount)
 						{
-										if (Globals.PlayerCount>1)
+										for (var i = 1; Globals.PlayerCount>i; i++) //3
+										{
+										if (Globals.ClientId==1)
 										{
 												astroSprites.AddToFront( new Astro( astroIdleTex )
 												{
-														clientId=Globals.PlayerCount
+														clientId=i+1
+														//if clinetid is >1 then make a new astro with client id up till the number
+
+												} );
+										}
+										else { 
+										
+												astroSprites.AddToFront( new Astro( astroIdleTex )
+												{
+														clientId=i
+														//if clinetid is >1 then make a new astro with client id up till the number
+
 												});
 										}
+										}
+
+										//astroSprites.AddToFront( new Astro( astroIdleTex )
+										//{
+										//		clientId=Globals.PlayerCount
+										//} );
 						}
 
 						// Update the camera
