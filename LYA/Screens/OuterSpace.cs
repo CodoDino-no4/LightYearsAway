@@ -38,7 +38,7 @@ namespace LYA.Screens
 
 				// Networking
 				public ClientManager clientManager;
-				int tmpCount;
+				private int tmpCount;
 
 				public OuterSpace( Game game, ClientManager clientManager ) : base( game )
 				{
@@ -54,7 +54,7 @@ namespace LYA.Screens
 						// Sprite List
 						astroSprites=new Deque<Astro>();
 						uiSprites=new Deque<BaseSprite>();
-						tileSprites = new Bag<Tile>();
+						tileSprites=new Bag<Tile>();
 				}
 
 				private new LYA Game => (LYA) base.Game;
@@ -144,13 +144,13 @@ namespace LYA.Screens
 				{
 						if (tmpCount!=Globals.PlayerCount)
 						{
-										if (Globals.PlayerCount>1)
+								if (Globals.PlayerCount>1)
+								{
+										astroSprites.AddToFront( new Astro( astroIdleTex )
 										{
-												astroSprites.AddToFront( new Astro( astroIdleTex )
-												{
-														clientId=Globals.PlayerCount
-												});
-										}
+												clientId=Globals.PlayerCount
+										} );
+								}
 						}
 
 						// Update the camera
@@ -159,7 +159,7 @@ namespace LYA.Screens
 						//Update BG astroSprites
 						bgManager.Update();
 
-						CommandManager.Commands( astro, foundationTex, tileSprites);
+						CommandManager.Commands( astro, foundationTex, tileSprites );
 
 						// Update astroSprites
 
@@ -167,9 +167,9 @@ namespace LYA.Screens
 						{
 								foreach (var sprite in astroSprites)
 								{
-										if (sprite.clientId==clientManager.astroCoords.Value) 
+										if (sprite.clientId==clientManager.astroCoords.Value)
 										{
-												sprite.Position=clientManager.astroCoords.Key; 
+												sprite.Position=clientManager.astroCoords.Key;
 										}
 										sprite.Update();
 								}
@@ -188,7 +188,7 @@ namespace LYA.Screens
 						}
 
 						// Temp player count set
-						tmpCount = Globals.PlayerCount;
+						tmpCount=Globals.PlayerCount;
 				}
 		}
 }

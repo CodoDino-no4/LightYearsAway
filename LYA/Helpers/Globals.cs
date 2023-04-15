@@ -2,9 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Collections;
 using MonoGame.Extended.Screens;
-using System.Net;
 
 namespace LYA.Helpers
 {
@@ -58,7 +56,7 @@ namespace LYA.Helpers
 				}
 
 
-				public static void Update( GraphicsDeviceManager graphics)
+				public static void Update( GraphicsDeviceManager graphics )
 				{
 						ScreenSize=graphics.GraphicsDevice.Viewport.Bounds;
 				}

@@ -1,6 +1,5 @@
 ﻿using LYA.Helpers;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended.Collections;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
@@ -44,15 +43,16 @@ namespace LYA.Networking
 								udpClient.ExclusiveAddressUse=false;
 								udpClient.EnableBroadcast=true;
 								udpClient.DontFragment=true;
-						
+
 								udpClient.Connect( serverEndPoint );
 						}
-						catch {
+						catch
+						{
 								Debug.WriteLine( "ERROR ON INITALISING UDPCLIENT" );
 						}
 
-						packetJoin = new PacketFormer();
-						packetLeave = new PacketFormer();
+						packetJoin=new PacketFormer();
+						packetLeave=new PacketFormer();
 						packetRecv=new PacketFormer();
 
 						JoinServer();
@@ -63,7 +63,7 @@ namespace LYA.Networking
 				{
 						try
 						{
-								udpClient.Send(packetJoin.ClientSendPacket( "Join", 0, udpClient.Client.LocalEndPoint.ToString() ) );
+								udpClient.Send( packetJoin.ClientSendPacket( "Join", 0, udpClient.Client.LocalEndPoint.ToString() ) );
 
 								var res = udpClient.Receive(ref serverEndPoint);
 								recvBuff=res;
@@ -97,20 +97,20 @@ namespace LYA.Networking
 				{
 						try
 						{
-								udpClient.Send( packetLeave.ClientSendPacket("Leave", Globals.ClientId, "" ));
+								udpClient.Send( packetLeave.ClientSendPacket( "Leave", Globals.ClientId, "" ) );
 						}
 						catch (SocketException e)
 						{
 								Debug.WriteLine( e );
 						}
 				}
-				public Vector2 Decode(PacketFormer packet)
+				public Vector2 Decode( PacketFormer packet )
 				{
 						Vector2 coords = new Vector2();
 
 						if (packet.cmd==3||packet.cmd==4)
 						{
-								if (packet.payload !=null)
+								if (packet.payload!=null)
 								{
 										string remCurlys = packet.payload.Substring(1, packet.payload.Length - 2); //"0:{X:0 Y:-6}"
 										string xPair = remCurlys.Split(' ').First();
@@ -125,7 +125,7 @@ namespace LYA.Networking
 										coords=new Vector2( x, y );
 								}
 						}
-									return coords;
+						return coords;
 				}
 
 				//public void Serialize( BinaryWriter writer )
@@ -189,7 +189,7 @@ namespace LYA.Networking
 												{
 														if (packetRecv.clientId!=Globals.ClientId)
 														{
-																astroCoords=new KeyValuePair<Vector2, int>( Decode(packetRecv), packetRecv.clientId );
+																astroCoords=new KeyValuePair<Vector2, int>( Decode( packetRecv ), packetRecv.clientId );
 														}
 												}
 
@@ -198,7 +198,7 @@ namespace LYA.Networking
 												{
 														if (packetRecv.clientId!=Globals.ClientId)
 														{
-																tileCoords=new KeyValuePair<Vector2, int>( Decode(packetRecv), packetRecv.clientId );
+																tileCoords=new KeyValuePair<Vector2, int>( Decode( packetRecv ), packetRecv.clientId );
 														}
 												}
 										}
@@ -211,7 +211,7 @@ namespace LYA.Networking
 												Debug.WriteLine( "The server port is unreachable" );
 										}
 								}
-						});
+						} );
 				}
 		}
 }

@@ -1,8 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Net;
-using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Text;
 using System.Timers;
 using Timer = System.Timers.Timer;
 
@@ -64,7 +62,7 @@ namespace Server
                     tickTimer.Interval = deltaTime.TotalMilliseconds;
                     tickTimer.Enabled = true;
                     tickTimer.Elapsed += async (object source, ElapsedEventArgs e) =>
-                    { 
+                    {
                         var res = await udpServer.ReceiveAsync();
                         recvBuff = res.Buffer;
                         packetRecv.ServerRecvPacket(recvBuff);
@@ -113,7 +111,7 @@ namespace Server
         {
             foreach (var client in conns)
             {
-                _ = await udpServer.SendAsync(data, client.Key);        
+                _ = await udpServer.SendAsync(data, client.Key);
             }
         }
 

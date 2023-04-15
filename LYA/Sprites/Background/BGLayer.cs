@@ -8,7 +8,7 @@ namespace LYA.Sprites.Background
 
 				public BGLayer( Texture2D texture ) : base( texture )
 				{
-						this.Texture=texture;
+						Texture=texture;
 				}
 
 				public override void Update()

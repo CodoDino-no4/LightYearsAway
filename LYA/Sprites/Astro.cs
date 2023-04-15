@@ -1,5 +1,4 @@
 ﻿using LYA.Helpers;
-using LYA.Sprites.Cloneables;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Collections;

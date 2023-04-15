@@ -1,13 +1,4 @@
-﻿using LYA._Camera;
-using LYA.Helpers;
-using LYA.Networking;
-using LYA.Sprites;
-using LYA.Sprites.Background;
-using LYA.Sprites.Cloneables;
-using LYA.Sprites.GUI;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text;
 
 namespace LYA.Testing.Unit

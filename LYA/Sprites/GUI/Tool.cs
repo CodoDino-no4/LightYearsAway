@@ -6,7 +6,7 @@ namespace LYA.Sprites.GUI
 		{
 				public Tool( Texture2D texture ) : base( texture )
 				{
-						this.Texture=texture;
+						Texture=texture;
 				}
 		}
 }

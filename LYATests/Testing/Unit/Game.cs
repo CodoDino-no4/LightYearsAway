@@ -1,19 +1,8 @@
-﻿using LYA._Camera;
-using LYA.Helpers;
-using LYA.Networking;
-using LYA.Sprites;
-using LYA.Sprites.Background;
-using LYA.Sprites.Cloneables;
-using LYA.Sprites.GUI;
-using Server;
+﻿using LYA.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using System.Diagnostics;
 using System.Net;
 using System.Text;
-using System.Diagnostics;
-using System.Xml.Linq;
-using System.Reflection;
 
 namespace LYA.Testing.Unit
 {
@@ -27,11 +16,10 @@ namespace LYA.Testing.Unit
         /// <summary>
         /// Initialises the game and runs one frame
         /// </summary>
-        LYA game;
-        Process proc;
-
-        string IP = "192.168.1.101";
-        string PORT = "11000";
+        private LYA game;
+        private Process proc;
+        private string IP = "192.168.1.101";
+        private string PORT = "11000";
 
         [TestInitialize()]
         public void Setup()
@@ -88,7 +76,7 @@ namespace LYA.Testing.Unit
 
         [TestMethod()]
         public void MultiplayerConnectTest()
-        {      
+        {
             Globals.IsMulti = true;
 
             game.clientManager.Init(IPAddress.Parse(IP), Int32.Parse(PORT));

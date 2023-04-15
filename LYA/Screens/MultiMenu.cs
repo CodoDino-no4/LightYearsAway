@@ -12,14 +12,13 @@ namespace LYA.Screens
 {
 		public class MultiMenu : GameScreen
 		{
-				ClientManager clientManager;
+				private ClientManager clientManager;
 
 				private Desktop desktop;
 				private Grid grid;
 				private Panel panel;
-
-				string ipAddress;
-				string port;
+				private string ipAddress;
+				private string port;
 
 				public MultiMenu( Game game, ClientManager clientManager ) : base( game )
 				{
@@ -111,9 +110,10 @@ namespace LYA.Screens
 												grid.Widgets.Add( DrawLabel( "success", "SUCCESS", 2, 5 ) );
 
 												// Start game
-												Globals.ScreenManager.LoadScreen( new OuterSpace( this.Game, clientManager ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
+												Globals.ScreenManager.LoadScreen( new OuterSpace( Game, clientManager ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
 										}
-										else {
+										else
+										{
 												grid.Widgets.Add( DrawLabel( "fail", "UNREACHABLE SERVER PORT", 2, 5 ) );
 										}
 								}

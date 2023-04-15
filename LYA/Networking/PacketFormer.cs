@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using System.Text;
+﻿using System.Text;
 
 namespace LYA.Networking
 {
@@ -62,7 +61,7 @@ namespace LYA.Networking
 								byteStream.AddRange( BitConverter.GetBytes( 0 ) );
 
 						// Final result
-						sendData = byteStream.ToArray();
+						sendData=byteStream.ToArray();
 						return byteStream.ToArray();
 				}
 

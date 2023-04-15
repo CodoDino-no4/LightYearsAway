@@ -1,11 +1,9 @@
 ﻿using LYA.Helpers;
-using LYA.Networking;
 using LYA.Sprites;
 using LYA.Sprites.Cloneables;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Collections;
-using System;
 using System.Diagnostics;
 
 namespace LYA.Commands
@@ -18,7 +16,7 @@ namespace LYA.Commands
 
 				}
 
-				public static Vector2 PlayerCameraMovement( Astro astro)
+				public static Vector2 PlayerCameraMovement( Astro astro )
 				{
 						// Previous Position
 						Vector2 tmpPosition = astro.Position;
@@ -36,7 +34,7 @@ namespace LYA.Commands
 						return astro.Position;
 				}
 
-				public static void PlaceTile( Astro astro, Texture2D tileTex, Bag<Tile> sprites)
+				public static void PlaceTile( Astro astro, Texture2D tileTex, Bag<Tile> sprites )
 				{
 						bool emptyPos = true;
 
@@ -60,16 +58,17 @@ namespace LYA.Commands
 										place.Execute();
 										Globals.Packet.ClientSendPacket( "Place", Globals.ClientId, astro.Position.ToString() );
 								}
-								else {
+								else
+								{
 
 										Debug.WriteLine( "Tile already placed here" );
 								}
 						}
 				}
 
-				public static void Commands( Astro astro, Texture2D tileTex, Bag<Tile> sprites)
+				public static void Commands( Astro astro, Texture2D tileTex, Bag<Tile> sprites )
 				{
-						PlaceTile( astro, tileTex, sprites);
+						PlaceTile( astro, tileTex, sprites );
 				}
 		}
 }

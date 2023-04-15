@@ -1,6 +1,5 @@
 ﻿using LYA.Helpers;
 using LYA.Sprites;
-using Microsoft.Xna.Framework;
 
 namespace LYA.Commands
 {

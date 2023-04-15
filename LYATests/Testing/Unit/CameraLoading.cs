@@ -1,9 +1,5 @@
 ﻿using LYA._Camera;
 using LYA.Helpers;
-using LYA.Sprites;
-using LYA.Sprites.Background;
-using LYA.Sprites.Cloneables;
-using LYA.Sprites.GUI;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,7 +15,7 @@ namespace LYA.Testing.Unit
         /// <summary>
         /// Initialises the game and runs one frame
         /// </summary>
-        LYA game;
+        private LYA game;
 
         [TestInitialize()]
         public void Setup()
@@ -35,7 +31,7 @@ namespace LYA.Testing.Unit
         public void CameraTest()
         {
             Camera camera = new Camera();
-            Assert.IsTrue(camera.scale ==1);
+            Assert.IsTrue(camera.scale == 1);
 
             // Get View
             var view = camera.GetView();

@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Collections;
-using System.Diagnostics;
 
 namespace LYA.Sprites.Cloneables
 {
@@ -27,7 +26,7 @@ namespace LYA.Sprites.Cloneables
 				{
 						Origin=new Vector2( Rectangle.Width/2, Rectangle.Height/2 );
 						Texture=texture;
-						type=(Type)Enum.Parse(typeof(Type), Texture.Name);
+						type=(Type) Enum.Parse( typeof( Type ), Texture.Name );
 				}
 
 				public void Draw( Bag<Tile> sprites )

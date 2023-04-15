@@ -13,7 +13,7 @@ namespace LYA.Sprites.GUI
 				public Toolbelt( Texture2D texture ) : base( texture )
 				{
 						tools=new List<Tool>();
-						this.Texture=texture;
+						Texture=texture;
 						Scale=4f;
 						Position=new Vector2( Globals.ScreenSize.Width/2, Globals.ScreenSize.Height-Texture.Height*2 );
 				}

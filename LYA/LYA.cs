@@ -6,8 +6,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
-using System.Diagnostics;
-using System.Net;
 
 namespace LYA
 {
@@ -70,23 +68,23 @@ namespace LYA
 						if (!Globals.testing)
 						{
 								isLoading=true;
-						// Graphics settings
-						isFullscreen=false;
-						graphics.PreferredBackBufferWidth=2000;
-						graphics.PreferredBackBufferHeight=1000;
-						graphics.IsFullScreen=isFullscreen;
-						customFPS=60;
+								// Graphics settings
+								isFullscreen=false;
+								graphics.PreferredBackBufferWidth=2000;
+								graphics.PreferredBackBufferHeight=1000;
+								graphics.IsFullScreen=isFullscreen;
+								customFPS=60;
 
-						// Timestep
-						graphics.SynchronizeWithVerticalRetrace=false;
-						IsFixedTimeStep=true;
-						TargetElapsedTime=TimeSpan.FromMilliseconds( 1000.0f/customFPS );
+								// Timestep
+								graphics.SynchronizeWithVerticalRetrace=false;
+								IsFixedTimeStep=true;
+								TargetElapsedTime=TimeSpan.FromMilliseconds( 1000.0f/customFPS );
 
-						Window.AllowUserResizing=true;
-						Window.Title="Light-Years Away";
-						IsMouseVisible=true;
+								Window.AllowUserResizing=true;
+								Window.Title="Light-Years Away";
+								IsMouseVisible=true;
 
-						graphics.ApplyChanges();
+								graphics.ApplyChanges();
 						}
 
 						// Set inital viewport 
@@ -100,10 +98,11 @@ namespace LYA
 
 						if (Globals.testing)
 						{
-								Globals.ScreenManager.LoadScreen( outerSpace = new OuterSpace(this, clientManager), new FadeTransition( GraphicsDevice, Color.Black, 1 ) );
+								Globals.ScreenManager.LoadScreen( outerSpace=new OuterSpace( this, clientManager ), new FadeTransition( GraphicsDevice, Color.Black, 1 ) );
 						}
-						else { 
-								Globals.ScreenManager.LoadScreen( splash = new Splash( this ), new FadeTransition( GraphicsDevice, Color.Black, 1 ) );
+						else
+						{
+								Globals.ScreenManager.LoadScreen( splash=new Splash( this ), new FadeTransition( GraphicsDevice, Color.Black, 1 ) );
 						}
 
 				}
@@ -123,7 +122,7 @@ namespace LYA
 				{
 						InputHelper.UpdateSetup();
 
-						Globals.Update(graphics);
+						Globals.Update( graphics );
 
 						if (InputBindings.Menu().Pressed())
 						{
