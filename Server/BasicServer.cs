@@ -32,6 +32,8 @@ namespace Server
         private Timer tickTimer;
         private TimeSpan deltaTime;
 
+        string path = "C:/Users/Alz/Documents/log.txt";
+
         public void Init()
         {
             sendBuff = new byte[512];
@@ -58,13 +60,14 @@ namespace Server
         {
             _ = Task.Factory.StartNew(async () =>
             {
-                try
+                
+                tickTimer = new Timer();
+                tickTimer.Interval = deltaTime.TotalMilliseconds;
+                tickTimer.Enabled = true;
+                tickTimer.Elapsed += async (object source, ElapsedEventArgs e) =>
                 {
-                    tickTimer = new Timer();
-                    tickTimer.Interval = deltaTime.TotalMilliseconds;
-                    tickTimer.Enabled = true;
-                    tickTimer.Elapsed += async (object source, ElapsedEventArgs e) =>
-                    { 
+                    try
+                    {
                         var res = await udpServer.ReceiveAsync();
                         recvBuff = res.Buffer;
                         packetRecv.ServerRecvPacket(recvBuff);
@@ -96,15 +99,26 @@ namespace Server
                             byte[] placeResp = ClientPlace();
                             await sendToAll(placeResp);
                         };
-                    };
-                }
-                catch (SocketException e)
-                {
-                    if (e.SocketErrorCode.ToString() == "ConnectionReset")
+
+                    } catch (SocketException ex)
                     {
-                        Debug.WriteLine("The client is unreachable");
+                        if (!File.Exists(path))
+                        {
+                            FileStream fs = File.Create(path);
+                        }
+
+                        File.AppendAllText(path, ex.Message);
+
+                        Console.Write("Press Enter to close window ...");
+                        Console.Read();
+
+                        if (ex.SocketErrorCode.ToString() == "ConnectionReset")
+                        {
+                            Debug.WriteLine("The client is unreachable");
+                        }
                     }
-                }
+                };
+                
             });
 
         }

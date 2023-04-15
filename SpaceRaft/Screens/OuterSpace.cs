@@ -152,6 +152,11 @@ namespace LYA.Screens
 										}
 								}
 
+								if (tmpCount>Globals.PlayerCount)
+								{
+										astroSprites.RemoveAt( clientManager.packetRecv.clientId-1 );
+								}
+
 										//astroSprites.AddToFront( new Astro( astroIdleTex )
 										//{
 										//		clientId=Globals.PlayerCount

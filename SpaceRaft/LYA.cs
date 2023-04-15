@@ -130,8 +130,6 @@ namespace LYA
 						if (Globals.IsMulti)
 						{
 								clientManager.MessageLoop();
-
-								//var serverData = clientManager.Decode();
 						}
 
 						InputHelper.UpdateCleanup();

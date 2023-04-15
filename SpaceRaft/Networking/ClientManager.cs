@@ -24,8 +24,9 @@ namespace LYA.Networking
 				// Has initalised and joined server
 				public bool isInit;
 
-				private PacketFormer packetJoin;
-				private PacketFormer packetRecv;
+				public PacketFormer packetJoin;
+				public PacketFormer packetRecv;
+				public PacketFormer packetLeave;
 
 				public void Init( IPAddress ip, int port )
 				{
@@ -52,6 +53,7 @@ namespace LYA.Networking
 
 						packetJoin = new PacketFormer();
 						packetRecv=new PacketFormer();
+						packetLeave=new PacketFormer();
 
 						JoinServer();
 
@@ -61,17 +63,17 @@ namespace LYA.Networking
 				{
 						try
 						{
-								udpClient.Send(Globals.Packet.ClientSendPacket( "Join", 0, udpClient.Client.LocalEndPoint.ToString() ) );
+								udpClient.Send(packetJoin.ClientSendPacket( "Join", 0, udpClient.Client.LocalEndPoint.ToString() ) );
 
 								var res = udpClient.Receive(ref serverEndPoint);
 								recvBuff=res;
-								packetJoin.ClientRecvPacket( recvBuff );
+								packetRecv.ClientRecvPacket( recvBuff );
 
 								// Join response parse
-								if (packetJoin.cmd==1)
+								if (packetRecv.cmd==1)
 								{
-										Globals.ClientId=packetJoin.clientId;
-										Globals.PlayerCount=Int32.Parse(packetJoin.payload);
+										Globals.ClientId=packetRecv.clientId;
+										Globals.PlayerCount=Int32.Parse(packetRecv.payload);
 										isInit=true;
 										Debug.WriteLine( "join server complete" );
 
@@ -94,17 +96,14 @@ namespace LYA.Networking
 
 				public void LeaveServer()
 				{
-						_=Task.Factory.StartNew(() =>
+						try
 						{
-								try
-								{
-										udpClient.Send( Globals.Packet.ClientSendPacket("Leave", Globals.ClientId, "" ));
-								}
-								catch (SocketException e)
-								{
-										Debug.WriteLine( e );
-								}
-						} );
+								udpClient.Send( packetLeave.ClientSendPacket("Leave", Globals.ClientId, "" ));
+						}
+						catch (SocketException e)
+						{
+								Debug.WriteLine( e );
+						}
 				}
 				public Vector2 Decode()
 				{
