@@ -149,8 +149,9 @@ namespace LYA
 								clientManager.MessageLoop();
 						}
 
-						InputHelper.UpdateCleanup();
 						base.Update( gameTime );
+
+						InputHelper.UpdateCleanup();
 				}
 
 				protected override void OnExiting( Object sender, EventArgs args )

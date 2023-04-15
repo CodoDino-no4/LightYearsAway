@@ -16,11 +16,11 @@ namespace LYA.Testing.Unit
     [TestClass()]
     public class SpriteLoading
     {
+        private LYA game;
+
         /// <summary>
         /// Initialises the game and runs one frame
         /// </summary>
-        private LYA game;
-
         [TestInitialize()]
         public void Setup()
         {

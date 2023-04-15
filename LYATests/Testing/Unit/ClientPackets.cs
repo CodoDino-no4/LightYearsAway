@@ -14,12 +14,15 @@ namespace LYA.Testing.Unit
     [TestClass()]
     public class ClientPackets
     {
+
+        private LYA game;
+        PacketFormer packetEncode;
+        PacketFormer packetDecode;
+        PacketFormer packetPayload;
+
         /// <summary>
         /// Initialises the game and runs one frame
         /// </summary>
-
-        private LYA game;
-
         [TestInitialize()]
         public void Setup()
         {
@@ -33,37 +36,37 @@ namespace LYA.Testing.Unit
         [TestMethod()]
         public void PacketEncodeTest()
         {
-            PacketFormer packet = new PacketFormer();
-            packet.ClientSendPacket("Move", 2, "Test");
+            packetEncode = new PacketFormer();
+            packetEncode.ClientSendPacket("Move", 2, "Test");
 
-            Assert.IsTrue(Encoding.UTF8.GetString(packet.sendData) == "\u0003\0\0\0\u0002\0\0\0Test");
+            Assert.IsTrue(Encoding.UTF8.GetString(packetEncode.sendData) == "\u0003\0\0\0\u0002\0\0\0Test");
 
         }
 
         [TestMethod()]
         public void PacketDecodeTest()
         {
-            PacketFormer packet = new PacketFormer();
-            packet.ClientSendPacket("Move", 2, "Test");
-            byte[] data = packet.sendData;
+            packetDecode = new PacketFormer();
+            packetDecode.ClientSendPacket("Move", 2, "Test");
+            byte[] data = packetDecode.sendData;
 
-            packet.ClientRecvPacket(data);
+            packetDecode.ClientRecvPacket(data);
 
-            Assert.IsTrue(packet.cmd == 3);
-            Assert.IsTrue(packet.clientId == 2);
-            Assert.IsTrue(packet.payload == "Test");
+            Assert.IsTrue(packetDecode.cmd == 3);
+            Assert.IsTrue(packetDecode.clientId == 2);
+            Assert.IsTrue(packetDecode.payload == "Test");
         }
 
         [TestMethod()]
         public void PayloadDecodeTest()
         {
-            PacketFormer packet = new PacketFormer();
-            packet.ClientSendPacket("Move", 2, new Vector2(20, 20).ToString());
-            byte[] data = packet.sendData;
+            packetPayload = new PacketFormer();
+            packetPayload.ClientSendPacket("Move", 2, new Vector2(20, 20).ToString());
+            byte[] data = packetPayload.sendData;
 
-            packet.ClientRecvPacket(data);
+            packetPayload.ClientRecvPacket(data);
 
-            Assert.IsTrue(game.clientManager.Decode(packet) == new Vector2(20, 20));
+            Assert.IsTrue(game.clientManager.Decode(packetPayload) == new Vector2(20, 20));
         }
 
 
