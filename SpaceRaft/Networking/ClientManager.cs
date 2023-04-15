@@ -71,7 +71,7 @@ namespace LYA.Networking
 								if (packetJoin.cmd==1)
 								{
 										Globals.ClientId=packetJoin.clientId;
-										Globals.PlayerCount=packetJoin.clientId;
+										Globals.PlayerCount=Int32.Parse(packetJoin.payload);
 										isInit=true;
 										Debug.WriteLine( "join server complete" );
 

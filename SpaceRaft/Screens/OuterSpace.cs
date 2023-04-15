@@ -79,7 +79,7 @@ namespace LYA.Screens
 
 						// Player Astro content
 						astroIdleTex=Globals.Content.Load<Texture2D>( "Astro-Idle" );
-						astro=new Astro( astroIdleTex )
+						astro=new Astro( astroIdleTex, 1 )
 						{
 								clientId=Globals.ClientId
 						};
@@ -144,27 +144,13 @@ namespace LYA.Screens
 				{
 						if (tmpCount!=Globals.PlayerCount)
 						{
-										for (var i = 1; Globals.PlayerCount>i; i++) //3
-										{
-										if (Globals.ClientId==1)
-										{
-												astroSprites.AddToFront( new Astro( astroIdleTex )
-												{
-														clientId=i+1
-														//if clinetid is >1 then make a new astro with client id up till the number
-
-												} );
+								for (var i = 1; Globals.PlayerCount>=i; i++)
+								{
+										if (Globals.ClientId!=i)
+										{	
+												astroSprites.AddToFront( new Astro( astroIdleTex, i ) );
 										}
-										else { 
-										
-												astroSprites.AddToFront( new Astro( astroIdleTex )
-												{
-														clientId=i
-														//if clinetid is >1 then make a new astro with client id up till the number
-
-												});
-										}
-										}
+								}
 
 										//astroSprites.AddToFront( new Astro( astroIdleTex )
 										//{

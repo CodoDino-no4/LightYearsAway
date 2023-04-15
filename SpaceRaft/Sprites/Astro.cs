@@ -21,10 +21,11 @@ namespace LYA.Sprites
 
 				public int clientId;
 
-				public Astro( Texture2D texture ) : base( texture )
+				public Astro( Texture2D texture, int clientId ) : base( texture )
 				{
 						state=State.swim;
 						Direction=Vector2.Zero;
+						this.clientId=clientId;
 				}
 
 				public void Draw( Deque<Astro> sprites )
