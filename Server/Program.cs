@@ -2,14 +2,20 @@
 {
     class Program
     {
-        private static void Main(string[] args)
+        static ManualResetEvent _quitEvent = new ManualResetEvent(false);
+        public static void Main()
         {
+            Console.CancelKeyPress += (sender, eArgs) => {
+                _quitEvent.Set();
+                eArgs.Cancel = true;
+            };
+
             var server = new BasicServer();
 
             server.Init();
             server.StartLoop();
 
-            Console.ReadLine();
+            _quitEvent.WaitOne();
         }
     }
 }
