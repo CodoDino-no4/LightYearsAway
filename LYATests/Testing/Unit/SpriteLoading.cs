@@ -16,7 +16,13 @@ namespace LYA.Testing.Unit
     [TestClass()]
     public class SpriteLoading
     {
+
         private LYA game;
+        private Astro astro;
+        private Tile tile;
+        private BGLayer bg1;
+        private BGLayer bg2;
+        private Toolbelt tb;
 
         /// <summary>
         /// Initialises the game and runs one frame
@@ -30,39 +36,39 @@ namespace LYA.Testing.Unit
             game = new LYA();
             game.SuppressDraw();
             game.RunOneFrame();
+
         }
 
         [TestMethod()]
         public void astroTest()
         {
-            Astro astro = new Astro(Globals.Content.Load<Texture2D>("Astro-Idle"));
+            astro = new Astro(Globals.Content.Load<Texture2D>("Astro-Idle"));
 
             Assert.IsTrue(astro.InScene);
             Assert.IsTrue(astro.Position == Vector2.Zero);
             Assert.IsTrue(astro.state == Astro.State.swim);
             Assert.IsTrue(astro.Texture.Bounds == astro.Rectangle);
+
         }
 
         [TestMethod()]
         public void BGTest()
         {
 
-            BGLayer bg1 = new BGLayer(Globals.Content.Load<Texture2D>("BG1-320px"));
-            BGLayer bg2 = new BGLayer(Globals.Content.Load<Texture2D>("BG2-320px"));
+            bg1 = new BGLayer(Globals.Content.Load<Texture2D>("BG1-320px"));
+            bg2 = new BGLayer(Globals.Content.Load<Texture2D>("BG2-320px"));
 
             Assert.IsTrue(bg1.InScene);
             Assert.IsTrue(bg2.InScene);
             Assert.IsTrue(bg1.Texture.Bounds == bg1.Rectangle);
             Assert.IsTrue(bg2.Texture.Bounds == bg2.Rectangle);
+
         }
 
         [TestMethod()]
         public void ToolbeltTest()
         {
-
-            BGLayer bg1 = new BGLayer(Globals.Content.Load<Texture2D>("BG1-320px"));
-            BGLayer bg2 = new BGLayer(Globals.Content.Load<Texture2D>("BG2-320px"));
-            Toolbelt tb = new Toolbelt(Globals.Content.Load<Texture2D>("toolbelt-empty"));
+            tb = new Toolbelt(Globals.Content.Load<Texture2D>("toolbelt-empty"));
 
             Assert.IsTrue(tb.InScene);
             Assert.IsTrue(tb.Texture.Bounds == tb.Rectangle);
@@ -72,20 +78,28 @@ namespace LYA.Testing.Unit
         [TestMethod()]
         public void TileTest()
         {
-            Tile tile = new Tile(Globals.Content.Load<Texture2D>("foundation"));
+            tile = new Tile(Globals.Content.Load<Texture2D>("foundation"));
 
             Assert.IsTrue(tile.InScene);
             Assert.IsTrue(tile.Texture.Bounds == tile.Rectangle);
             Assert.IsTrue(tile.type == Tile.Type.foundation);
             Assert.IsTrue(tile.Texture.Name == "foundation");
+
         }
 
         [TestCleanup()]
         public void CleanUp()
         {
+            Thread.Sleep(2000);
+
+            astro = null;
+            tile = null;
+            tb = null;
+            bg1 = null;
+            bg2 = null;
+
             game.Exit();
             game = null;
-
         }
     }
 }
