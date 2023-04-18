@@ -4,11 +4,11 @@ using Microsoft.Xna.Framework;
 
 namespace LYA.Commands
 {
-		public class MoveCommands : CommandManager.ICommand
+		public class MoveCommand : CommandManager.ICommand
 		{
 				public Astro astro;
 
-				public MoveCommands( Astro astro ) : base()
+				public MoveCommand( Astro astro ) : base()
 				{
 						this.astro=astro;
 				}

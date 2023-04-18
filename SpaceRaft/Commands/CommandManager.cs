@@ -23,7 +23,7 @@ namespace LYA.Commands
 						Vector2 tmpPosition = astro.Position;
 
 						// Execute Command
-						var move = new MoveCommands(astro);
+						var move = new MoveCommand(astro);
 						move.Execute();
 
 						// Send Packet
