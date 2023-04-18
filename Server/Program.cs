@@ -1,11 +1,12 @@
 ﻿namespace Server
 {
-    class Program
+    public class Program
     {
-        static ManualResetEvent _quitEvent = new ManualResetEvent(false);
+        private static ManualResetEvent _quitEvent = new ManualResetEvent(false);
         public static void Main()
         {
-            Console.CancelKeyPress += (sender, eArgs) => {
+            Console.CancelKeyPress += (sender, eArgs) =>
+            {
                 _quitEvent.Set();
                 eArgs.Cancel = true;
             };
