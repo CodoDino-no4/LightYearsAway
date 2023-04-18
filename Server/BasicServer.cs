@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Server.Commands;
+using System.Diagnostics;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
@@ -20,7 +21,6 @@ namespace Server
         private byte[] sendBuff;
         private byte[] recvBuff;
 
-        private Dictionary<IPEndPoint, int> conns;
         private int clientId = 0;
 
         private ServerPacket packetSent;
@@ -36,8 +36,6 @@ namespace Server
         {
             sendBuff = new byte[512];
             recvBuff = new byte[512];
-
-            conns = new Dictionary<IPEndPoint, int>();
 
             udpServer = new UdpClient(PORT);
             udpServer.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
@@ -65,37 +63,15 @@ namespace Server
                     tickTimer.Enabled = true;
                     tickTimer.Elapsed += async (object source, ElapsedEventArgs e) =>
                     { 
+                        // Recieve packet and data
                         var res = await udpServer.ReceiveAsync();
                         recvBuff = res.Buffer;
                         packetRecv.ServerRecvPacket(recvBuff);
 
-                        //Join Resp
-                        if (packetRecv.cmd == 1) // for second player either unreachable or no response given
-                        {
-                            byte[] joinResp = ClientJoin(res.RemoteEndPoint);
-                            await sendToAll(joinResp);
-                        };
-
-                        // Leave Resp
-                        if (packetRecv.cmd == 2)
-                        {
-                            byte[] leaveResp = ClientLeave(res.RemoteEndPoint);
-                            await sendToAll(leaveResp);
-                        };
-
-                        // Move Resp
-                        if (packetRecv.cmd == 3)
-                        {
-                            byte[] moveResp = ClientMove();
-                            await sendToAll(moveResp);
-                        };
-
-                        // Place Resp
-                        if (packetRecv.cmd == 4)
-                        {
-                            byte[] placeResp = ClientPlace();
-                            await sendToAll(placeResp);
-                        };
+                        // Handle command and send a response
+                        ResponseCommand resCommand = new ResponseCommand(res);
+                        resCommand.Execute();
+                        await sendToAll(resCommand.data, resCommand.conns);
                     };
                 }
                 catch (SocketException e)
@@ -106,46 +82,14 @@ namespace Server
                     }
                 }
             });
-
         }
 
-        public async Task sendToAll(byte[] data)
+        public async Task sendToAll(byte[] data, Dictionary<IPEndPoint, int> conns)
         {
             foreach (var client in conns)
             {
                 _ = await udpServer.SendAsync(data, client.Key);        
             }
-        }
-
-        public byte[] ClientJoin(IPEndPoint ep)
-        {
-            if (!conns.ContainsKey(ep))
-            {
-                conns.Add(ep, conns.Count() + 1);
-                clientId = conns.GetValueOrDefault(ep);
-            }
-
-            return packetSent.ServerSendPacket("Join", clientId, conns.Count().ToString());
-        }
-
-        public byte[] ClientLeave(IPEndPoint ep)
-        {
-            if (conns.ContainsKey(ep))
-            {
-                conns.Remove(ep);
-            }
-
-            return packetSent.ServerSendPacket("Leave", packetRecv.clientId, conns.Count().ToString());
-        }
-
-        public byte[] ClientMove()
-        {
-            return packetSent.ServerSendPacket("Move", packetRecv.clientId, packetRecv.payload);
-        }
-
-        public byte[] ClientPlace()
-        {
-            return packetSent.ServerSendPacket("Place", packetRecv.clientId, packetRecv.payload);
         }
     }
 }

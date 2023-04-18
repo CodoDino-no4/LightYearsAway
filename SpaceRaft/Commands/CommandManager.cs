@@ -15,7 +15,6 @@ namespace LYA.Commands
 				public interface ICommand
 				{
 						protected void Execute();
-
 				}
 
 				public static Vector2 PlayerCameraMovement( Astro astro)
@@ -54,6 +53,7 @@ namespace LYA.Commands
 												emptyPos=false;
 										}
 								}
+
 								if (emptyPos)
 								{
 										var place = new PlaceCommand(astro, tile, sprites);

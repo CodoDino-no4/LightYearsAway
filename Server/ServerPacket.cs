@@ -10,7 +10,7 @@ public class ServerPacket
         Leave,  // A Client leaves the server
         Move,   // Astro movement
         Place,  // Place a tile
-        Check, // Check if a client is connected
+        Error   // Error handling
 
     }
 
@@ -22,6 +22,9 @@ public class ServerPacket
 
     // Payload sent within packetSent
     public string payload;
+
+    // Datastream
+    public byte[] sendData;
 
     //Creates an instance of packetSent
     public ServerPacket()
@@ -57,6 +60,7 @@ public class ServerPacket
         else
             byteStream.AddRange(BitConverter.GetBytes(0));
 
+        sendData = byteStream.ToArray();
         return byteStream.ToArray();
     }
 
