@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
+using System.Numerics;
 using System.Timers;
 using Timer = System.Timers.Timer;
 
@@ -18,8 +19,8 @@ namespace Server
         private byte[] sendBuff;
         private byte[] recvBuff;
 
-        private Dictionary<IPEndPoint, int> conns;
-        private int clientId = 0;
+        private List<string> tiles;
+        private List<ClientInfo> clients;
 
         private ServerPacket packetSent;
         private ServerPacket packetRecv;
@@ -37,7 +38,8 @@ namespace Server
             sendBuff = new byte[512];
             recvBuff = new byte[512];
 
-            conns = new Dictionary<IPEndPoint, int>();
+            clients = new List<ClientInfo>();
+            tiles = new List<string>();
 
             udpServer = new UdpClient(PORT);
             udpServer.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
@@ -84,14 +86,14 @@ namespace Server
                     // Move Resp
                     if (packetRecv.cmd == 3)
                     {
-                        byte[] moveResp = ClientMove();
+                        byte[] moveResp = ClientMove(res.RemoteEndPoint);
                         await sendToAll(moveResp);
                     };
 
                     // Place Resp
                     if (packetRecv.cmd == 4)
                     {
-                        byte[] placeResp = ClientPlace();
+                        byte[] placeResp = ClientPlace(res.RemoteEndPoint);
                         await sendToAll(placeResp);
                     };
 
@@ -115,43 +117,120 @@ namespace Server
             };       
         }
 
+        public string Decode(ServerPacket packet)
+        {
+            string position = "";
+
+            if (packet.cmd == 3 || packet.cmd == 4)
+            {
+                if (packet.payload != null)
+                {
+                    string remCurlys = packet.payload.Substring(1, packet.payload.Length - 2);
+                    string xPair = remCurlys.Split(' ').First();
+                    string yPair = remCurlys.Split(' ').Last();
+
+                    string xValue = xPair.Split(":").Last();
+                    string yValue = yPair.Split(":").Last();
+
+                    int x = Int32.Parse(xValue);
+                    int y = Int32.Parse(yValue);
+
+                    position = "{X:" + x + " Y:" + y + "}";
+                }
+            }
+            return position;
+        }
+
         public async Task sendToAll(byte[] data)
         {
-            foreach (var client in conns)
+            foreach (var client in clients)
             {
-                _ = await udpServer.SendAsync(data, client.Key);
+                _ = await udpServer.SendAsync(data, client.ep);
             }
         }
 
         public byte[] ClientJoin(IPEndPoint ep)
         {
-            if (!conns.ContainsKey(ep))
+            var client = clients.Find(c => c.ep.Equals(ep));
+            var clientId = 0;
+
+            if (client == null)
             {
-                conns.Add(ep, conns.Count() + 1);
-                clientId = conns.GetValueOrDefault(ep);
+                clientId = clients.Count() + 1;
+                clients.Add(new ClientInfo(ep, clientId));
+
+                return packetSent.ServerSendPacket("Join", clientId, clients.Count().ToString());
+            }
+            else {
+
+                return packetSent.ServerSendPacket("Error", clientId, "Error on joining server");
             }
 
-            return packetSent.ServerSendPacket("Join", clientId, conns.Count().ToString());
         }
 
         public byte[] ClientLeave(IPEndPoint ep)
         {
-            if (conns.ContainsKey(ep))
+            var client = clients.Find(c => c.ep.Equals(ep));
+            var clientId = 0;
+
+            if (client != null)
             {
-                conns.Remove(ep);
+                clientId = client.id;
+                clients.Remove(client);
+
+                return packetSent.ServerSendPacket("Leave", clientId, clients.Count().ToString());
+            }
+            else {
+
+                return packetSent.ServerSendPacket("Error", clientId, "Error on leaving server");
+            }
+        }
+
+        public byte[] ClientMove(IPEndPoint ep)
+        {
+            ClientInfo client = clients.Find(c => c.ep.Equals(ep));
+            var clientId = 0;
+
+            if (client != null)
+            {
+                clientId = client.id;
+                var position = Decode(packetRecv);
+                client.position = position;
+
+                return packetSent.ServerSendPacket("Move", clientId, position);
+            }
+            else {
+
+                return packetSent.ServerSendPacket("Error", clientId, "Error on move");
             }
 
-            return packetSent.ServerSendPacket("Leave", packetRecv.clientId, conns.Count().ToString());
         }
 
-        public byte[] ClientMove()
+        public byte[] ClientPlace(IPEndPoint ep)
         {
-            return packetSent.ServerSendPacket("Move", packetRecv.clientId, packetRecv.payload);
-        }
+            var client = clients.Find(c => c.ep.Equals(ep));
+            var clientId = 0;
 
-        public byte[] ClientPlace()
-        {
-            return packetSent.ServerSendPacket("Place", packetRecv.clientId, packetRecv.payload);
+            var position = Decode(packetRecv);
+
+            if (client != null)
+            {
+                if (!tiles.Contains(position))
+                {
+                    clientId = client.id;
+                    tiles.Add(position);
+                    return packetSent.ServerSendPacket("Place", clientId, position);
+                }
+                else
+                {
+                    return packetSent.ServerSendPacket("Error", clientId, "Tile already placed here");
+                }
+            }
+            else {
+
+                return packetSent.ServerSendPacket("Error", clientId, "Error on place");
+            }
+
         }
     }
 }

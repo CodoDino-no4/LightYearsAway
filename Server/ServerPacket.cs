@@ -10,7 +10,7 @@ public class ServerPacket
         Leave,  // A Client leaves the server
         Move,   // Astro movement
         Place,  // Place a tile
-        Check, // Check if a client is connected
+        Error, // Error message
 
     }
 
