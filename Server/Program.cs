@@ -22,6 +22,7 @@
             }
             catch (Exception e)
             {
+                Console.Write(e);
                 Console.Write("Press Enter to close window ...");
                 Console.Read();
             }

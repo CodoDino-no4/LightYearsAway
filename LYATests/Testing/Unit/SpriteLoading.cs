@@ -42,7 +42,7 @@ namespace LYA.Testing.Unit
         [TestMethod()]
         public void astroTest()
         {
-            astro = new Astro(Globals.Content.Load<Texture2D>("Astro-Idle"));
+            astro = new Astro(Globals.Content.Load<Texture2D>("Astro-Idle"), 1);
 
             Assert.IsTrue(astro.InScene);
             Assert.IsTrue(astro.Position == Vector2.Zero);

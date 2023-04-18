@@ -176,7 +176,7 @@ namespace LYA.Networking
 														if (Globals.ClientId!=0)
 														{
 																Globals.PlayerCount++;
-																astroCoords=new KeyValuePair<Vector2, int>( Decode(), packetRecv.clientId );
+																astroCoords=new KeyValuePair<Vector2, int>( Decode(packetRecv), packetRecv.clientId );
 														}
 												}
 
