@@ -56,71 +56,65 @@ namespace Server
             Console.WriteLine("Server successfully intialised...");
         }
 
-        public void StartLoop()
+        public async void StartLoop()
         {
-            _ = Task.Factory.StartNew(async () =>
+            tickTimer = new Timer();
+            tickTimer.Interval = deltaTime.TotalMilliseconds;
+            tickTimer.Enabled = true;
+            tickTimer.Elapsed += async (object source, ElapsedEventArgs e) =>
             {
-                
-                tickTimer = new Timer();
-                tickTimer.Interval = deltaTime.TotalMilliseconds;
-                tickTimer.Enabled = true;
-                tickTimer.Elapsed += async (object source, ElapsedEventArgs e) =>
+                try
                 {
-                    try
+                    var res = await udpServer.ReceiveAsync();
+                    recvBuff = res.Buffer;
+                    packetRecv.ServerRecvPacket(recvBuff);
+
+                    //Join Resp
+                    if (packetRecv.cmd == 1) // for second player either unreachable or no response given
                     {
-                        var res = await udpServer.ReceiveAsync();
-                        recvBuff = res.Buffer;
-                        packetRecv.ServerRecvPacket(recvBuff);
+                        byte[] joinResp = ClientJoin(res.RemoteEndPoint);
+                        await sendToAll(joinResp);
+                    };
 
-                        //Join Resp
-                        if (packetRecv.cmd == 1) // for second player either unreachable or no response given
-                        {
-                            byte[] joinResp = ClientJoin(res.RemoteEndPoint);
-                            await sendToAll(joinResp);
-                        };
-
-                        // Leave Resp
-                        if (packetRecv.cmd == 2)
-                        {
-                            byte[] leaveResp = ClientLeave(res.RemoteEndPoint);
-                            await sendToAll(leaveResp);
-                        };
-
-                        // Move Resp
-                        if (packetRecv.cmd == 3)
-                        {
-                            byte[] moveResp = ClientMove();
-                            await sendToAll(moveResp);
-                        };
-
-                        // Place Resp
-                        if (packetRecv.cmd == 4)
-                        {
-                            byte[] placeResp = ClientPlace();
-                            await sendToAll(placeResp);
-                        };
-
-                    } catch (SocketException ex)
+                    // Leave Resp
+                    if (packetRecv.cmd == 2)
                     {
-                        if (!File.Exists(path))
-                        {
-                            FileStream fs = File.Create(path);
-                        }
+                        byte[] leaveResp = ClientLeave(res.RemoteEndPoint);
+                        await sendToAll(leaveResp);
+                    };
 
-                        File.AppendAllText(path, ex.Message);
+                    // Move Resp
+                    if (packetRecv.cmd == 3)
+                    {
+                        byte[] moveResp = ClientMove();
+                        await sendToAll(moveResp);
+                    };
 
-                        Console.Write("Press Enter to close window ...");
-                        Console.Read();
+                    // Place Resp
+                    if (packetRecv.cmd == 4)
+                    {
+                        byte[] placeResp = ClientPlace();
+                        await sendToAll(placeResp);
+                    };
 
-                        if (ex.SocketErrorCode.ToString() == "ConnectionReset")
-                        {
-                            Debug.WriteLine("The client is unreachable");
-                        }
+                } catch (SocketException ex)
+                {
+                    if (!File.Exists(path))
+                    {
+                        FileStream fs = File.Create(path);
                     }
-                };
-                
-            });
 
+                    File.AppendAllText(path, ex.Message);
+
+                    Console.Write("Press Enter to close window ...");
+                    Console.Read();
+
+                    if (ex.SocketErrorCode.ToString() == "ConnectionReset")
+                    {
+                        Debug.WriteLine("The client is unreachable");
+                    }
+                }
+            };       
         }
 
         public async Task sendToAll(byte[] data)
