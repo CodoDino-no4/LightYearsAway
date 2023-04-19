@@ -39,7 +39,7 @@ namespace LYA.Testing.Unit
             packetEncode = new PacketFormer();
             packetEncode.ClientSendPacket("Move", 2, 0, 0, "Test");
 
-            Assert.IsTrue(Encoding.UTF8.GetString(packetEncode.sendData) == "\u0003\0\0\0\u0002\0\0\0Test");
+            Assert.IsTrue(Encoding.UTF8.GetString(packetEncode.sendData) == "\u0003\0\0\0\u0002\0\0\0\0\0\0\0\0\0\0\0Test");
 
         }
 
@@ -47,13 +47,15 @@ namespace LYA.Testing.Unit
         public void PacketDecodeTest()
         {
             packetDecode = new PacketFormer();
-            packetDecode.ClientSendPacket("Move", 2, 0, 0, "Test");
+            packetDecode.ClientSendPacket("Move", 2, 20, 30, "Test");
             byte[] data = packetDecode.sendData;
 
             packetDecode.ClientRecvPacket(data);
 
             Assert.IsTrue(packetDecode.cmd == 3);
             Assert.IsTrue(packetDecode.clientId == 2);
+            Assert.IsTrue(packetDecode.posX == 20);
+            Assert.IsTrue(packetDecode.posY == 30);
             Assert.IsTrue(packetDecode.payload == "Test");
         }
 
@@ -65,10 +67,9 @@ namespace LYA.Testing.Unit
             byte[] data = packetPayload.sendData;
 
             packetPayload.ClientRecvPacket(data);
-
-            Assert.IsTrue(new Vector2(game.clientManager.packetRecv.posX, game.clientManager.packetRecv.posY) == new Vector2(20, 20));
+            Vector2 packetPos = new Vector2(packetPayload.posX, packetPayload.posY);
+            Assert.IsTrue(packetPos == new Vector2(20, 20));
         }
-
 
         [TestCleanup()]
         public void CleanUp()

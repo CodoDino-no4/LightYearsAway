@@ -18,7 +18,7 @@ namespace LYA.Testing.Unit
         {
             packetEncode = new ServerPacket();
 
-            Assert.IsTrue(Encoding.UTF8.GetString(packetEncode.ServerSendPacket("Move", 2, 0, 0, "Test")) == "\u0003\0\0\0\u0002\0\0\0Test");
+            Assert.IsTrue(Encoding.UTF8.GetString(packetEncode.ServerSendPacket("Move", 2, 0, 0, "Test")) == "\u0003\0\0\0\u0002\0\0\0\0\0\0\0\0\0\0\0Test");
         }
 
         [TestMethod()]
