@@ -69,7 +69,7 @@ namespace LYA.Testing.Unit
             game.clientManager.Init(IPAddress.Parse(IP), Int32.Parse(PORT));
             game.clientManager.LeaveServer();
 
-            Assert.IsTrue(Encoding.UTF8.GetString(game.clientManager.packetLeave.sendData) == "\u0002\0\0\0\u0002\0\0\0\0\0\0\0\0\0\0\0");
+            Assert.IsTrue(Encoding.UTF8.GetString(game.clientManager.packetLeave.sendData) == "\u0002\0\0\0\u0004\0\0\0\0\0\0\0\0\0\0\0");
         }
 
         [TestMethod()]
