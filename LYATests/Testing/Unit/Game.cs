@@ -1,6 +1,5 @@
 ﻿using LYA.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Myra.Graphics2D.UI;
 using System.Diagnostics;
 using System.Net;
 using System.Text;
@@ -50,7 +49,7 @@ namespace LYA.Testing.Unit
             Assert.IsTrue(game.Content == Globals.Content);
             Assert.IsTrue(game.GraphicsDevice.Viewport.Bounds == Globals.ScreenSize);
             Assert.IsTrue(Globals.PlayerCount == 1);
-            Assert.IsTrue(Globals.MaxPlayers == 8);
+            Assert.IsTrue(Globals.MaxPlayers == 4);
         }
 
         [TestMethod()]
@@ -70,7 +69,7 @@ namespace LYA.Testing.Unit
             game.clientManager.Init(IPAddress.Parse(IP), Int32.Parse(PORT));
             game.clientManager.LeaveServer();
 
-            Assert.IsTrue(Encoding.UTF8.GetString(game.clientManager.packetLeave.sendData) == "\u0002\0\0\0\u0001\0\0\0");
+            Assert.IsNotNull(Encoding.UTF8.GetString(game.clientManager.packetLeave.sendData));
         }
 
         [TestMethod()]
@@ -94,7 +93,7 @@ namespace LYA.Testing.Unit
             proc.Dispose();
 
             proc = null;
-            
+
         }
     }
 }

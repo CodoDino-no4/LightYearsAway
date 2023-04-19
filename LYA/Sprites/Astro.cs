@@ -20,19 +20,11 @@ namespace LYA.Sprites
 
 				public int clientId;
 
-				public Astro( Texture2D texture ) : base( texture )
+				public Astro( Texture2D texture, int clientId ) : base( texture )
 				{
 						state=State.swim;
 						Direction=Vector2.Zero;
-				}
-
-				public void Draw( Deque<Astro> sprites )
-				{
-						foreach (BaseSprite sprite in sprites)
-						{
-								if (Texture!=null)
-										Globals.SpriteBatch.Draw( Texture, Position, Rectangle, Color.White, rotation, Origin, Scale, SpriteEffects.None, 0 );
-						}
+						this.clientId=clientId;
 				}
 
 				public override void Update()

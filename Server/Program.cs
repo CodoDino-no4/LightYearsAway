@@ -5,18 +5,32 @@
         private static ManualResetEvent _quitEvent = new ManualResetEvent(false);
         public static void Main()
         {
-            Console.CancelKeyPress += (sender, eArgs) =>
+            try
             {
-                _quitEvent.Set();
-                eArgs.Cancel = true;
-            };
+                Console.CancelKeyPress += (sender, eArgs) =>
+                {
+                    _quitEvent.Set();
+                    eArgs.Cancel = true;
+                };
 
-            var server = new BasicServer();
+                var server = new BasicServer();
 
-            server.Init();
-            server.StartLoop();
+                server.Init();
+                server.StartLoop();
 
-            _quitEvent.WaitOne();
+                _quitEvent.WaitOne();
+            }
+            catch (Exception e)
+            {
+                Console.Write(e);
+                Console.Write("Press Enter to close window ...");
+                Console.Read();
+            }
+            finally
+            {
+                Console.Write("Press Enter to close window ...");
+                Console.Read();
+            }
         }
     }
 }

@@ -42,13 +42,12 @@ namespace LYA.Sprites
 						InScene=true;
 				}
 
-				public virtual void Draw( Deque<BaseSprite> sprites )
+				public virtual void Draw()
 				{
-						foreach (BaseSprite sprite in sprites)
-						{
-								if (Texture!=null)
-										Globals.SpriteBatch.Draw( Texture, Position, Rectangle, Color.White, rotation, Origin, Scale, SpriteEffects.None, 0 );
-						}
+
+					  if (Texture!=null)
+					  		Globals.SpriteBatch.Draw( Texture, Position, Rectangle, Color.White, rotation, Origin, Scale, SpriteEffects.None, 0 );
+
 				}
 				public virtual void Update()
 				{

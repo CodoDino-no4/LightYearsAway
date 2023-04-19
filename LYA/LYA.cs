@@ -48,7 +48,7 @@ namespace LYA
 						Globals.Content=Content;
 
 						// Networking
-						clientManager=new ClientManager();
+						clientManager=new ClientManager(this);
 						Globals.Packet=new PacketFormer();
 
 						// Screen Management
@@ -94,7 +94,7 @@ namespace LYA
 						spriteBatch=new SpriteBatch( GraphicsDevice );
 						Globals.SpriteBatch=spriteBatch;
 						Globals.PlayerCount=1;
-						Globals.MaxPlayers=8;
+						Globals.MaxPlayers=4;
 
 						if (Globals.testing)
 						{

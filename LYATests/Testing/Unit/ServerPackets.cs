@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Xna.Framework;
 using System.Text;
 
 namespace LYA.Testing.Unit
@@ -11,25 +10,23 @@ namespace LYA.Testing.Unit
     [TestClass()]
     public class ServerPackets
     {
-        ServerPacket packetEncode;
-        ServerPacket packetDecode;
+        private ServerPacket packetEncode;
+        private ServerPacket packetDecode;
 
         [TestMethod()]
         public void PacketEncodeTest()
         {
             packetEncode = new ServerPacket();
-            packetEncode.ServerSendPacket("Move", 2, "Test");
 
-            Assert.IsTrue(Encoding.UTF8.GetString(packetEncode.sendData) == "\u0003\0\0\0\u0002\0\0\0Test");
-
+            Assert.IsTrue(Encoding.UTF8.GetString(packetEncode.ServerSendPacket("Move", 2, 0, 0, "Test")) == "\u0003\0\0\0\u0002\0\0\0\0\0\0\0\0\0\0\0Test");
         }
 
         [TestMethod()]
         public void PacketDecodeTest()
         {
             packetDecode = new ServerPacket();
-            packetDecode.ServerSendPacket("Move", 2, "Test");
-            byte[] data = packetDecode.sendData;
+
+            byte[] data = packetDecode.ServerSendPacket("Move", 2, 0, 0, "Test");
 
             packetDecode.ServerRecvPacket(data);
 
