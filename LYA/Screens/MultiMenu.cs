@@ -114,7 +114,8 @@ namespace LYA.Screens
 										}
 										else
 										{
-												grid.Widgets.Add( DrawLabel( "fail", "UNREACHABLE SERVER PORT", 2, 5 ) );
+												var errBox = Dialog.CreateMessageBox("Error", "Server Address Not Found");
+												errBox.ShowModal( desktop );
 										}
 								}
 								catch
@@ -124,10 +125,23 @@ namespace LYA.Screens
 								}
 						};
 
-						var exitBtn = new TextButton
+						var backBtn = new TextButton
 						{
 								GridColumn = 3,
 								GridRow = 5,
+								Text = "Back",
+								HorizontalAlignment = HorizontalAlignment.Center,
+						};
+
+						backBtn.Click+=( s, a ) =>
+						{
+								Globals.ScreenManager.LoadScreen( new MainMenu( Game, clientManager ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
+						};
+
+						var exitBtn = new TextButton
+						{
+								GridColumn = 3,
+								GridRow = 6,
 								Text = "Exit",
 								HorizontalAlignment = HorizontalAlignment.Center,
 						};
@@ -138,6 +152,7 @@ namespace LYA.Screens
 						};
 
 						grid.Widgets.Add( connBtn );
+						grid.Widgets.Add( backBtn );
 						grid.Widgets.Add( exitBtn );
 
 						// Add it to the desktop

@@ -29,15 +29,6 @@ namespace LYA.Sprites.Cloneables
 						type=(Type) Enum.Parse( typeof( Type ), Texture.Name );
 				}
 
-				public void Draw( Bag<Tile> sprites )
-				{
-						foreach (BaseSprite sprite in sprites)
-						{
-								if (Texture!=null)
-										Globals.SpriteBatch.Draw( Texture, Position, Rectangle, Color.White, rotation, Origin, Scale, SpriteEffects.None, 0 );
-						}
-				}
-
 				public override void Update()
 				{
 

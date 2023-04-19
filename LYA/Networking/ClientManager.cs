@@ -1,5 +1,8 @@
 ﻿using LYA.Helpers;
+using LYA.Screens;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Screens.Transitions;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
@@ -17,8 +20,9 @@ namespace LYA.Networking
 				private byte[] tmpData;
 
 				// Recieved and decoded coordinates
-				public KeyValuePair<Vector2, int> astroCoords;
-				public KeyValuePair<Vector2, int> tileCoords;
+				public KeyValuePair<int, Vector2> astroCoords;
+				public KeyValuePair<int, Vector2> tileCoords;
+				public List<KeyValuePair<int, Vector2>> clients;
 
 				// Has initalised and joined server
 				public bool isInit;
@@ -27,12 +31,19 @@ namespace LYA.Networking
 				public PacketFormer packetRecv;
 				public PacketFormer packetLeave;
 
+				private new LYA Game;
+
+				public ClientManager(Game game)
+				{
+						Game=(LYA) game;
+				}
+
 				public void Init( IPAddress ip, int port )
 				{
 						isInit=false;
 
-						recvBuff=new byte[ 512 ];
-						tmpData=new byte[ 512 ];
+						recvBuff=new byte[ 128 ];
+						tmpData=new byte[ 128 ];
 
 						try
 						{
@@ -48,15 +59,40 @@ namespace LYA.Networking
 						}
 						catch
 						{
-								Debug.WriteLine( "ERROR ON INITALISING UDPCLIENT" );
+								isInit=false;
+								Globals.ScreenManager.LoadScreen( new MultiMenu( Game, this ), new FadeTransition( Game.GraphicsDevice, Color.Black, 4 ) );
 						}
 
 						packetJoin=new PacketFormer();
-						packetLeave=new PacketFormer();
 						packetRecv=new PacketFormer();
 						packetLeave=new PacketFormer();
+						clients=new List<KeyValuePair<int, Vector2>>();
 
 						JoinServer();
+
+				}
+
+				public void GetExistingClients(string payload)
+				{
+						// Get player count
+						Globals.PlayerCount=Int32.Parse(payload.Split("?").First());
+
+						string newClients = payload.Split("?").Last();
+						string[] newClientsList = newClients.Split("client");
+
+						foreach (var newClient in newClientsList)
+						{
+								if (newClient!="")
+								{
+										// Get player id and the player current position
+										string[] data = newClient.Split(":");
+										clients.Add( new KeyValuePair<int, Vector2>( Int32.Parse(data[ 0 ]), new Vector2( Int32.Parse(data[ 1 ]), Int32.Parse(data[ 2 ] ))) );
+								}
+						}
+				}
+
+				public void GetExisitngTiles()
+				{
 
 				}
 
@@ -64,7 +100,7 @@ namespace LYA.Networking
 				{
 						try
 						{
-								udpClient.Send(packetJoin.ClientSendPacket( "Join", 0, udpClient.Client.LocalEndPoint.ToString() ) );
+								udpClient.Send( packetJoin.ClientSendPacket( "Join", 0, 0, 0, udpClient.Client.LocalEndPoint.ToString() ) );
 
 								var res = udpClient.Receive(ref serverEndPoint);
 								recvBuff=res;
@@ -74,20 +110,33 @@ namespace LYA.Networking
 								if (packetRecv.cmd==1)
 								{
 										Globals.ClientId=packetRecv.clientId;
-										Globals.PlayerCount=Int32.Parse(packetRecv.payload);
+
+										if (Globals.ClientId>1)
+										{
+												GetExistingClients(packetRecv.payload); 
+										}
+
 										isInit=true;
 										Debug.WriteLine( "join server complete" );
 
 										// Prevent sending join data more than once
 										Globals.Packet.sendData=null;
 								}
+
+								// Error response parse
+								if (packetRecv.cmd==5)
+								{
+										isInit=false;
+										Globals.ScreenManager.LoadScreen( new MultiMenu( Game, this ), new FadeTransition( Game.GraphicsDevice, Color.Black, 4 ) );
+								}
+
 						}
 						catch (SocketException e)
 						{
 								if (e.SocketErrorCode.ToString()=="ConnectionReset")
 								{
 										isInit=false;
-										Debug.WriteLine( "The server port is unreachable" );
+										Globals.ScreenManager.LoadScreen( new MultiMenu( Game, this ), new FadeTransition( Game.GraphicsDevice, Color.Black, 4 ) );
 								}
 						}
 
@@ -98,54 +147,17 @@ namespace LYA.Networking
 				{
 						try
 						{
-								udpClient.Send( packetLeave.ClientSendPacket("Leave", Globals.ClientId, "" ));
+								udpClient.Send( packetLeave.ClientSendPacket( "Leave", Globals.ClientId, 0, 0, "" ) );
 						}
 						catch (SocketException e)
 						{
 								Debug.WriteLine( e );
 						}
 				}
-				public Vector2 Decode( PacketFormer packet )
-				{
-						Vector2 coords = new Vector2();
-
-						if (packet.cmd==3||packet.cmd==4)
-						{
-								if (packet.payload!=null)
-								{
-										string remCurlys = packet.payload.Substring(1, packet.payload.Length - 2); //"0:{X:0 Y:-6}"
-										string xPair = remCurlys.Split(' ').First();
-										string yPair = remCurlys.Split(' ').Last();
-
-										string xValue = xPair.Split(":").Last();
-										string yValue = yPair.Split(":").Last();
-
-										int x = Int32.Parse(xValue);
-										int y = Int32.Parse(yValue);
-
-										coords=new Vector2( x, y );
-								}
-						}
-						return coords;
-				}
-
-				//public void Serialize( BinaryWriter writer )
-				//{
-				//		writer.Write( position.X );
-				//		writer.Write( position.Y );
-				//		writer.Write( speed );
-				//}
-
-				//public void Deserialize( BinaryReader reader )
-				//{
-				//		position.X=reader.ReadSingle();
-				//		position.Y=reader.ReadSingle();
-				//		speed=reader.ReadSingle();
-				//}
 
 				public void MessageLoop()
 				{
-						_=Task.Factory.StartNew( async () =>
+						_=Task.Run( async () =>
 						{
 								try
 								{
@@ -176,7 +188,7 @@ namespace LYA.Networking
 														if (Globals.ClientId!=0)
 														{
 																Globals.PlayerCount++;
-																astroCoords=new KeyValuePair<Vector2, int>( Decode(packetRecv), packetRecv.clientId );
+																astroCoords=new KeyValuePair<int, Vector2>(  packetRecv.clientId, new Vector2(packetRecv.posX, packetRecv.posY) );
 														}
 												}
 
@@ -184,6 +196,7 @@ namespace LYA.Networking
 												if (packetRecv.cmd==2)
 												{
 														Globals.PlayerCount--;
+														astroCoords=new KeyValuePair<int, Vector2>( packetRecv.clientId, new Vector2( packetRecv.posX, packetRecv.posY ) );
 												}
 
 												// Move response parse
@@ -191,7 +204,7 @@ namespace LYA.Networking
 												{
 														if (packetRecv.clientId!=Globals.ClientId)
 														{
-																astroCoords=new KeyValuePair<Vector2, int>( Decode( packetRecv ), packetRecv.clientId );
+																astroCoords=new KeyValuePair<int, Vector2>( packetRecv.clientId, new Vector2( packetRecv.posX, packetRecv.posY ) );
 														}
 												}
 
@@ -200,8 +213,14 @@ namespace LYA.Networking
 												{
 														if (packetRecv.clientId!=Globals.ClientId)
 														{
-																tileCoords=new KeyValuePair<Vector2, int>( Decode( packetRecv ), packetRecv.clientId );
+																tileCoords=new KeyValuePair<int, Vector2>(  packetRecv.clientId, new Vector2(packetRecv.posX, packetRecv.posY) );
 														}
+												}
+
+												// Error response parse
+												if (packetRecv.cmd==5)
+												{
+														
 												}
 										}
 								}

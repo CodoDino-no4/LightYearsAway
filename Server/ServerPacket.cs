@@ -20,11 +20,12 @@ public class ServerPacket
     // Client unique ID
     public int clientId;
 
+    // Cooridnate data
+    public int posX;
+    public int posY;
+
     // Payload sent within packetSent
     public string payload;
-
-    // Datastream
-    public byte[] sendData;
 
     //Creates an instance of packetSent
     public ServerPacket()
@@ -33,24 +34,25 @@ public class ServerPacket
     }
 
     // Converts server payload into a byte stream
-    public byte[] ServerSendPacket(string command, int clientId, string data)
+    public byte[] ServerSendPacket(string command, int id, int x, int y, string data)
     {
         // Byte stream
         List<byte> byteStream = new List<byte>();
 
         // Get cmd index number
-        int cmdTmp = (int)(Command)Enum.Parse(typeof(Command), command, true);
+        int cmdVal = (int)(Command)Enum.Parse(typeof(Command), command, true);
 
-        // Add the cmd to the datastream
-        byteStream.AddRange(BitConverter.GetBytes(cmdTmp));
+        // Add the command
+        byteStream.AddRange(BitConverter.GetBytes(cmdVal));
 
         // Add client ID
-        if (clientId != 0)
-        {
-            byteStream.AddRange(BitConverter.GetBytes(clientId));
-        }
-        else
-            byteStream.AddRange(BitConverter.GetBytes(0));
+        byteStream.AddRange(BitConverter.GetBytes(id));
+
+        // Add coordinates X
+        byteStream.AddRange(BitConverter.GetBytes(x));
+
+        // Add coordinates Y
+        byteStream.AddRange(BitConverter.GetBytes(y));
 
         // Add payload
         if (data != null)
@@ -60,7 +62,6 @@ public class ServerPacket
         else
             byteStream.AddRange(BitConverter.GetBytes(0));
 
-        sendData = byteStream.ToArray();
         return byteStream.ToArray();
     }
 
@@ -77,13 +78,21 @@ public class ServerPacket
         clientId = BitConverter.ToInt32(data, 4);
         Console.WriteLine($"clientID: {clientId}");
 
+        // Decode coordinate X
+        posX = BitConverter.ToInt32(data, 8);
+        Console.WriteLine($"X: {posX}");
+
+        // Decode coordinate Y
+        posY = BitConverter.ToInt32(data, 12);
+        Console.WriteLine($"X: {posY}");
+
         // Decode the payload
         // Length is variable so get the length
-        int dataLen = data.Length - 8;
+        int dataLen = data.Length - 16;
 
         // Copy payload to new array and get the string
         byte[] dataSegment = new byte[dataLen];
-        Buffer.BlockCopy(data, 8, dataSegment, 0, dataLen);
+        Buffer.BlockCopy(data, 16, dataSegment, 0, dataLen);
 
         payload = Encoding.UTF8.GetString(dataSegment);
 

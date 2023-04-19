@@ -39,6 +39,7 @@ namespace LYA.Screens
 				// Networking
 				public ClientManager clientManager;
 				private int tmpCount;
+				private bool playersAdded = false;
 
 				public OuterSpace( Game game, ClientManager clientManager ) : base( game )
 				{
@@ -84,9 +85,6 @@ namespace LYA.Screens
 								clientId=Globals.ClientId
 						};
 
-						// add astroSprites to list
-						astroSprites.AddToBack( astro );
-
 						foundationTex=Globals.Content.Load<Texture2D>( "foundation" );
 				}
 
@@ -118,10 +116,12 @@ namespace LYA.Screens
 						Globals.SpriteBatch.Begin( samplerState: SamplerState.PointWrap, transformMatrix: camera.Transform );
 
 						foreach (var sprite in tileSprites)
-								sprite.Draw( tileSprites );
+								sprite.Draw();
 
 						foreach (var sprite in astroSprites)
-								sprite.Draw( astroSprites );
+								sprite.Draw();
+
+						astro.Draw();
 
 						Globals.SpriteBatch.End();
 
@@ -133,7 +133,7 @@ namespace LYA.Screens
 						Globals.SpriteBatch.Begin( samplerState: SamplerState.PointWrap, transformMatrix: ui_scale );
 
 						foreach (var sprite in uiSprites)
-								sprite.Draw( uiSprites );
+								sprite.Draw();
 
 						Globals.SpriteBatch.End();
 
@@ -142,25 +142,46 @@ namespace LYA.Screens
 
 				public override void Update( GameTime gameTime )
 				{
-						if (tmpCount!=Globals.PlayerCount)
+						if (Globals.IsMulti && tmpCount !=0)
 						{
-								for (var i = 1; Globals.PlayerCount>=i; i++)
+								// Add exisitng players on the server
+								if (!playersAdded)
 								{
-										if (Globals.ClientId!=i)
-										{	
-												astroSprites.AddToFront( new Astro( astroIdleTex, i ) );
+										foreach (var client in clientManager.clients)
+										{
+												astroSprites.AddToFront( new Astro( astroIdleTex, client.Key ) { Position = client.Value } );
+										}
+
+										playersAdded = true;
+								}
+
+								// Player count has changed
+								if (tmpCount!=Globals.PlayerCount)
+								{
+										// If player count has increased
+										if (tmpCount<Globals.PlayerCount)
+										{
+												astroSprites.AddToFront( new Astro( astroIdleTex, clientManager.astroCoords.Key ) 
+												{
+														Position = new Vector2(clientManager.astroCoords.Value.X, clientManager.astroCoords.Value.X )
+
+												} );
+										}
+										// If player count has decreased
+										else { //if it exisits
+												astroSprites.RemoveAt( clientManager.astroCoords.Key-1 );
 										}
 								}
 
-								if (tmpCount>Globals.PlayerCount)
+								// Update astroSprites
+								foreach (var sprite in astroSprites)
 								{
-										astroSprites.RemoveAt( clientManager.packetRecv.clientId-1 );
+										if (sprite.clientId==clientManager.astroCoords.Key)
+										{
+												sprite.Position=clientManager.astroCoords.Value;
+										}
+										sprite.Update();
 								}
-
-										//astroSprites.AddToFront( new Astro( astroIdleTex )
-										//{
-										//		clientId=Globals.PlayerCount
-										//} );
 						}
 
 						// Update the camera
@@ -169,21 +190,10 @@ namespace LYA.Screens
 						//Update BG astroSprites
 						bgManager.Update();
 
+						//Update BG astroSprites
+						astro.Update();
+
 						CommandManager.Commands( astro, foundationTex, tileSprites );
-
-						// Update astroSprites
-
-						if (Globals.IsMulti)
-						{
-								foreach (var sprite in astroSprites)
-								{
-										if (sprite.clientId==clientManager.astroCoords.Value)
-										{
-												sprite.Position=clientManager.astroCoords.Key;
-										}
-										sprite.Update();
-								}
-						}
 
 						//Update UI Sprites
 						foreach (var sprite in uiSprites)

@@ -1,6 +1,5 @@
 ﻿using LYA.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Myra.Graphics2D.UI;
 using System.Diagnostics;
 using System.Net;
 using System.Text;
@@ -94,7 +93,7 @@ namespace LYA.Testing.Unit
             proc.Dispose();
 
             proc = null;
-            
+
         }
     }
 }

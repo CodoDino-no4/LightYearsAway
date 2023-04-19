@@ -27,15 +27,6 @@ namespace LYA.Sprites
 						this.clientId=clientId;
 				}
 
-				public void Draw( Deque<Astro> sprites )
-				{
-						foreach (BaseSprite sprite in sprites)
-						{
-								if (Texture!=null)
-										Globals.SpriteBatch.Draw( Texture, Position, Rectangle, Color.White, rotation, Origin, Scale, SpriteEffects.None, 0 );
-						}
-				}
-
 				public override void Update()
 				{
 

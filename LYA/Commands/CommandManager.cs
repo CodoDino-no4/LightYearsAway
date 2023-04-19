@@ -28,7 +28,7 @@ namespace LYA.Commands
 						// Send Packet
 						if (tmpPosition!=astro.Position)
 						{
-								Globals.Packet.ClientSendPacket( "Move", Globals.ClientId, astro.Position.ToString() );
+								Globals.Packet.ClientSendPacket( "Move", Globals.ClientId, (int) astro.Position.X, (int) astro.Position.Y, "" );
 						}
 
 						return astro.Position;
@@ -56,7 +56,7 @@ namespace LYA.Commands
 								{
 										var place = new PlaceCommand(astro, tile, sprites);
 										place.Execute();
-										Globals.Packet.ClientSendPacket( "Place", Globals.ClientId, astro.Position.ToString() );
+										Globals.Packet.ClientSendPacket( "Place", Globals.ClientId, (int) astro.Position.X, (int) astro.Position.Y, "" );
 								}
 								else
 								{

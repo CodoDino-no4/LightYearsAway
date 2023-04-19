@@ -19,27 +19,27 @@ namespace Server
         private byte[] sendBuff;
         private byte[] recvBuff;
 
-        private List<string> tiles;
+        private List<Vector2> tiles;
         private List<ClientInfo> clients;
 
         private ServerPacket packetSent;
         private ServerPacket packetRecv;
 
         public bool messageRec = false;
+        public bool hasErrored;
 
         // Tick rate
         private Timer tickTimer;
         private TimeSpan deltaTime;
-
-        string path = "C:/Users/Alz/Documents/log.txt";
+        private string path = "C:/Users/Alz/Documents/log.txt";
 
         public void Init()
         {
-            sendBuff = new byte[512];
-            recvBuff = new byte[512];
+            sendBuff = new byte[128];
+            recvBuff = new byte[128];
 
             clients = new List<ClientInfo>();
-            tiles = new List<string>();
+            tiles = new List<Vector2>();
 
             udpServer = new UdpClient(PORT);
             udpServer.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
@@ -61,84 +61,103 @@ namespace Server
             tickTimer = new Timer();
             tickTimer.Interval = deltaTime.TotalMilliseconds;
             tickTimer.Enabled = true;
-            tickTimer.Elapsed += async (object source, ElapsedEventArgs e) =>
+
+            await Task.Run(() =>
             {
-                try
+                tickTimer.Elapsed += async (object source, ElapsedEventArgs e) =>
                 {
-                    var res = await udpServer.ReceiveAsync();
-                    recvBuff = res.Buffer;
-                    packetRecv.ServerRecvPacket(recvBuff);
-
-                    //Join Resp
-                    if (packetRecv.cmd == 1) // for second player either unreachable or no response given
+                    try
                     {
-                        byte[] joinResp = ClientJoin(res.RemoteEndPoint);
-                        await sendToAll(joinResp);
-                    };
+                        hasErrored = false;
+                        var res = await udpServer.ReceiveAsync();
+                        recvBuff = res.Buffer;
+                        packetRecv.ServerRecvPacket(recvBuff);
 
-                    // Leave Resp
-                    if (packetRecv.cmd == 2)
-                    {
-                        byte[] leaveResp = ClientLeave(res.RemoteEndPoint);
-                        await sendToAll(leaveResp);
-                    };
+                        //Join Resp
+                        if (packetRecv.cmd == 1)
+                        {
+                            byte[] joinResp = ClientJoin(res.RemoteEndPoint);
 
-                    // Move Resp
-                    if (packetRecv.cmd == 3)
-                    {
-                        byte[] moveResp = ClientMove(res.RemoteEndPoint);
-                        await sendToAll(moveResp);
-                    };
+                            if (packetSent.cmd != 5)
+                            {
+                                await sendToAll(joinResp);
+                            }
+                            else { 
+                                await sendToOne(joinResp, res.RemoteEndPoint);
+                            }
+                        };
 
-                    // Place Resp
-                    if (packetRecv.cmd == 4)
-                    {
-                        byte[] placeResp = ClientPlace(res.RemoteEndPoint);
-                        await sendToAll(placeResp);
-                    };
+                        // Leave Resp
+                        if (packetRecv.cmd == 2)
+                        {
+                            byte[] leaveResp = ClientLeave(res.RemoteEndPoint);
 
-                } catch (SocketException ex)
-                {
-                    if (!File.Exists(path))
-                    {
-                        FileStream fs = File.Create(path);
+                            if (!hasErrored)
+                            {
+                                await sendToAll(leaveResp);
+                            }
+                            else
+                            {
+                                await sendToOne(leaveResp, res.RemoteEndPoint);
+                            }
+                        };
+
+                        // Move Resp
+                        if (packetRecv.cmd == 3)
+                        {
+                            byte[] moveResp = ClientMove(res.RemoteEndPoint);
+
+                            if (!hasErrored)
+                            {
+                                await sendToAll(moveResp);
+                            }
+                            else
+                            {
+                                await sendToOne(moveResp, res.RemoteEndPoint);
+                            }
+                        };
+
+                        // Place Resp
+                        if (packetRecv.cmd == 4)
+                        {
+                            byte[] placeResp = ClientPlace(res.RemoteEndPoint);
+
+                            if (!hasErrored)
+                            {
+                                await sendToAll(placeResp);
+                            }
+                            else
+                            {
+                                await sendToOne(placeResp, res.RemoteEndPoint);
+                            }
+                        };
+
+                        // Error Resp
+                        if (packetRecv.cmd == 5)
+                        {
+                            ClientError(res.RemoteEndPoint);
+                        };
+
                     }
-
-                    File.AppendAllText(path, ex.Message);
-
-                    Console.Write("Press Enter to close window ...");
-                    Console.Read();
-
-                    if (ex.SocketErrorCode.ToString() == "ConnectionReset")
+                    catch (SocketException ex)
                     {
-                        Debug.WriteLine("The client is unreachable");
+                        if (!File.Exists(path))
+                        {
+                            FileStream fs = File.Create(path);
+                        }
+
+                        File.AppendAllText(path, ex.Message);
+
+                        Console.Write("Press Enter to close window ...");
+                        Console.Read();
+
+                        if (ex.SocketErrorCode.ToString() == "ConnectionReset")
+                        {
+                            Debug.WriteLine("The client is unreachable");
+                        }
                     }
-                }
-            };       
-        }
-
-        public string Decode(ServerPacket packet)
-        {
-            string position = "";
-
-            if (packet.cmd == 3 || packet.cmd == 4)
-            {
-                if (packet.payload != null)
-                {
-                    string remCurlys = packet.payload.Substring(1, packet.payload.Length - 2);
-                    string xPair = remCurlys.Split(' ').First();
-                    string yPair = remCurlys.Split(' ').Last();
-
-                    string xValue = xPair.Split(":").Last();
-                    string yValue = yPair.Split(":").Last();
-
-                    int x = Int32.Parse(xValue);
-                    int y = Int32.Parse(yValue);
-
-                    position = "{X:" + x + " Y:" + y + "}";
-                }
-            }
-            return position;
+                };
+            });
         }
 
         public async Task sendToAll(byte[] data)
@@ -149,23 +168,46 @@ namespace Server
             }
         }
 
+        public async Task sendToOne(byte[] data, IPEndPoint ep)
+        {
+           _ = await udpServer.SendAsync(data, ep);
+        }
+
         public byte[] ClientJoin(IPEndPoint ep)
         {
-            var client = clients.Find(c => c.ep.Equals(ep));
-            var clientId = 0;
-
-            if (client == null)
+            if (clients.Count < 4)
             {
-                clientId = clients.Count() + 1;
-                clients.Add(new ClientInfo(ep, clientId));
+                var client = clients.Find(c => c.ep.Equals(ep));
+                var clientId = 0;
 
-                return packetSent.ServerSendPacket("Join", clientId, clients.Count().ToString());
+                if (client == null)
+                {
+                    clientId = clients.Count() + 1;
+                    clients.Add(new ClientInfo(ep, clientId));
+                    var serverData = $"{clients.Count()}?";
+
+                    for (var i = 1; clients.Count()>i; i++)
+                    {
+                        var conn = clients.Find(c => c.id.Equals(i));
+                        if (conn != null)
+                        {
+                            serverData += $"client{i}:{conn.position.X}:{conn.position.Y}";
+   
+                        }
+                    }
+
+                    return packetSent.ServerSendPacket("Join", clientId, 0, 0, serverData);
+                }
+                else
+                {
+                    hasErrored = true;
+                    return packetSent.ServerSendPacket("Error", clientId, 0, 0, "Client is already connected on this IP address and port");
+                }
+            } else {
+
+                hasErrored = true;
+                return packetSent.ServerSendPacket("Error", 0, 0, 0, "Server full");
             }
-            else {
-
-                return packetSent.ServerSendPacket("Error", clientId, "Error on joining server");
-            }
-
         }
 
         public byte[] ClientLeave(IPEndPoint ep)
@@ -178,30 +220,31 @@ namespace Server
                 clientId = client.id;
                 clients.Remove(client);
 
-                return packetSent.ServerSendPacket("Leave", clientId, clients.Count().ToString());
+                return packetSent.ServerSendPacket("Leave", clientId, 0, 0, clients.Count().ToString());
             }
-            else {
-
-                return packetSent.ServerSendPacket("Error", clientId, "Error on leaving server");
+            else
+            {
+                hasErrored = true;
+                return packetSent.ServerSendPacket("Error", clientId, 0, 0, "Error on leaving server");
             }
         }
 
         public byte[] ClientMove(IPEndPoint ep)
         {
-            ClientInfo client = clients.Find(c => c.ep.Equals(ep));
+            var client = clients.Find(c => c.ep.Equals(ep));
             var clientId = 0;
 
             if (client != null)
             {
                 clientId = client.id;
-                var position = Decode(packetRecv);
-                client.position = position;
+                client.position = new Vector2(packetRecv.posX, packetRecv.posY);
 
-                return packetSent.ServerSendPacket("Move", clientId, position);
+                return packetSent.ServerSendPacket("Move", clientId, packetRecv.posX, packetRecv.posY, "");
             }
-            else {
-
-                return packetSent.ServerSendPacket("Error", clientId, "Error on move");
+            else
+            {
+                hasErrored = true;
+                return packetSent.ServerSendPacket("Error", clientId, 0, 0, "Error on move");
             }
 
         }
@@ -210,8 +253,7 @@ namespace Server
         {
             var client = clients.Find(c => c.ep.Equals(ep));
             var clientId = 0;
-
-            var position = Decode(packetRecv);
+            var position = new Vector2(packetRecv.posX, packetRecv.posY);
 
             if (client != null)
             {
@@ -219,18 +261,27 @@ namespace Server
                 {
                     clientId = client.id;
                     tiles.Add(position);
-                    return packetSent.ServerSendPacket("Place", clientId, position);
+                    return packetSent.ServerSendPacket("Place", clientId, (int)position.X, (int)position.Y, "");
                 }
                 else
                 {
-                    return packetSent.ServerSendPacket("Error", clientId, "Tile already placed here");
+                    hasErrored = true;
+                    return packetSent.ServerSendPacket("Error", clientId, 0, 0, "Tile already placed here");
                 }
             }
-            else {
-
-                return packetSent.ServerSendPacket("Error", clientId, "Error on place");
+            else
+            {
+                hasErrored = true;
+                return packetSent.ServerSendPacket("Error", clientId, 0, 0, "Error on place");
             }
 
+        }
+
+        public void ClientError(IPEndPoint ep)
+        {
+            var client = clients.Find(c => c.ep.Equals(ep));
+            var clientId = 0;
+            Console.WriteLine($"Client ID: {client.id}, ERROR: {packetRecv.payload}");
         }
     }
 }
