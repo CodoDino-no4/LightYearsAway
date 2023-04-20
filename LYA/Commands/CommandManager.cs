@@ -13,7 +13,6 @@ namespace LYA.Commands
 				public interface ICommand
 				{
 						protected void Execute();
-
 				}
 
 				public static Vector2 PlayerCameraMovement( Astro astro )
@@ -36,34 +35,15 @@ namespace LYA.Commands
 
 				public static void PlaceTile( Astro astro, Texture2D tileTex, Bag<Tile> sprites )
 				{
-						bool emptyPos = true;
-
+						// Execute command
 						if (InputBindings.Place().Pressed())
 						{
-								Tile tile = new Tile(tileTex)
-								{
-										Position = astro.Position
-								};
-
-								foreach (var sprite in sprites)
-								{
-										if (sprite.Position==tile.Position)
-										{
-												emptyPos=false;
-										}
-								}
-								if (emptyPos)
-								{
-										var place = new PlaceCommand(astro, tile, sprites);
-										place.Execute();
-										Globals.Packet.ClientSendPacket( "Place", Globals.ClientId, (int) astro.Position.X, (int) astro.Position.Y, "" );
-								}
-								else
-								{
-
-										Debug.WriteLine( "Tile already placed here" );
-								}
+								var place = new PlaceCommand(astro, tileTex, sprites);
+								place.Execute();
 						}
+
+						// Send Packet
+						Globals.Packet.ClientSendPacket( "Place", Globals.ClientId, (int) astro.Position.X, (int) astro.Position.Y, "" );
 				}
 
 				public static void Commands( Astro astro, Texture2D tileTex, Bag<Tile> sprites )

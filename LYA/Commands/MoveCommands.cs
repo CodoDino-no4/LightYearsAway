@@ -6,36 +6,40 @@ namespace LYA.Commands
 		public class MoveCommands : CommandManager.ICommand
 		{
 				public Astro astro;
+				private MoveUp moveUp;
+				private MoveDown moveDown;
+				private MoveRight moveRight;
+				private MoveLeft moveLeft;
 
 				public MoveCommands( Astro astro ) : base()
 				{
 						this.astro=astro;
+						moveUp = new MoveUp(astro);
+						moveDown = new MoveDown(astro);
+						moveLeft = new MoveLeft(astro);
+						moveRight = new MoveRight(astro);
 				}
 
 				public void Execute()
 				{
 						if (InputBindings.Up().Held())
 						{
-								astro.Position.Y-=3f;
-								astro.Direction.Y=1;
+								moveUp.Execute();
 						}
 
 						if (InputBindings.Down().Held())
 						{
-								astro.Position.Y+=3f;
-								astro.Direction.Y=-1;
+								moveDown.Execute();
 						}
 
 						if (InputBindings.Left().Held())
 						{
-								astro.Position.X-=3f;
-								astro.Direction.X=-1;
+								moveLeft.Execute();
 						}
 
 						if (InputBindings.Right().Held())
 						{
-								astro.Position.X+=3f;
-								astro.Direction.X=1;
+								moveRight.Execute();
 						}
 				}
 		}

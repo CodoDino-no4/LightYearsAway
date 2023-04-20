@@ -14,6 +14,9 @@ using MonoGame.Extended.Screens;
 
 namespace LYA.Screens
 {
+		/// <summary>
+		/// Outer Space Game Screen
+		/// </summary>
 		public class OuterSpace : GameScreen
 		{
 
@@ -40,6 +43,8 @@ namespace LYA.Screens
 				public ClientManager clientManager;
 				private int tmpCount;
 				private bool playersAdded = false;
+
+				private AutoAstro autoAstro;
 
 				public OuterSpace( Game game, ClientManager clientManager ) : base( game )
 				{
@@ -80,68 +85,83 @@ namespace LYA.Screens
 
 						// Player Astro content
 						astroIdleTex=Globals.Content.Load<Texture2D>( "Astro-Idle" );
-						astro=new Astro( astroIdleTex, 1 )
-						{
-								clientId=Globals.ClientId
-						};
 
+						// Auto Astro
+						if (Globals.testing)
+						{
+								autoAstro=new AutoAstro( astroIdleTex, 0 )
+								{
+										Position=new Vector2( -Globals.ScreenSize.Width/2+100, -Globals.ScreenSize.Height/2+100 )
+								};
+						}
+
+						astro=new Astro( astroIdleTex, Globals.ClientId );
+
+						// Tiles content
 						foundationTex=Globals.Content.Load<Texture2D>( "foundation" );
 				}
 
 				public override void Draw( GameTime gameTime )
 				{
+						// Matrix transformations
 						Matrix projection = Matrix.CreateOrthographicOffCenter(Globals.ScreenSize, 0, 1);
 						Matrix bg_transform = camera.GetBgTransform(bg1);
 						Matrix ui_scale = camera.GetUIScale();
 
+						// Shader setup
 						bgInfinateShader.Parameters[ "view_projection" ].SetValue( Matrix.Identity*projection );
 						bgInfinateShader.Parameters[ "uv_transform" ].SetValue( Matrix.Invert( bg_transform ) );
-
-						////////////////////////////////////////////////
 
 						/* Begin Spritebatch
 						 * Infinate Background */
 
 						Globals.SpriteBatch.Begin( effect: bgInfinateShader, samplerState: SamplerState.PointWrap, transformMatrix: camera.Transform );
 
+						// Draw Background
 						bgManager.Draw();
 
 						Globals.SpriteBatch.End();
-
-						////////////////////////////////////////////////
 
 						/* Begin Spritebatch
 						 * Variable position Sprites */
 
 						Globals.SpriteBatch.Begin( samplerState: SamplerState.PointWrap, transformMatrix: camera.Transform );
 
+						// Draw Tiles
 						foreach (var sprite in tileSprites)
 								sprite.Draw();
 
+						// Draw Multiplayer Astros
 						foreach (var sprite in astroSprites)
 								sprite.Draw();
 
-						astro.Draw();
+						// Draw Astro
+						if (Globals.testing)
+						{
+								autoAstro.Draw();
+								autoAstro.tiles = tileSprites;
+						}
+						else { 
+								astro.Draw();
+						}
 
 						Globals.SpriteBatch.End();
-
-						////////////////////////////////////////////////
 
 						/* Begin Spritebatch
 						 * UI Layer Sprites */
 
 						Globals.SpriteBatch.Begin( samplerState: SamplerState.PointWrap, transformMatrix: ui_scale );
 
+						// Draw UI
 						foreach (var sprite in uiSprites)
 								sprite.Draw();
 
 						Globals.SpriteBatch.End();
-
-						////////////////////////////////////////////////
 				}
 
 				public override void Update( GameTime gameTime )
 				{
+						// If multiplayer
 						if (Globals.IsMulti && tmpCount !=0)
 						{
 								// Add exisitng players on the server
@@ -187,21 +207,26 @@ namespace LYA.Screens
 						// Update the camera
 						camera.UpdateCameraInput( CommandManager.PlayerCameraMovement( astro ) );
 
-						//Update BG astroSprites
+						// Update BG Sprites
 						bgManager.Update();
 
-						//Update BG astroSprites
+						// Update astro
 						astro.Update();
+
+						if (Globals.testing)
+						{
+								autoAstro.Update();
+						}
 
 						CommandManager.Commands( astro, foundationTex, tileSprites );
 
-						//Update UI Sprites
+						// Update UI Sprites
 						foreach (var sprite in uiSprites)
 						{
 								sprite.Update();
 						}
 
-						//Update tile Sprites
+						// Update tile Sprites
 						foreach (var sprite in tileSprites)
 						{
 								sprite.Update();

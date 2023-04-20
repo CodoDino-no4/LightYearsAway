@@ -6,6 +6,9 @@ using MonoGame.Extended.Screens;
 
 namespace LYA.Screens
 {
+		/// <summary>
+		/// Splash Game Screen
+		/// </summary>
 		public class Splash : GameScreen
 		{
 				private Texture2D imgTex;

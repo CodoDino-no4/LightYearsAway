@@ -10,6 +10,9 @@ using System.Net;
 
 namespace LYA.Screens
 {
+		/// <summary>
+		/// Multi Menu Game Screen
+		/// </summary>
 		public class MultiMenu : GameScreen
 		{
 				private ClientManager clientManager;

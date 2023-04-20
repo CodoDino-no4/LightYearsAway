@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Testing\Integration\" />
+    <Folder Include="Testing\Integration\NewFolder\" />
   </ItemGroup>
 
   <ItemGroup>

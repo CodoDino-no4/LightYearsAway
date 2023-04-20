@@ -8,6 +8,9 @@ using Myra.Graphics2D.UI;
 
 namespace LYA.Screens
 {
+		/// <summary>
+		/// Main Menu Game Screen
+		/// </summary>
 		public class MainMenu : GameScreen
 		{
 				private ClientManager clientManager;
@@ -83,7 +86,8 @@ namespace LYA.Screens
 
 						testsBtn.Click+=( s, a ) =>
 						{
-								///
+								Globals.testing=true;
+								Globals.ScreenManager.LoadScreen( new OuterSpace( Game, clientManager ), new FadeTransition( GraphicsDevice, Color.Black, 3 ) );
 						};
 
 						var exitBtn = new TextButton
