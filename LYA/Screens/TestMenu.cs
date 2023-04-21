@@ -2,45 +2,30 @@
 using LYA.Networking;
 using LYA.Testing;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
 using Myra;
 using Myra.Graphics2D.UI;
-using System.Diagnostics;
 using System.Net;
 
 namespace LYA.Screens
 {
 		/// <summary>
-		/// Multi Menu Game Screen
+		/// Main Menu Game Screen
 		/// </summary>
-		public class MultiMenu : GameScreen
+		public class TestMenu : GameScreen
 		{
 				private ClientManager clientManager;
 
 				private Desktop desktop;
 				private Grid grid;
-				private Panel panel;
-				private string ipAddress;
-				private string port;
 
-				public MultiMenu( Game game, ClientManager clientManager ) : base( game )
+				public TestMenu( Game game, ClientManager clientManager ) : base( game )
 				{
 						this.clientManager=clientManager;
 				}
 
 				private new LYA Game => (LYA) base.Game;
-
-				public override void Initialize()
-				{
-						desktop=new Desktop
-						{
-								HasExternalTextInput=true
-						};
-
-						base.Initialize();
-				}
 
 				public override void LoadContent()
 				{
@@ -55,11 +40,6 @@ namespace LYA.Screens
 								ColumnSpacing=50
 						};
 
-						panel=new Panel()
-						{
-
-						};
-
 						grid.ColumnsProportions.Add( new Proportion( ProportionType.Auto ) );
 						grid.ColumnsProportions.Add( new Proportion( ProportionType.Auto ) );
 						grid.RowsProportions.Add( new Proportion( ProportionType.Auto ) );
@@ -67,70 +47,38 @@ namespace LYA.Screens
 
 						// Labels
 
-						grid.Widgets.Add( DrawLabel( "title", "Light-Years Away Multiplayer", 2, 1 ) );
-						grid.Widgets.Add( DrawLabel( "ip-input", "Enter Server IP Addess: ", 2, 2 ) );
-						grid.Widgets.Add( DrawLabel( "port-input", "Enter Server Port: ", 2, 3 ) );
-
-						// Inputs
-
-						Game.Window.TextInput+=( s, a ) =>
-						{
-								desktop.OnChar( a.Character );
-						};
-
-						string ipText = "";
-						var ip = new TextBox
-						{
-								GridColumn = 3,
-								GridRow = 2,
-								HorizontalAlignment = HorizontalAlignment.Center,
-								Text = ipText,
-								TextColor = Color.White,
-
-						};
-
-						string portText = "";
-						var port = new TextBox
-						{
-								GridColumn = 3,
-								GridRow = 3,
-								HorizontalAlignment = HorizontalAlignment.Center,
-								Text = portText,
-								TextColor = Color.White,
-						};
-
-						grid.Widgets.Add( ip );
-						grid.Widgets.Add( port );
+						grid.Widgets.Add( DrawLabel( "title", "Light-Years Away", 2, 1 ) );
 
 						// Buttons
 
 						var serverBtn = new TextButton
 						{
-								GridColumn = 3,
-								GridRow = 4,
-								Text = "Start Integrated Server",
+								GridColumn = 2,
+								GridRow = 2,
+								Text = "Start Server",
 								HorizontalAlignment = HorizontalAlignment.Center,
 						};
 
 						serverBtn.Click+=( s, a ) =>
 						{
-								clientManager.StartIntegratedServer();
+								Tests.ServerInit();
+								Thread.Sleep(2000);
 						};
 
-						var connBtn = new TextButton
+						var testPlayerBtn = new TextButton
 						{
-								GridColumn = 3,
-								GridRow = 5,
-								Text = "Connect",
+								GridColumn = 2,
+								GridRow = 3,
+								Text = "Start Test Player",
 								HorizontalAlignment = HorizontalAlignment.Center,
 						};
 
-						connBtn.Click+=( s, a ) =>
+						testPlayerBtn.Click+=( s, a ) =>
 						{
 								try
 								{
 										// Initalise connection to server
-										clientManager.Init( IPAddress.Parse( "192.168.1.101" ), Int32.Parse( "11000" ) );
+										clientManager.Init( IPAddress.Parse( "192.168.1.101" ), Int32.Parse( "11000" ) ); //try with public ip
 
 										if (clientManager.isInit)
 										{
@@ -154,8 +102,8 @@ namespace LYA.Screens
 
 						var backBtn = new TextButton
 						{
-								GridColumn = 3,
-								GridRow = 6,
+								GridColumn = 2,
+								GridRow = 4,
 								Text = "Back",
 								HorizontalAlignment = HorizontalAlignment.Center,
 						};
@@ -167,8 +115,8 @@ namespace LYA.Screens
 
 						var exitBtn = new TextButton
 						{
-								GridColumn = 3,
-								GridRow = 7,
+								GridColumn = 2,
+								GridRow = 5,
 								Text = "Exit",
 								HorizontalAlignment = HorizontalAlignment.Center,
 						};
@@ -178,13 +126,17 @@ namespace LYA.Screens
 								Game.Exit();
 						};
 
+
 						grid.Widgets.Add( serverBtn );
-						grid.Widgets.Add( connBtn );
+						grid.Widgets.Add( testPlayerBtn );
 						grid.Widgets.Add( backBtn );
 						grid.Widgets.Add( exitBtn );
 
 						// Add it to the desktop
-						desktop.Root=grid;
+						desktop=new Desktop
+						{
+								Root=grid
+						};
 				}
 
 				private Label DrawLabel( string id, string text, int column, int row )

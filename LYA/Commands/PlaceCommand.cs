@@ -32,8 +32,10 @@ namespace LYA.Commands
 								if (sprite.Position==tile.Position)
 								{
 										emptyPos=false;
+										break;
 								}
 						}
+
 						if (emptyPos)
 						{
 								sprites.Add( (Tile) tile.Clone() );

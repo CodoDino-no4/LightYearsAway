@@ -88,7 +88,19 @@ namespace LYA.Screens
 						// Auto Astro
 						if (Globals.testing)
 						{
-								autoAstro=new AutoAstro( astroIdleTex, 0, 40, new Vector2( 100, 100 ) );
+								List<Vector2> testPositions = new List<Vector2>()
+								{
+										new Vector2(10, 10),
+										new Vector2(20, 20),
+										new Vector2(30, 30),
+										new Vector2(40, 40),
+
+								};
+
+								Random rand = new Random();
+								var pos = rand.Next( 0, testPositions.Count() );
+
+								autoAstro=new AutoAstro( astroIdleTex, 0, 40, testPositions[pos] );
 						}
 
 						astro=new Astro( astroIdleTex, Globals.ClientId );
@@ -187,7 +199,7 @@ namespace LYA.Screens
 										// If player count has decreased
 										else
 										{ //if it exisits
-												astroSprites.RemoveAt( clientManager.astroCoords.Key-1 );
+												astroSprites.RemoveAt( clientManager.clients. );
 										}
 								}
 
@@ -213,6 +225,7 @@ namespace LYA.Screens
 														emptyPos=false;
 												}
 										}
+
 										if (emptyPos)
 										{
 												tileSprites.Add( new Tile( foundationTex ) { Position=clientManager.tileCoords.Value } );

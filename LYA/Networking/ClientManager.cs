@@ -5,6 +5,7 @@ using MonoGame.Extended.Screens.Transitions;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 
 namespace LYA.Networking
 {
@@ -31,6 +32,9 @@ namespace LYA.Networking
 				public PacketFormer packetLeave;
 
 				private new LYA Game;
+
+				Process proc;
+				ProcessStartInfo start;
 
 				public ClientManager( Game game )
 				{
@@ -90,9 +94,36 @@ namespace LYA.Networking
 						}
 				}
 
-				public void GetExisitngTiles()
+				public void StartIntegratedServer()
 				{
+						Task.Run( () =>
+						{
+								// Setup server exe
+								start = new ProcessStartInfo();
+								start.CreateNoWindow=true;
+								bool isRoot = false;
 
+								string[] initalPath = AppContext.BaseDirectory.Split(Path.DirectorySeparatorChar);
+								string rootPath = "";
+								foreach (var dir in initalPath)
+								{
+										rootPath+=$"{dir}\\";
+
+										if (dir=="SpaceRaftMono")
+										{
+												isRoot=true;
+												break;
+										}
+								}
+
+								string fullPath = rootPath + "Server\\bin\\Debug\\net7.0-windows\\Server.exe";
+								start.FileName=fullPath;
+
+								proc=Process.Start( start );
+
+						} );
+
+						Thread.Sleep( 2000 );
 				}
 
 				public void JoinServer()
@@ -147,6 +178,7 @@ namespace LYA.Networking
 						try
 						{
 								udpClient.Send( packetLeave.ClientSendPacket( "Leave", Globals.ClientId, 0, 0, "" ) );
+								proc.Kill();
 						}
 						catch (SocketException e)
 						{
@@ -195,7 +227,6 @@ namespace LYA.Networking
 												if (packetRecv.cmd==2)
 												{
 														Globals.PlayerCount--;
-														astroCoords=new KeyValuePair<int, Vector2>( packetRecv.clientId, new Vector2( packetRecv.posX, packetRecv.posY ) );
 												}
 
 												// Move response parse
@@ -219,7 +250,7 @@ namespace LYA.Networking
 												// Error response parse
 												if (packetRecv.cmd==5)
 												{
-
+														Debug.WriteLine(packetRecv.payload);
 												}
 										}
 								}

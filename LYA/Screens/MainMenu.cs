@@ -87,7 +87,7 @@ namespace LYA.Screens
 						testsBtn.Click+=( s, a ) =>
 						{
 								Globals.testing=true;
-								Globals.ScreenManager.LoadScreen( new OuterSpace( Game, clientManager ), new FadeTransition( GraphicsDevice, Color.Black, 3 ) );
+								Globals.ScreenManager.LoadScreen( new TestMenu( Game, clientManager ), new FadeTransition( GraphicsDevice, Color.Black, 3 ) );
 						};
 
 						var exitBtn = new TextButton

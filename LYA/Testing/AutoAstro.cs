@@ -5,6 +5,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Collections;
 using System.Diagnostics;
+using System.Timers;
+using Timer = System.Timers.Timer;
 
 namespace LYA.Sprites
 {
@@ -23,6 +25,7 @@ namespace LYA.Sprites
 
 				public int clientId;
 
+				private Texture2D tex;
 				public Bag<Tile> tiles
 				{
 						get; set;
@@ -32,28 +35,43 @@ namespace LYA.Sprites
 				private MoveDown moveDown;
 				private MoveRight moveRight;
 				private MoveLeft moveLeft;
+
 				private bool leftDone, downDone, rightDone, upDone, placeDone;
+
+				// Auto movement params
 				private Vector2 startPos;
 				private int maxPoint;
 
-				private Texture2D tex;
+				//Timer
+				Timer timer;
+				Random rand;
 
 				public AutoAstro( Texture2D texture, int clientId, int maxPoint, Vector2 startPos ) : base( texture, clientId )
 				{
+						tex=Globals.Content.Load<Texture2D>( "foundation" );
+
 						leftDone=false;
 						downDone=false;
 						rightDone=false;
 						upDone=false;
 						placeDone=false;
-						tex=Globals.Content.Load<Texture2D>( "foundation" );
+
 						this.startPos = startPos;
 						this.maxPoint = maxPoint;
+
+						rand=new Random();
+						var interval = rand.Next( 2000, 4000 );
+
+						timer=new Timer();
+						timer.Interval=interval;
+						timer.Enabled=true;
+
 				}
 
 				public override void Update()
 				{
 						Movement();
-						//Place();
+						Place();
 				}
 
 				public void Movement()
@@ -129,39 +147,11 @@ namespace LYA.Sprites
 				}
 				public void Place()
 				{
-						Random rand = new Random();
-
-						int randXPlus = rand.Next( (int) startPos.X, maxPoint);
-						int randXMinus = rand.Next( (int) startPos.X, -maxPoint);
-						int randYPlus = rand.Next( (int) startPos.Y, maxPoint);
-						int randYMinus = rand.Next( (int) startPos.Y, -maxPoint);
-
-						if (!placeDone)
+						timer.Elapsed+=( object source, ElapsedEventArgs e ) =>
 						{
-								List<Vector2> tilePos = new List<Vector2>()
-								{
-										new Vector2(randXPlus, randYPlus),
-										new Vector2(-99, -280),
-										new Vector2(-600, -97),
-
-								};
-
-								foreach (var pos in tilePos)
-								{
-										if (pos==Position)
-										{
-												var place = new PlaceCommand(this, tex, tiles);
-												place.Execute();
-										}
-								}
-
-								if (tiles.Count().Equals( 3 ))
-								{
-										placeDone=true;
-								}
-						}
-
+								var place = new PlaceCommand(this, tex, tiles);
+								place.Execute();
+						};
 				}
-
 		}
 }
