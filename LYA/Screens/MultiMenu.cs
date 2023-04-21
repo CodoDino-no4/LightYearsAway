@@ -84,7 +84,7 @@ namespace LYA.Screens
 								HorizontalAlignment = HorizontalAlignment.Center,
 								Text = ipText,
 								TextColor = Color.White,
-								
+
 						};
 
 						string portText = "";

@@ -4,7 +4,6 @@ using LYA.Sprites.Cloneables;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Collections;
-using MonoGame.Extended.Sprites;
 using System.Diagnostics;
 
 namespace LYA.Sprites
@@ -24,7 +23,10 @@ namespace LYA.Sprites
 
 				public int clientId;
 
-				public Bag<Tile> tiles { get; set; }
+				public Bag<Tile> tiles
+				{
+						get; set;
+				}
 
 				private MoveUp moveUp;
 				private MoveDown moveDown;
@@ -41,7 +43,7 @@ namespace LYA.Sprites
 						rightDone=false;
 						upDone=false;
 						placeDone=false;
-						tex = Globals.Content.Load<Texture2D>( "foundation" );
+						tex=Globals.Content.Load<Texture2D>( "foundation" );
 				}
 
 				public override void Update()
@@ -62,10 +64,11 @@ namespace LYA.Sprites
 								else
 								{
 										rightDone=true;
-										downDone = false;
+										downDone=false;
 								}
 						}
-						else {
+						else
+						{
 
 								if (!downDone)
 								{
@@ -80,7 +83,8 @@ namespace LYA.Sprites
 												leftDone=false;
 										}
 								}
-								else {
+								else
+								{
 
 										if (!leftDone)
 										{
@@ -92,10 +96,11 @@ namespace LYA.Sprites
 												else
 												{
 														leftDone=true;
-														upDone = false;
+														upDone=false;
 												}
 										}
-										else {
+										else
+										{
 
 												if (!upDone)
 												{
@@ -114,7 +119,7 @@ namespace LYA.Sprites
 										}
 
 								}
-								
+
 						}
 						Debug.WriteLine( Position );
 				}
@@ -144,7 +149,7 @@ namespace LYA.Sprites
 										placeDone=true;
 								}
 						}
-						
+
 				}
 
 		}

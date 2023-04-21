@@ -2,7 +2,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 using System.Net;
-using System.Text;
 
 namespace LYA.Testing.Integration
 {
@@ -42,7 +41,7 @@ namespace LYA.Testing.Integration
             });
 
             _ = Task.Run(() =>
-            { 
+            {
                 game.SuppressDraw();
                 game.Run();
             });

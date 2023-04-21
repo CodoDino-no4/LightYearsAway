@@ -11,7 +11,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Collections;
 using MonoGame.Extended.Screens;
-
 namespace LYA.Screens
 {
 		/// <summary>
@@ -139,9 +138,10 @@ namespace LYA.Screens
 						if (Globals.testing)
 						{
 								autoAstro.Draw();
-								autoAstro.tiles = tileSprites;
+								autoAstro.tiles=tileSprites;
 						}
-						else { 
+						else
+						{
 								astro.Draw();
 						}
 
@@ -162,17 +162,17 @@ namespace LYA.Screens
 				public override void Update( GameTime gameTime )
 				{
 						// If multiplayer
-						if (Globals.IsMulti && tmpCount !=0)
+						if (Globals.IsMulti&&tmpCount!=0)
 						{
 								// Add exisitng players on the server
 								if (!playersAdded)
 								{
 										foreach (var client in clientManager.clients)
 										{
-												astroSprites.AddToFront( new Astro( astroIdleTex, client.Key ) { Position = client.Value } );
+												astroSprites.AddToFront( new Astro( astroIdleTex, client.Key ) { Position=client.Value } );
 										}
 
-										playersAdded = true;
+										playersAdded=true;
 								}
 
 								// Player count has changed
@@ -181,14 +181,15 @@ namespace LYA.Screens
 										// If player count has increased
 										if (tmpCount<Globals.PlayerCount)
 										{
-												astroSprites.AddToFront( new Astro( astroIdleTex, clientManager.astroCoords.Key ) 
+												astroSprites.AddToFront( new Astro( astroIdleTex, clientManager.astroCoords.Key )
 												{
-														Position = new Vector2(clientManager.astroCoords.Value.X, clientManager.astroCoords.Value.X )
+														Position=new Vector2( clientManager.astroCoords.Value.X, clientManager.astroCoords.Value.X )
 
 												} );
 										}
 										// If player count has decreased
-										else { //if it exisits
+										else
+										{ //if it exisits
 												astroSprites.RemoveAt( clientManager.astroCoords.Key-1 );
 										}
 								}
@@ -201,6 +202,25 @@ namespace LYA.Screens
 												sprite.Position=clientManager.astroCoords.Value;
 										}
 										sprite.Update();
+								}
+
+								// Add new tile to world
+								if (clientManager.tileCoords.Key!=0)
+								{
+										bool emptyPos =true;
+
+										foreach (var sprite in tileSprites)
+										{
+												if (clientManager.tileCoords.Value==sprite.Position)
+												{
+														emptyPos=false;
+												}
+
+										}
+										if (emptyPos)
+										{
+												tileSprites.Add( new Tile( foundationTex ) { Position=clientManager.tileCoords.Value } );
+										}
 								}
 						}
 

@@ -4,7 +4,6 @@ using LYA.Sprites.Cloneables;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Collections;
-using System.Diagnostics;
 
 namespace LYA.Commands
 {
@@ -25,7 +24,7 @@ namespace LYA.Commands
 						move.Execute();
 
 						// Send Packet
-						if (Globals.IsMulti && tmpPosition!=astro.Position)
+						if (Globals.IsMulti&&tmpPosition!=astro.Position)
 						{
 								Globals.Packet.ClientSendPacket( "Move", Globals.ClientId, (int) astro.Position.X, (int) astro.Position.Y, "" );
 						}
@@ -46,7 +45,7 @@ namespace LYA.Commands
 								{
 										Globals.Packet.ClientSendPacket( "Place", Globals.ClientId, (int) astro.Position.X, (int) astro.Position.Y, "" );
 								}
-						}				
+						}
 				}
 
 				public static void Commands( Astro astro, Texture2D tileTex, Bag<Tile> sprites )

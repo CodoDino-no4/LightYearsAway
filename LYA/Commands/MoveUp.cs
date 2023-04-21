@@ -1,10 +1,4 @@
-﻿using LYA.Helpers;
-using LYA.Sprites;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LYA.Sprites;
 
 namespace LYA.Commands
 {
@@ -18,8 +12,8 @@ namespace LYA.Commands
 
 				public void Execute()
 				{
-								astro.Position.Y-=3f;
-								astro.Direction.Y=1;
+						astro.Position.Y-=3f;
+						astro.Direction.Y=1;
 				}
 		}
 }

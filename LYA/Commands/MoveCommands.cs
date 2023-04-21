@@ -14,10 +14,10 @@ namespace LYA.Commands
 				public MoveCommands( Astro astro ) : base()
 				{
 						this.astro=astro;
-						moveUp = new MoveUp(astro);
-						moveDown = new MoveDown(astro);
-						moveLeft = new MoveLeft(astro);
-						moveRight = new MoveRight(astro);
+						moveUp=new MoveUp( astro );
+						moveDown=new MoveDown( astro );
+						moveLeft=new MoveLeft( astro );
+						moveRight=new MoveRight( astro );
 				}
 
 				public void Execute()

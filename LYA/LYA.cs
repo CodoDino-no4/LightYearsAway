@@ -48,7 +48,7 @@ namespace LYA
 						Globals.Content=Content;
 
 						// Networking
-						clientManager=new ClientManager(this);
+						clientManager=new ClientManager( this );
 						Globals.Packet=new PacketFormer();
 
 						// Screen Management
