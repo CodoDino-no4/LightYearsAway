@@ -7,35 +7,39 @@ using Timer = System.Timers.Timer;
 
 namespace Server
 {
+    /// <summary>
+    /// Server class to initalise and start a data transmission loop
+    /// </summary>
     public class BasicServer
     {
-        public const int PORT = 11000;
-
+        // Socket setup
         private UdpClient udpServer;
+        private const int PORT = 11000;
 
-        private UdpClient remoteClient;
-        private IPEndPoint remoteEndpoint;
-
-        private byte[] sendBuff;
-        private byte[] recvBuff;
-
+        // Game world data
         private List<Vector2> tiles;
         private List<ClientInfo> clients;
 
+        // Packets to store data
         private ServerPacket packetSent;
         private ServerPacket packetRecv;
+        private byte[] recvBuff;
 
-        public bool messageRec = false;
+        // Check error
         public bool hasErrored;
 
         // Tick rate
         private Timer tickTimer;
         private TimeSpan deltaTime;
+
+        // Logging REMOVE BEFORE COMPLETION
         private string path = "C:/Users/Alz/Documents/log.txt";
 
+        /// <summary>
+        /// Initalise the server
+        /// </summary>
         public void Init()
         {
-            sendBuff = new byte[128];
             recvBuff = new byte[128];
 
             clients = new List<ClientInfo>();
@@ -46,8 +50,6 @@ namespace Server
             udpServer.EnableBroadcast = true;
             udpServer.DontFragment = true;
 
-            remoteEndpoint = new IPEndPoint(IPAddress.Any, PORT);
-
             packetSent = new ServerPacket();
             packetRecv = new ServerPacket();
 
@@ -56,6 +58,9 @@ namespace Server
             Console.WriteLine("Server successfully intialised...");
         }
 
+        /// <summary>
+        /// Start the data transmission loop
+        /// </summary>
         public async void StartLoop()
         {
             tickTimer = new Timer();
@@ -94,7 +99,7 @@ namespace Server
 
                             if (!hasErrored)
                             {
-                                await sendToAll(leaveResp);
+                                await sendToAllNotSender(leaveResp, res.RemoteEndPoint);
                             }
                             else
                             {
@@ -109,7 +114,7 @@ namespace Server
 
                             if (!hasErrored)
                             {
-                                await sendToAll(moveResp);
+                                await sendToAllNotSender(moveResp, res.RemoteEndPoint);
                             }
                             else
                             {
@@ -124,7 +129,7 @@ namespace Server
 
                             if (!hasErrored)
                             {
-                                await sendToAll(placeResp);
+                                await sendToAllNotSender(placeResp, res.RemoteEndPoint);
                             }
                             else
                             {
@@ -141,25 +146,31 @@ namespace Server
                     }
                     catch (SocketException ex)
                     {
+                        if (ex.SocketErrorCode.ToString() == "ConnectionReset")
+                        {
+                            Debug.WriteLine("The client is unreachable");
+                        }
+
                         if (!File.Exists(path))
                         {
                             FileStream fs = File.Create(path);
                         }
 
                         File.AppendAllText(path, ex.Message);
+                        Console.WriteLine("added to file...");
+
 
                         Console.Write("Press Enter to close window ...");
                         Console.Read();
 
-                        if (ex.SocketErrorCode.ToString() == "ConnectionReset")
-                        {
-                            Debug.WriteLine("The client is unreachable");
-                        }
                     }
                 };
             });
         }
 
+        /// <summary>
+        /// Send data to all clients
+        /// </summary>
         public async Task sendToAll(byte[] data)
         {
             foreach (var client in clients)
@@ -168,11 +179,31 @@ namespace Server
             }
         }
 
+        /// <summary>
+        /// Send data to all clients except the sender client
+        /// </summary>
+        public async Task sendToAllNotSender(byte[] data, IPEndPoint sender)
+        {
+            foreach (var client in clients)
+            {
+                if (sender != client.ep)
+                { 
+                    _ = await udpServer.SendAsync(data, client.ep);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Send data to only the sender client
+        /// </summary>
         public async Task sendToOne(byte[] data, IPEndPoint ep)
         {
            _ = await udpServer.SendAsync(data, ep);
         }
 
+        /// <summary>
+        /// Add client to server client list
+        /// </summary>
         public byte[] ClientJoin(IPEndPoint ep)
         {
             if (clients.Count < 4)
@@ -196,6 +227,8 @@ namespace Server
                         }
                     }
 
+                    Console.WriteLine($"{ep} has joined the server as Client ID: {clientId}");
+
                     return packetSent.ServerSendPacket("Join", clientId, 0, 0, serverData);
                 }
                 else
@@ -210,6 +243,9 @@ namespace Server
             }
         }
 
+        /// <summary>
+        /// Remove client from server client list
+        /// </summary>
         public byte[] ClientLeave(IPEndPoint ep)
         {
             var client = clients.Find(c => c.ep.Equals(ep));
@@ -220,6 +256,8 @@ namespace Server
                 clientId = client.id;
                 clients.Remove(client);
 
+                Console.WriteLine($"Client ID: {clientId} has disconnected from the server");
+
                 return packetSent.ServerSendPacket("Leave", clientId, 0, 0, clients.Count().ToString());
             }
             else
@@ -229,6 +267,9 @@ namespace Server
             }
         }
 
+        /// <summary>
+        /// Handle move data
+        /// </summary>
         public byte[] ClientMove(IPEndPoint ep)
         {
             var client = clients.Find(c => c.ep.Equals(ep));
@@ -249,6 +290,9 @@ namespace Server
 
         }
 
+        /// <summary>
+        /// Handle place data
+        /// </summary>
         public byte[] ClientPlace(IPEndPoint ep)
         {
             var client = clients.Find(c => c.ep.Equals(ep));
@@ -277,6 +321,9 @@ namespace Server
 
         }
 
+        /// <summary>
+        /// Handle errors
+        /// </summary>
         public void ClientError(IPEndPoint ep)
         {
             var client = clients.Find(c => c.ep.Equals(ep));

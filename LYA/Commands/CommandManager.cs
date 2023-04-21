@@ -25,7 +25,7 @@ namespace LYA.Commands
 						move.Execute();
 
 						// Send Packet
-						if (tmpPosition!=astro.Position)
+						if (Globals.IsMulti && tmpPosition!=astro.Position)
 						{
 								Globals.Packet.ClientSendPacket( "Move", Globals.ClientId, (int) astro.Position.X, (int) astro.Position.Y, "" );
 						}
@@ -40,10 +40,13 @@ namespace LYA.Commands
 						{
 								var place = new PlaceCommand(astro, tileTex, sprites);
 								place.Execute();
-						}
 
-						// Send Packet
-						Globals.Packet.ClientSendPacket( "Place", Globals.ClientId, (int) astro.Position.X, (int) astro.Position.Y, "" );
+								// Send Packet
+								if (Globals.IsMulti)
+								{
+										Globals.Packet.ClientSendPacket( "Place", Globals.ClientId, (int) astro.Position.X, (int) astro.Position.Y, "" );
+								}
+						}				
 				}
 
 				public static void Commands( Astro astro, Texture2D tileTex, Bag<Tile> sprites )

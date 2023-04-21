@@ -3,6 +3,9 @@ using System.Numerics;
 
 namespace Server
 {
+    /// <summary>
+    /// Store the clients connected to the server
+    /// </summary>
     public class ClientInfo
     {
         public IPEndPoint ep { get; set; }

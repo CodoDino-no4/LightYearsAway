@@ -2,7 +2,9 @@
 
 public class ServerPacket
 {
-    // Command types
+    /// <summary>
+    /// Valid command types
+    /// </summary>
     private enum Command
     {
         Null,   // Default
@@ -27,13 +29,17 @@ public class ServerPacket
     // Payload sent within packetSent
     public string payload;
 
-    //Creates an instance of packetSent
+    /// <summary>
+    /// Instantiate the class
+    /// </summary>
     public ServerPacket()
     {
 
     }
 
-    // Converts server payload into a byte stream
+    /// <summary>
+    /// Converts data into a byte stream
+    /// </summary>
     public byte[] ServerSendPacket(string command, int id, int x, int y, string data)
     {
         // Byte stream
@@ -65,26 +71,24 @@ public class ServerPacket
         return byteStream.ToArray();
     }
 
-    // converts the bytes into a Packet Object
+    /// <summary>
+    /// Converts byte stream into packet data
+    /// </summary>
     public void ServerRecvPacket(byte[] data)
     {
         // Decode the cmd
         // Length is always 1
         cmd = BitConverter.ToInt32(data, 0);
-        Console.WriteLine($"command: {cmd}");
 
         // Decode the clientId
         // Length is always 1
         clientId = BitConverter.ToInt32(data, 4);
-        Console.WriteLine($"clientID: {clientId}");
 
         // Decode coordinate X
         posX = BitConverter.ToInt32(data, 8);
-        Console.WriteLine($"X: {posX}");
 
         // Decode coordinate Y
         posY = BitConverter.ToInt32(data, 12);
-        Console.WriteLine($"X: {posY}");
 
         // Decode the payload
         // Length is variable so get the length
@@ -95,7 +99,5 @@ public class ServerPacket
         Buffer.BlockCopy(data, 16, dataSegment, 0, dataLen);
 
         payload = Encoding.UTF8.GetString(dataSegment);
-
-        Console.WriteLine($"payload: {payload}");
     }
 }
