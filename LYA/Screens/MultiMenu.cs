@@ -37,12 +37,6 @@ namespace LYA.Screens
 								HasExternalTextInput=true
 						};
 
-						// Provide that text input
-						Game.Window.TextInput+=( s, a ) =>
-						{
-								desktop.OnChar( a.Character );
-						};
-
 						base.Initialize();
 				}
 
@@ -77,19 +71,34 @@ namespace LYA.Screens
 
 						// Inputs
 
+						Game.Window.TextInput+=( s, a ) =>
+						{
+								desktop.OnChar( a.Character );
+						};
+
+						string ipText = "";
 						var ip = new TextBox
 						{
 								GridColumn = 3,
 								GridRow = 2,
 								HorizontalAlignment = HorizontalAlignment.Center,
+								Text = ipText,
+								TextColor = Color.White,
+								
 						};
 
+						string portText = "";
 						var port = new TextBox
 						{
 								GridColumn = 3,
 								GridRow = 3,
 								HorizontalAlignment = HorizontalAlignment.Center,
+								Text = portText,
+								TextColor = Color.White,
 						};
+
+						grid.Widgets.Add( ip );
+						grid.Widgets.Add( port );
 
 						// Buttons
 

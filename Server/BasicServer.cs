@@ -94,7 +94,7 @@ namespace Server
 
                             if (!hasErrored)
                             {
-                                await sendToAll(leaveResp);
+                                await sendToAllNotSender(leaveResp, res.RemoteEndPoint);
                             }
                             else
                             {
@@ -109,7 +109,7 @@ namespace Server
 
                             if (!hasErrored)
                             {
-                                await sendToAll(moveResp);
+                                await sendToAllNotSender(moveResp, res.RemoteEndPoint);
                             }
                             else
                             {
@@ -124,7 +124,7 @@ namespace Server
 
                             if (!hasErrored)
                             {
-                                await sendToAll(placeResp);
+                                await sendToAllNotSender(placeResp, res.RemoteEndPoint);
                             }
                             else
                             {
@@ -141,20 +141,23 @@ namespace Server
                     }
                     catch (SocketException ex)
                     {
+                        if (ex.SocketErrorCode.ToString() == "ConnectionReset")
+                        {
+                            Debug.WriteLine("The client is unreachable");
+                        }
+
                         if (!File.Exists(path))
                         {
                             FileStream fs = File.Create(path);
                         }
 
                         File.AppendAllText(path, ex.Message);
+                        Console.WriteLine("added to file...");
+
 
                         Console.Write("Press Enter to close window ...");
                         Console.Read();
 
-                        if (ex.SocketErrorCode.ToString() == "ConnectionReset")
-                        {
-                            Debug.WriteLine("The client is unreachable");
-                        }
                     }
                 };
             });
@@ -165,6 +168,17 @@ namespace Server
             foreach (var client in clients)
             {
                 _ = await udpServer.SendAsync(data, client.ep);
+            }
+        }
+
+        public async Task sendToAllNotSender(byte[] data, IPEndPoint sender)
+        {
+            foreach (var client in clients)
+            {
+                if (sender != client.ep)
+                { 
+                    _ = await udpServer.SendAsync(data, client.ep);
+                }
             }
         }
 
@@ -196,6 +210,8 @@ namespace Server
                         }
                     }
 
+                    Console.WriteLine($"{ep} has joined the server as Client ID: {clientId}");
+
                     return packetSent.ServerSendPacket("Join", clientId, 0, 0, serverData);
                 }
                 else
@@ -219,6 +235,8 @@ namespace Server
             {
                 clientId = client.id;
                 clients.Remove(client);
+
+                Console.WriteLine($"Client ID: {clientId} has disconnected from the server");
 
                 return packetSent.ServerSendPacket("Leave", clientId, 0, 0, clients.Count().ToString());
             }

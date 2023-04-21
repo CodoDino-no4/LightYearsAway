@@ -83,11 +83,9 @@ namespace LYA.Networking
 
 						// Decode coordinate X
 						posX=BitConverter.ToInt32( data, 8 );
-						Console.WriteLine( $"X: {posX}" );
 
 						// Decode coordinate Y
 						posY=BitConverter.ToInt32( data, 12 );
-						Console.WriteLine( $"X: {posY}" );
 
 						// Decode the payload
 						// Length is variable so get the length

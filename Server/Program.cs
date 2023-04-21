@@ -26,11 +26,6 @@
                 Console.Write("Press Enter to close window ...");
                 Console.Read();
             }
-            finally
-            {
-                Console.Write("Press Enter to close window ...");
-                Console.Read();
-            }
         }
     }
 }

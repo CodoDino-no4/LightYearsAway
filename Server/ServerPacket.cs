@@ -71,20 +71,16 @@ public class ServerPacket
         // Decode the cmd
         // Length is always 1
         cmd = BitConverter.ToInt32(data, 0);
-        Console.WriteLine($"command: {cmd}");
 
         // Decode the clientId
         // Length is always 1
         clientId = BitConverter.ToInt32(data, 4);
-        Console.WriteLine($"clientID: {clientId}");
 
         // Decode coordinate X
         posX = BitConverter.ToInt32(data, 8);
-        Console.WriteLine($"X: {posX}");
 
         // Decode coordinate Y
         posY = BitConverter.ToInt32(data, 12);
-        Console.WriteLine($"X: {posY}");
 
         // Decode the payload
         // Length is variable so get the length
@@ -95,7 +91,5 @@ public class ServerPacket
         Buffer.BlockCopy(data, 16, dataSegment, 0, dataLen);
 
         payload = Encoding.UTF8.GetString(dataSegment);
-
-        Console.WriteLine($"payload: {payload}");
     }
 }
