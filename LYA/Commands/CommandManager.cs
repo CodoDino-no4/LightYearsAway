@@ -16,18 +16,9 @@ namespace LYA.Commands
 
 				public static Vector2 PlayerCameraMovement( Astro astro )
 				{
-						// Previous Position
-						Vector2 tmpPosition = astro.Position;
-
 						// Execute Command
 						var move = new MoveCommands(astro);
 						move.Execute();
-
-						// Send Packet
-						if (Globals.IsMulti&&tmpPosition!=astro.Position)
-						{
-								Globals.Packet.ClientSendPacket( "Move", Globals.ClientId, (int) astro.Position.X, (int) astro.Position.Y, "" );
-						}
 
 						return astro.Position;
 				}
@@ -39,12 +30,6 @@ namespace LYA.Commands
 						{
 								var place = new PlaceCommand(astro, tileTex, sprites);
 								place.Execute();
-
-								// Send Packet
-								if (Globals.IsMulti)
-								{
-										Globals.Packet.ClientSendPacket( "Place", Globals.ClientId, (int) astro.Position.X, (int) astro.Position.Y, "" );
-								}
 						}
 				}
 

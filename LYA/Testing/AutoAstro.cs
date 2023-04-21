@@ -33,10 +33,12 @@ namespace LYA.Sprites
 				private MoveRight moveRight;
 				private MoveLeft moveLeft;
 				private bool leftDone, downDone, rightDone, upDone, placeDone;
+				private Vector2 startPos;
+				private int maxPoint;
 
 				private Texture2D tex;
 
-				public AutoAstro( Texture2D texture, int clientId ) : base( texture, clientId )
+				public AutoAstro( Texture2D texture, int clientId, int maxPoint, Vector2 startPos ) : base( texture, clientId )
 				{
 						leftDone=false;
 						downDone=false;
@@ -44,19 +46,21 @@ namespace LYA.Sprites
 						upDone=false;
 						placeDone=false;
 						tex=Globals.Content.Load<Texture2D>( "foundation" );
+						this.startPos = startPos;
+						this.maxPoint = maxPoint;
 				}
 
 				public override void Update()
 				{
 						Movement();
-						Place();
+						//Place();
 				}
 
 				public void Movement()
 				{
 						if (!rightDone)
 						{
-								if (Position.X<=-100)
+								if (Position.X<=startPos.X+maxPoint)
 								{
 										moveRight=new MoveRight( this );
 										moveRight.Execute();
@@ -72,7 +76,7 @@ namespace LYA.Sprites
 
 								if (!downDone)
 								{
-										if (Position.Y<=-100)
+										if (Position.Y<=startPos.Y+maxPoint)
 										{
 												moveDown=new MoveDown( this );
 												moveDown.Execute();
@@ -88,7 +92,7 @@ namespace LYA.Sprites
 
 										if (!leftDone)
 										{
-												if (Position.X>=-900)
+												if (Position.X>=-startPos.X+maxPoint)
 												{
 														moveLeft=new MoveLeft( this );
 														moveLeft.Execute();
@@ -104,7 +108,7 @@ namespace LYA.Sprites
 
 												if (!upDone)
 												{
-														if (Position.Y>=-400)
+														if (Position.Y>=-startPos.Y+maxPoint)
 														{
 																moveUp=new MoveUp( this );
 																moveUp.Execute();
@@ -125,11 +129,18 @@ namespace LYA.Sprites
 				}
 				public void Place()
 				{
+						Random rand = new Random();
+
+						int randXPlus = rand.Next( (int) startPos.X, maxPoint);
+						int randXMinus = rand.Next( (int) startPos.X, -maxPoint);
+						int randYPlus = rand.Next( (int) startPos.Y, maxPoint);
+						int randYMinus = rand.Next( (int) startPos.Y, -maxPoint);
+
 						if (!placeDone)
 						{
 								List<Vector2> tilePos = new List<Vector2>()
 								{
-										new Vector2(-513, -400),
+										new Vector2(randXPlus, randYPlus),
 										new Vector2(-99, -280),
 										new Vector2(-600, -97),
 

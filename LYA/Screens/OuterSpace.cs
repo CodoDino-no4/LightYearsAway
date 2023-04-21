@@ -88,10 +88,7 @@ namespace LYA.Screens
 						// Auto Astro
 						if (Globals.testing)
 						{
-								autoAstro=new AutoAstro( astroIdleTex, 0 )
-								{
-										Position=new Vector2( -Globals.ScreenSize.Width/2+100, -Globals.ScreenSize.Height/2+100 )
-								};
+								autoAstro=new AutoAstro( astroIdleTex, 0, 40, new Vector2( 100, 100 ) );
 						}
 
 						astro=new Astro( astroIdleTex, Globals.ClientId );
@@ -215,7 +212,6 @@ namespace LYA.Screens
 												{
 														emptyPos=false;
 												}
-
 										}
 										if (emptyPos)
 										{

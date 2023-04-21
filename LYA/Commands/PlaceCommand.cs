@@ -1,4 +1,5 @@
-﻿using LYA.Sprites;
+﻿using LYA.Helpers;
+using LYA.Sprites;
 using LYA.Sprites.Cloneables;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Collections;
@@ -36,6 +37,12 @@ namespace LYA.Commands
 						if (emptyPos)
 						{
 								sprites.Add( (Tile) tile.Clone() );
+						}
+
+						// Send Packet
+						if (Globals.IsMulti)
+						{
+								Globals.Packet.ClientSendPacket( "Place", Globals.ClientId, (int) tile.Position.X, (int) tile.Position.Y, "" );
 						}
 				}
 		}

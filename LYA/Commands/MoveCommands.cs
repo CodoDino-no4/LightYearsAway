@@ -1,5 +1,6 @@
 ﻿using LYA.Helpers;
 using LYA.Sprites;
+using Microsoft.Xna.Framework;
 
 namespace LYA.Commands
 {
@@ -22,6 +23,9 @@ namespace LYA.Commands
 
 				public void Execute()
 				{
+						// Previous Position
+						Vector2 tmpPosition = astro.Position;
+
 						if (InputBindings.Up().Held())
 						{
 								moveUp.Execute();
@@ -40,6 +44,12 @@ namespace LYA.Commands
 						if (InputBindings.Right().Held())
 						{
 								moveRight.Execute();
+						}
+
+						// Send Packet
+						if (Globals.IsMulti&&tmpPosition!=astro.Position)
+						{
+								Globals.Packet.ClientSendPacket( "Move", Globals.ClientId, (int) astro.Position.X, (int) astro.Position.Y, "" );
 						}
 				}
 		}
