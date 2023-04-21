@@ -2,7 +2,9 @@
 
 public class ServerPacket
 {
-    // Command types
+    /// <summary>
+    /// Valid command types
+    /// </summary>
     private enum Command
     {
         Null,   // Default
@@ -27,13 +29,17 @@ public class ServerPacket
     // Payload sent within packetSent
     public string payload;
 
-    //Creates an instance of packetSent
+    /// <summary>
+    /// Instantiate the class
+    /// </summary>
     public ServerPacket()
     {
 
     }
 
-    // Converts server payload into a byte stream
+    /// <summary>
+    /// Converts data into a byte stream
+    /// </summary>
     public byte[] ServerSendPacket(string command, int id, int x, int y, string data)
     {
         // Byte stream
@@ -65,7 +71,9 @@ public class ServerPacket
         return byteStream.ToArray();
     }
 
-    // converts the bytes into a Packet Object
+    /// <summary>
+    /// Converts byte stream into packet data
+    /// </summary>
     public void ServerRecvPacket(byte[] data)
     {
         // Decode the cmd
