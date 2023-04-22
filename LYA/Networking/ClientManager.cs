@@ -1,6 +1,7 @@
 ﻿using LYA.Helpers;
 using LYA.Screens;
 using Microsoft.Xna.Framework;
+using MonoGame.Extended;
 using MonoGame.Extended.Screens.Transitions;
 using System.Diagnostics;
 using System.Net;
@@ -20,10 +21,8 @@ namespace LYA.Networking
 				private byte[] tmpData;
 
 				// Recieved and decoded coordinates
-				public KeyValuePair<int, Vector2> astroCoords;
 				public KeyValuePair<int, Vector2> tileCoords;
-				public List<KeyValuePair<int, Vector2>> clients;
-				public int clientLeft;
+				public List<ClientInfo> clients;
 
 				// Has initalised and joined server
 				public bool isInit;
@@ -40,6 +39,7 @@ namespace LYA.Networking
 				public ClientManager( Game game )
 				{
 						Game=(LYA) game;
+						clients = new List<ClientInfo>();
 				}
 
 				public void Init( IPAddress ip, int port )
@@ -70,7 +70,7 @@ namespace LYA.Networking
 						packetJoin=new PacketFormer();
 						packetRecv=new PacketFormer();
 						packetLeave=new PacketFormer();
-						clients=new List<KeyValuePair<int, Vector2>>();
+						clients=new List<ClientInfo>();
 
 						JoinServer();
 
@@ -78,9 +78,6 @@ namespace LYA.Networking
 
 				public void GetExistingClients( string payload )
 				{
-						// Get player count
-						Globals.PlayerCount=Int32.Parse( payload.Split( "?" ).First() );
-
 						string newClients = payload.Split("?").Last();
 						string[] newClientsList = newClients.Split("client");
 
@@ -90,7 +87,7 @@ namespace LYA.Networking
 								{
 										// Get player id and the player current position
 										string[] data = newClient.Split(":");
-										clients.Add( new KeyValuePair<int, Vector2>( Int32.Parse( data[ 0 ] ), new Vector2( Int32.Parse( data[ 1 ] ), Int32.Parse( data[ 2 ] ) ) ) );
+										clients.Add( new ClientInfo( Int32.Parse(data[ 0 ] )) {position = new Vector2( Int32.Parse( data[ 1 ] ), Int32.Parse( data[ 2 ] ) ) } );
 								}
 						}
 				}
@@ -224,17 +221,15 @@ namespace LYA.Networking
 												{
 														if (Globals.ClientId!=0)
 														{
-																Globals.PlayerCount++;
-																astroCoords=new KeyValuePair<int, Vector2>( packetRecv.clientId, new Vector2( packetRecv.posX, packetRecv.posY ) );
+																clients.Add( new ClientInfo(packetRecv.clientId) );
 														}
 												}
 
 												// Leave response parse
 												if (packetRecv.cmd==2)
 												{
-														Globals.PlayerCount--;
-														clients.Remove(new KeyValuePair<int, Vector2>(packetRecv.clientId, Vector2.Zero));
-														clientLeft=packetRecv.clientId;
+														var client=clients.Find( c => c.id.Equals( packetRecv.clientId ) );
+														client.hasLeft=true;
 												}
 
 												// Move response parse
@@ -242,7 +237,8 @@ namespace LYA.Networking
 												{
 														if (packetRecv.clientId!=Globals.ClientId)
 														{
-																astroCoords=new KeyValuePair<int, Vector2>( packetRecv.clientId, new Vector2( packetRecv.posX, packetRecv.posY ) );
+																var client=clients.Find( c => c.id.Equals( packetRecv.clientId ) );
+																client.position = new Vector2( packetRecv.posX, packetRecv.posY );
 														}
 												}
 

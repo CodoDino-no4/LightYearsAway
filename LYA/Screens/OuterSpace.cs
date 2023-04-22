@@ -181,32 +181,35 @@ namespace LYA.Screens
 								{
 										foreach (var client in clientManager.clients)
 										{
-												astroSprites.AddToFront( new Astro( astroIdleTex, client.Key ) { Position=client.Value } );
+												astroSprites.AddToFront( new Astro( astroIdleTex, client.id ) { Position=client.position } );
 										}
 
 										playersAdded=true;
 								}
 
 								// Player count has changed
-								if (tmpCount!=Globals.PlayerCount)
+								if (tmpCount!=clientManager.clients.Count())
 								{
 										// If player count has increased
-										if (tmpCount<Globals.PlayerCount)
+										if (tmpCount<clientManager.clients.Count())
 										{
-												astroSprites.AddToFront( new Astro( astroIdleTex, clientManager.astroCoords.Key )
-												{
-														Position=new Vector2( clientManager.astroCoords.Value.X, clientManager.astroCoords.Value.X )
+												var client=clientManager.clients.Find( c => c.isAdded.Equals( false ) );
 
-												} );
+												astroSprites.AddToFront( new Astro( astroIdleTex, client.id ));
+
+												client.isAdded=true;
 										}
 										// If player count has decreased
 										else
-										{ //if it exisits
+										{
 												foreach (var sprite in astroSprites)
 												{
-														if (sprite.clientId==clientManager.clientLeft)
+														var client=clientManager.clients.Find( c => c.hasLeft.Equals( true ) );
+
+														if (sprite.clientId==client.id)
 														{
 																astroSprites.Remove( sprite );
+																clientManager.clients.Remove( client );
 																break;
 														}
 												}
@@ -216,10 +219,8 @@ namespace LYA.Screens
 								// Update astroSprites
 								foreach (var sprite in astroSprites)
 								{
-										if (sprite.clientId==clientManager.astroCoords.Key)
-										{
-												sprite.Position=clientManager.astroCoords.Value;
-										}
+										var client=clientManager.clients.Find( c => c.id.Equals( sprite.clientId ) );
+										sprite.Position=client.position;
 										sprite.Update();
 								}
 
@@ -233,6 +234,7 @@ namespace LYA.Screens
 												if (clientManager.tileCoords.Value==sprite.Position)
 												{
 														emptyPos=false;
+														break;
 												}
 										}
 
@@ -272,8 +274,7 @@ namespace LYA.Screens
 						}
 
 						// Temp player count set
-						tmpCount=Globals.PlayerCount;
-						tmpClients=clientManager.clients;
+						tmpCount=clientManager.clients.Count();
 				}
 		}
 }
