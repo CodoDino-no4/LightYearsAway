@@ -182,6 +182,7 @@ namespace LYA.Screens
 										foreach (var client in clientManager.clients)
 										{
 												astroSprites.AddToFront( new Astro( astroIdleTex, client.id ) { Position=client.position } );
+												client.isAdded = true;
 										}
 
 										playersAdded=true;
