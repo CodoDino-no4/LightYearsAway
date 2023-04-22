@@ -68,8 +68,8 @@ namespace LYA.Screens
 						// Labels
 
 						grid.Widgets.Add( DrawLabel( "title", "Light-Years Away Multiplayer", 2, 1 ) );
-						grid.Widgets.Add( DrawLabel( "ip-input", "Enter Server IP Addess: ", 2, 2 ) );
-						grid.Widgets.Add( DrawLabel( "port-input", "Enter Server Port: ", 2, 3 ) );
+						grid.Widgets.Add( DrawLabel( "ip-input", "Enter Server IP Addess: ", 2, 3 ) );
+						grid.Widgets.Add( DrawLabel( "port-input", "Enter Server Port: ", 2, 4 ) );
 
 						// Inputs
 
@@ -82,7 +82,7 @@ namespace LYA.Screens
 						var ip = new TextBox
 						{
 								GridColumn = 3,
-								GridRow = 2,
+								GridRow = 3,
 								HorizontalAlignment = HorizontalAlignment.Center,
 								Text = ipText,
 								TextColor = Color.White,
@@ -93,7 +93,7 @@ namespace LYA.Screens
 						var port = new TextBox
 						{
 								GridColumn = 3,
-								GridRow = 3,
+								GridRow = 4,
 								HorizontalAlignment = HorizontalAlignment.Center,
 								Text = portText,
 								TextColor = Color.White,
@@ -107,14 +107,19 @@ namespace LYA.Screens
 						var serverBtn = new TextButton
 						{
 								GridColumn = 3,
-								GridRow = 4,
+								GridRow = 2,
 								Text = "Start Integrated Server",
 								HorizontalAlignment = HorizontalAlignment.Center,
 						};
 
 						serverBtn.Click+=( s, a ) =>
 						{
-								clientManager.StartIntegratedServer();
+								if (clientManager.proc == null)
+								{
+										clientManager.StartIntegratedServer();
+										serverBtn.Text="Integrated Server Running";
+										serverBtn.Enabled=false;
+								}
 						};
 
 						var connBtn = new TextButton

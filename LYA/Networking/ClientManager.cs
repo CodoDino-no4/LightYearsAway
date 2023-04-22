@@ -34,8 +34,8 @@ namespace LYA.Networking
 
 				private new LYA Game;
 
-				Process proc;
-				ProcessStartInfo start;
+				public Process proc;
+				private ProcessStartInfo start;
 
 				public ClientManager( Game game )
 				{
