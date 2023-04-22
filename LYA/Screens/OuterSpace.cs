@@ -11,7 +11,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Collections;
 using MonoGame.Extended.Screens;
-
 namespace LYA.Screens
 {
 		/// <summary>
@@ -42,6 +41,7 @@ namespace LYA.Screens
 				// Networking
 				public ClientManager clientManager;
 				private int tmpCount;
+				private List<KeyValuePair<int, Vector2>> tmpClients;
 				private bool playersAdded = false;
 
 				private AutoAstro autoAstro;
@@ -56,11 +56,13 @@ namespace LYA.Screens
 
 						// Networking
 						this.clientManager=clientManager;
+						tmpClients=new List<KeyValuePair<int, Vector2>>();
 
 						// Sprite List
 						astroSprites=new Deque<Astro>();
 						uiSprites=new Deque<BaseSprite>();
 						tileSprites=new Bag<Tile>();
+
 				}
 
 				private new LYA Game => (LYA) base.Game;
@@ -89,10 +91,19 @@ namespace LYA.Screens
 						// Auto Astro
 						if (Globals.testing)
 						{
-								autoAstro=new AutoAstro( astroIdleTex, 0 )
+								List<Vector2> testPositions = new List<Vector2>()
 								{
-										Position=new Vector2( -Globals.ScreenSize.Width/2+100, -Globals.ScreenSize.Height/2+100 )
+										new Vector2(10, 10),
+										new Vector2(20, 20),
+										new Vector2(30, 30),
+										new Vector2(40, 40),
+
 								};
+
+								Random rand = new Random();
+								var pos = rand.Next( 0, testPositions.Count() );
+
+								autoAstro=new AutoAstro( astroIdleTex, 0, 40, testPositions[pos] );
 						}
 
 						astro=new Astro( astroIdleTex, Globals.ClientId );
@@ -139,9 +150,10 @@ namespace LYA.Screens
 						if (Globals.testing)
 						{
 								autoAstro.Draw();
-								autoAstro.tiles = tileSprites;
+								autoAstro.tiles=tileSprites;
 						}
-						else { 
+						else
+						{
 								astro.Draw();
 						}
 
@@ -162,45 +174,75 @@ namespace LYA.Screens
 				public override void Update( GameTime gameTime )
 				{
 						// If multiplayer
-						if (Globals.IsMulti && tmpCount !=0)
+						if (Globals.IsMulti&&tmpCount!=0)
 						{
 								// Add exisitng players on the server
 								if (!playersAdded)
 								{
 										foreach (var client in clientManager.clients)
 										{
-												astroSprites.AddToFront( new Astro( astroIdleTex, client.Key ) { Position = client.Value } );
+												astroSprites.AddToFront( new Astro( astroIdleTex, client.id ) { Position=client.position } );
+												client.isAdded = true;
 										}
 
-										playersAdded = true;
+										playersAdded=true;
 								}
 
 								// Player count has changed
-								if (tmpCount!=Globals.PlayerCount)
+								if (tmpCount!=clientManager.clients.Count())
 								{
 										// If player count has increased
-										if (tmpCount<Globals.PlayerCount)
+										if (tmpCount<clientManager.clients.Count())
 										{
-												astroSprites.AddToFront( new Astro( astroIdleTex, clientManager.astroCoords.Key ) 
-												{
-														Position = new Vector2(clientManager.astroCoords.Value.X, clientManager.astroCoords.Value.X )
+												var client=clientManager.clients.Find( c => c.isAdded.Equals( false ) );
 
-												} );
+												astroSprites.AddToFront( new Astro( astroIdleTex, client.id ));
+
+												client.isAdded=true;
 										}
 										// If player count has decreased
-										else { //if it exisits
-												astroSprites.RemoveAt( clientManager.astroCoords.Key-1 );
+										else
+										{
+												foreach (var sprite in astroSprites)
+												{
+														var client=clientManager.clients.Find( c => c.hasLeft.Equals( true ) );
+
+														if (sprite.clientId==client.id)
+														{
+																astroSprites.Remove( sprite );
+																clientManager.clients.Remove( client );
+																break;
+														}
+												}
 										}
 								}
 
 								// Update astroSprites
 								foreach (var sprite in astroSprites)
 								{
-										if (sprite.clientId==clientManager.astroCoords.Key)
-										{
-												sprite.Position=clientManager.astroCoords.Value;
-										}
+										var client=clientManager.clients.Find( c => c.id.Equals( sprite.clientId ) );
+										sprite.Position=client.position;
 										sprite.Update();
+								}
+
+								// Add new tile to world
+								if (clientManager.tileCoords.Key!=0)
+								{
+										bool emptyPos =true;
+
+										foreach (var sprite in tileSprites)
+										{
+												if (clientManager.tileCoords.Value==sprite.Position)
+												{
+														emptyPos=false;
+														break;
+												}
+										}
+
+										if (emptyPos)
+										{
+												tileSprites.Add( new Tile( foundationTex ) { Position=clientManager.tileCoords.Value } );
+										}
 								}
 						}
 
@@ -233,7 +275,7 @@ namespace LYA.Screens
 						}
 
 						// Temp player count set
-						tmpCount=Globals.PlayerCount;
+						tmpCount=clientManager.clients.Count();
 				}
 		}
 }

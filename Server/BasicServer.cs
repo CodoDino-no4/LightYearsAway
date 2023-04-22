@@ -87,7 +87,8 @@ namespace Server
                             {
                                 await sendToAll(joinResp);
                             }
-                            else { 
+                            else
+                            {
                                 await sendToOne(joinResp, res.RemoteEndPoint);
                             }
                         };
@@ -187,7 +188,7 @@ namespace Server
             foreach (var client in clients)
             {
                 if (sender != client.ep)
-                { 
+                {
                     _ = await udpServer.SendAsync(data, client.ep);
                 }
             }
@@ -198,7 +199,7 @@ namespace Server
         /// </summary>
         public async Task sendToOne(byte[] data, IPEndPoint ep)
         {
-           _ = await udpServer.SendAsync(data, ep);
+            _ = await udpServer.SendAsync(data, ep);
         }
 
         /// <summary>
@@ -217,13 +218,13 @@ namespace Server
                     clients.Add(new ClientInfo(ep, clientId));
                     var serverData = $"{clients.Count()}?";
 
-                    for (var i = 1; clients.Count()>i; i++)
+                    for (var i = 1; clients.Count() > i; i++)
                     {
                         var conn = clients.Find(c => c.id.Equals(i));
                         if (conn != null)
                         {
                             serverData += $"client{i}:{conn.position.X}:{conn.position.Y}";
-   
+
                         }
                     }
 
@@ -236,7 +237,9 @@ namespace Server
                     hasErrored = true;
                     return packetSent.ServerSendPacket("Error", clientId, 0, 0, "Client is already connected on this IP address and port");
                 }
-            } else {
+            }
+            else
+            {
 
                 hasErrored = true;
                 return packetSent.ServerSendPacket("Error", 0, 0, 0, "Server full");
@@ -327,7 +330,6 @@ namespace Server
         public void ClientError(IPEndPoint ep)
         {
             var client = clients.Find(c => c.ep.Equals(ep));
-            var clientId = 0;
             Console.WriteLine($"Client ID: {client.id}, ERROR: {packetRecv.payload}");
         }
     }

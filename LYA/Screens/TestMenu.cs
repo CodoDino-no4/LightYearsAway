@@ -1,24 +1,26 @@
 ﻿using LYA.Helpers;
 using LYA.Networking;
+using LYA.Testing;
 using Microsoft.Xna.Framework;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
 using Myra;
 using Myra.Graphics2D.UI;
+using System.Net;
 
 namespace LYA.Screens
 {
 		/// <summary>
 		/// Main Menu Game Screen
 		/// </summary>
-		public class MainMenu : GameScreen
+		public class TestMenu : GameScreen
 		{
 				private ClientManager clientManager;
 
 				private Desktop desktop;
 				private Grid grid;
 
-				public MainMenu( Game game, ClientManager clientManager ) : base( game )
+				public TestMenu( Game game, ClientManager clientManager ) : base( game )
 				{
 						this.clientManager=clientManager;
 				}
@@ -49,45 +51,66 @@ namespace LYA.Screens
 
 						// Buttons
 
-						var playBtn = new TextButton
+						var serverBtn = new TextButton
 						{
 								GridColumn = 2,
 								GridRow = 2,
-								Text = "Play",
+								Text = "Start Server",
 								HorizontalAlignment = HorizontalAlignment.Center,
 						};
 
-						playBtn.Click+=( s, a ) =>
+						serverBtn.Click+=( s, a ) =>
 						{
-								Globals.ScreenManager.LoadScreen( new OuterSpace( Game, clientManager ), new FadeTransition( GraphicsDevice, Color.Black, 3 ) );
-								Globals.IsMulti=false;
+								Tests.ServerInit();
+								Thread.Sleep(2000);
 						};
 
-						var multiBtn = new TextButton
+						var testPlayerBtn = new TextButton
 						{
 								GridColumn = 2,
 								GridRow = 3,
-								Text = "Multiplayer",
+								Text = "Start Test Player",
 								HorizontalAlignment = HorizontalAlignment.Center,
 						};
 
-						multiBtn.Click+=( s, a ) =>
+						testPlayerBtn.Click+=( s, a ) =>
 						{
-								Globals.ScreenManager.LoadScreen( new MultiMenu( Game, clientManager ), new FadeTransition( GraphicsDevice, Color.Black, 1 ) );
+								try
+								{
+										// Initalise connection to server
+										clientManager.Init( IPAddress.Parse( "192.168.1.101" ), Int32.Parse( "11000" ) ); //try with public ip
+
+										if (clientManager.isInit)
+										{
+												grid.Widgets.Add( DrawLabel( "success", "SUCCESS", 2, 5 ) );
+
+												// Start game
+												Globals.ScreenManager.LoadScreen( new OuterSpace( Game, clientManager ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
+										}
+										else
+										{
+												var errBox = Dialog.CreateMessageBox("Error", "Server Address Not Found");
+												errBox.ShowModal( desktop );
+										}
+								}
+								catch
+								{
+										var errBox = Dialog.CreateMessageBox("Error", "Server Address Not Found");
+										errBox.ShowModal( desktop );
+								}
 						};
 
-						var testsBtn = new TextButton
+						var backBtn = new TextButton
 						{
 								GridColumn = 2,
 								GridRow = 4,
-								Text = "Run Tests",
+								Text = "Back",
 								HorizontalAlignment = HorizontalAlignment.Center,
 						};
 
-						testsBtn.Click+=( s, a ) =>
+						backBtn.Click+=( s, a ) =>
 						{
-								Globals.testing=true;
-								Globals.ScreenManager.LoadScreen( new TestMenu( Game, clientManager ), new FadeTransition( GraphicsDevice, Color.Black, 3 ) );
+								Globals.ScreenManager.LoadScreen( new MainMenu( Game, clientManager ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
 						};
 
 						var exitBtn = new TextButton
@@ -104,9 +127,9 @@ namespace LYA.Screens
 						};
 
 
-						grid.Widgets.Add( playBtn );
-						grid.Widgets.Add( multiBtn );
-						grid.Widgets.Add( testsBtn );
+						grid.Widgets.Add( serverBtn );
+						grid.Widgets.Add( testPlayerBtn );
+						grid.Widgets.Add( backBtn );
 						grid.Widgets.Add( exitBtn );
 
 						// Add it to the desktop

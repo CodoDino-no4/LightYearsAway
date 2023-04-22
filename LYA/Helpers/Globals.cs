@@ -40,11 +40,6 @@ namespace LYA.Helpers
 						get; set;
 				}
 
-				public static int PlayerCount
-				{
-						get; set;
-				}
-
 				public static bool testing
 				{
 						get; set;

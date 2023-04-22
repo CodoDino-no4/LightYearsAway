@@ -1,7 +1,6 @@
 ﻿using LYA.Helpers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended.Collections;
 
 namespace LYA.Sprites
 {
@@ -45,8 +44,8 @@ namespace LYA.Sprites
 				public virtual void Draw()
 				{
 
-					  if (Texture!=null)
-					  		Globals.SpriteBatch.Draw( Texture, Position, Rectangle, Color.White, rotation, Origin, Scale, SpriteEffects.None, 0 );
+						if (Texture!=null)
+								Globals.SpriteBatch.Draw( Texture, Position, Rectangle, Color.White, rotation, Origin, Scale, SpriteEffects.None, 0 );
 
 				}
 				public virtual void Update()
