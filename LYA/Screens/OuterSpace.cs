@@ -41,6 +41,7 @@ namespace LYA.Screens
 				// Networking
 				public ClientManager clientManager;
 				private int tmpCount;
+				private List<KeyValuePair<int, Vector2>> tmpClients;
 				private bool playersAdded = false;
 
 				private AutoAstro autoAstro;
@@ -55,11 +56,13 @@ namespace LYA.Screens
 
 						// Networking
 						this.clientManager=clientManager;
+						tmpClients=new List<KeyValuePair<int, Vector2>>();
 
 						// Sprite List
 						astroSprites=new Deque<Astro>();
 						uiSprites=new Deque<BaseSprite>();
 						tileSprites=new Bag<Tile>();
+
 				}
 
 				private new LYA Game => (LYA) base.Game;
@@ -199,7 +202,14 @@ namespace LYA.Screens
 										// If player count has decreased
 										else
 										{ //if it exisits
-												astroSprites.RemoveAt( clientManager.clients. );
+												foreach (var sprite in astroSprites)
+												{
+														if (sprite.clientId==clientManager.clientLeft)
+														{
+																astroSprites.Remove( sprite );
+																break;
+														}
+												}
 										}
 								}
 
@@ -263,6 +273,7 @@ namespace LYA.Screens
 
 						// Temp player count set
 						tmpCount=Globals.PlayerCount;
+						tmpClients=clientManager.clients;
 				}
 		}
 }

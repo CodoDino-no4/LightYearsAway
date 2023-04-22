@@ -23,6 +23,7 @@ namespace LYA.Networking
 				public KeyValuePair<int, Vector2> astroCoords;
 				public KeyValuePair<int, Vector2> tileCoords;
 				public List<KeyValuePair<int, Vector2>> clients;
+				public int clientLeft;
 
 				// Has initalised and joined server
 				public bool isInit;
@@ -178,7 +179,12 @@ namespace LYA.Networking
 						try
 						{
 								udpClient.Send( packetLeave.ClientSendPacket( "Leave", Globals.ClientId, 0, 0, "" ) );
-								proc.Kill();
+
+								// Kill integrated server if its running
+								if (proc!=null)
+								{
+										proc.Kill();
+								}
 						}
 						catch (SocketException e)
 						{
@@ -227,6 +233,8 @@ namespace LYA.Networking
 												if (packetRecv.cmd==2)
 												{
 														Globals.PlayerCount--;
+														clients.Remove(new KeyValuePair<int, Vector2>(packetRecv.clientId, Vector2.Zero));
+														clientLeft=packetRecv.clientId;
 												}
 
 												// Move response parse
