@@ -20,6 +20,7 @@ namespace LYA.Networking
 						hasLeft=false;
 						isAdded=false;
             this.id = id;
+						// DO NOT COUPLE UP RENDERING AND NETCODE THIS IS BAD
         }
     }
 }
