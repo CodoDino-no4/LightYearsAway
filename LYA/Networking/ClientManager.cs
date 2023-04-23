@@ -39,7 +39,6 @@ namespace LYA.Networking
 				public ClientManager( Game game )
 				{
 						Game=(LYA) game;
-						clients = new List<ClientInfo>();
 				}
 
 				public void Init( IPAddress ip, int port )
@@ -138,6 +137,7 @@ namespace LYA.Networking
 								if (packetRecv.cmd==1)
 								{
 										Globals.ClientId=packetRecv.clientId;
+										clients.Add( new ClientInfo( Globals.ClientId ) { isAdded = true } );
 
 										if (Globals.ClientId>1)
 										{

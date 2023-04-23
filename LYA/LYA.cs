@@ -93,7 +93,6 @@ namespace LYA
 						// Create a new SpriteBatch
 						spriteBatch=new SpriteBatch( GraphicsDevice );
 						Globals.SpriteBatch=spriteBatch;
-						clientManager.clients.Add( new ClientInfo(Globals.ClientId) );
 						Globals.MaxPlayers=4;
 
 						if (Globals.testing)
