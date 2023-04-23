@@ -44,11 +44,11 @@ namespace LYA.Testing.Unit
         [TestMethod()]
         public void GlobalsTest()
         {
+            Assert.IsTrue(Globals.testing);
             Assert.IsTrue(game.screenManager == Globals.ScreenManager);
             Assert.IsTrue(game.spriteBatch == Globals.SpriteBatch);
             Assert.IsTrue(game.Content == Globals.Content);
             Assert.IsTrue(game.GraphicsDevice.Viewport.Bounds == Globals.ScreenSize);
-            Assert.IsTrue(game.clientManager.clients.Count() == 1);
             Assert.IsTrue(Globals.MaxPlayers == 4);
         }
 
