@@ -15,7 +15,6 @@ namespace LYA.Networking
 
 				// Buffers
 				private byte[] recvBuff;
-				private byte[] tmpData;
 
 				// Recieved and decoded coordinates
 				public KeyValuePair<Vector2, int> astroCoords;
@@ -32,7 +31,6 @@ namespace LYA.Networking
 						isInit=false;
 
 						recvBuff=new byte[ 512 ];
-						tmpData=new byte[ 512 ];
 
 						try
 						{
@@ -75,9 +73,6 @@ namespace LYA.Networking
 										isInit=true;
 										Debug.WriteLine( "join server complete" );
 
-
-										// Prevent sending join data more than once
-										Globals.Packet.sendData=null;
 								}
 						}
 						catch (SocketException e)
@@ -152,19 +147,7 @@ namespace LYA.Networking
 								{
 										if (isInit)
 										{
-												if (Globals.Packet.sendData!=null&&!tmpData.SequenceEqual( Globals.Packet.sendData ))
-												{
-														await udpClient.SendAsync( Globals.Packet.sendData );
-												}
-
-												if (Globals.Packet.sendData!=null)
-												{
-														tmpData=Globals.Packet.sendData;
-												}
-												else
-												{
-														tmpData=new byte[ 512 ];
-												}
+												await udpClient.SendAsync( Globals.Packet.sendData );
 
 												var res = await udpClient.ReceiveAsync();
 
