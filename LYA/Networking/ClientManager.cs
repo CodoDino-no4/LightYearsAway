@@ -23,7 +23,7 @@ namespace LYA.Networking
 				// Recieved and decoded coordinates
 				public KeyValuePair<int, Vector2> tileCoords;
 				public List<ClientInfo> clients;
-
+		
 				// Has initalised and joined server
 				public bool isInit;
 
@@ -39,6 +39,7 @@ namespace LYA.Networking
 				public ClientManager( Game game )
 				{
 						Game=(LYA) game;
+						clients = new List<ClientInfo>();
 				}
 
 				public void Init( IPAddress ip, int port )
@@ -69,7 +70,6 @@ namespace LYA.Networking
 						packetJoin=new PacketFormer();
 						packetRecv=new PacketFormer();
 						packetLeave=new PacketFormer();
-						clients=new List<ClientInfo>();
 
 						JoinServer();
 
@@ -212,49 +212,51 @@ namespace LYA.Networking
 												}
 
 												var res = await udpClient.ReceiveAsync();
-
 												recvBuff=res.Buffer;
 												packetRecv.ClientRecvPacket( recvBuff );
+												ClientInfo client = null;
 
-												// Join response parse
-												if (packetRecv.cmd==1)
+												switch (packetRecv.cmd)
 												{
-														if (Globals.ClientId!=0)
-														{
-																clients.Add( new ClientInfo(packetRecv.clientId) );
-														}
-												}
+														default:
+														case 0:
+																break;
 
-												// Leave response parse
-												if (packetRecv.cmd==2)
-												{
-														var client=clients.Find( c => c.id.Equals( packetRecv.clientId ) );
-														client.hasLeft=true;
-												}
+														// Join response parse
+														case 1:
+																if (Globals.ClientId!=0)
+																{
+																		clients.Add( new ClientInfo( packetRecv.clientId ) );
+																}
+																break;
 
-												// Move response parse
-												if (packetRecv.cmd==3)
-												{
-														if (packetRecv.clientId!=Globals.ClientId)
-														{
-																var client=clients.Find( c => c.id.Equals( packetRecv.clientId ) );
-																client.position = new Vector2( packetRecv.posX, packetRecv.posY );
-														}
-												}
+														// Leave response parse
+														case 2:
+																client=clients.Find( c => c.id.Equals( packetRecv.clientId ) );
+																client.hasLeft=true;
+																break;
 
-												// Place response parse
-												if (packetRecv.cmd==4)
-												{
-														if (packetRecv.clientId!=Globals.ClientId)
-														{
-																tileCoords=new KeyValuePair<int, Vector2>( packetRecv.clientId, new Vector2( packetRecv.posX, packetRecv.posY ) );
-														}
-												}
+														// Move response parse
+														case 3:
+																if (packetRecv.clientId!=Globals.ClientId)
+																{
+																		client=clients.Find( c => c.id.Equals( packetRecv.clientId ) );
+																		client.position=new Vector2( packetRecv.posX, packetRecv.posY );
+																}
+																break;
 
-												// Error response parse
-												if (packetRecv.cmd==5)
-												{
-														Debug.WriteLine(packetRecv.payload);
+														// Place response parse
+														case 4:
+																if (packetRecv.clientId!=Globals.ClientId)
+																{
+																		tileCoords=new KeyValuePair<int, Vector2>( packetRecv.clientId, new Vector2( packetRecv.posX, packetRecv.posY ) );
+																}
+																break;
+
+														// Error response parse
+														case 5:
+																Debug.WriteLine( packetRecv.payload );
+																break;
 												}
 										}
 								}

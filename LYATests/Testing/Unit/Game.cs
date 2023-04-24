@@ -49,7 +49,6 @@ namespace LYA.Testing.Unit
             Assert.IsTrue(game.spriteBatch == Globals.SpriteBatch);
             Assert.IsTrue(game.Content == Globals.Content);
             Assert.IsTrue(game.GraphicsDevice.Viewport.Bounds == Globals.ScreenSize);
-            Assert.IsTrue(Globals.MaxPlayers == 4);
         }
 
         [TestMethod()]

@@ -25,11 +25,6 @@ namespace LYA.Helpers
 						get; set;
 				}
 
-				public static int MaxPlayers
-				{
-						get; set;
-				}
-
 				public static int ClientId
 				{
 						get; set;

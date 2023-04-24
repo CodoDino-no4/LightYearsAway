@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Server.Commands;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Numerics;
@@ -31,6 +32,9 @@ namespace Server
         // Tick rate
         private Timer tickTimer;
         private TimeSpan deltaTime;
+
+        // Response Command
+        private Response response;
 
         // Logging REMOVE BEFORE COMPLETION
         private string path = "C:/Users/Alz/Documents/log.txt";
@@ -73,77 +77,35 @@ namespace Server
                 {
                     try
                     {
-                        hasErrored = false;
                         var res = await udpServer.ReceiveAsync();
-                        recvBuff = res.Buffer;
-                        packetRecv.ServerRecvPacket(recvBuff);
 
-                        //Join Resp
-                        if (packetRecv.cmd == 1)
+                        response = new Response(res, clients);
+                        response.Execute();
+
+                        switch (response.packetSend.cmd)
                         {
-                            byte[] joinResp = ClientJoin(res.RemoteEndPoint);
+                            // Null
+                            default:
+                            case 0:
+                                break;
 
-                            if (packetSent.cmd != 5)
-                            {
-                                await sendToAll(joinResp);
-                            }
-                            else
-                            {
-                                await sendToOne(joinResp, res.RemoteEndPoint);
-                            }
-                        };
+                            // Join
+                            case 1:
+                                await sendToAll(response.data);
+                                break;
 
-                        // Leave Resp
-                        if (packetRecv.cmd == 2)
-                        {
-                            byte[] leaveResp = ClientLeave(res.RemoteEndPoint);
+                            // Leave, Move, Place
+                            case 2:
+                            case 3:
+                            case 4:
+                                await sendToAllExceptSender(response.data, response.remoteEp);
+                                break;
 
-                            if (!hasErrored)
-                            {
-                                await sendToAllNotSender(leaveResp, res.RemoteEndPoint);
-                            }
-                            else
-                            {
-                                await sendToOne(leaveResp, res.RemoteEndPoint);
-                            }
-                        };
-
-                        // Move Resp
-                        if (packetRecv.cmd == 3)
-                        {
-                            byte[] moveResp = ClientMove(res.RemoteEndPoint);
-
-                            if (!hasErrored)
-                            {
-                                await sendToAllNotSender(moveResp, res.RemoteEndPoint);
-                            }
-                            else
-                            {
-                                await sendToOne(moveResp, res.RemoteEndPoint);
-                            }
-                        };
-
-                        // Place Resp
-                        if (packetRecv.cmd == 4)
-                        {
-                            byte[] placeResp = ClientPlace(res.RemoteEndPoint);
-
-                            if (!hasErrored)
-                            {
-                                await sendToAllNotSender(placeResp, res.RemoteEndPoint);
-                            }
-                            else
-                            {
-                                await sendToOne(placeResp, res.RemoteEndPoint);
-                            }
-                        };
-
-                        // Error Resp
-                        if (packetRecv.cmd == 5)
-                        {
-                            ClientError(res.RemoteEndPoint);
-                        };
-
+                            // Error
+                            case 5:
+                                await sendToSender(response.data, response.remoteEp);
+                                break;
+                        }
                     }
                     catch (SocketException ex)
                     {
@@ -159,7 +121,6 @@ namespace Server
 
                         File.AppendAllText(path, ex.Message);
                         Console.WriteLine("added to file...");
-
 
                         Console.Write("Press Enter to close window ...");
                         Console.Read();
@@ -183,7 +144,7 @@ namespace Server
         /// <summary>
         /// Send data to all clients except the sender client
         /// </summary>
-        public async Task sendToAllNotSender(byte[] data, IPEndPoint sender)
+        public async Task sendToAllExceptSender(byte[] data, IPEndPoint sender)
         {
             foreach (var client in clients)
             {
@@ -197,140 +158,9 @@ namespace Server
         /// <summary>
         /// Send data to only the sender client
         /// </summary>
-        public async Task sendToOne(byte[] data, IPEndPoint ep)
+        public async Task sendToSender(byte[] data, IPEndPoint ep)
         {
             _ = await udpServer.SendAsync(data, ep);
-        }
-
-        /// <summary>
-        /// Add client to server client list
-        /// </summary>
-        public byte[] ClientJoin(IPEndPoint ep)
-        {
-            if (clients.Count < 4)
-            {
-                var client = clients.Find(c => c.ep.Equals(ep));
-                var clientId = 0;
-
-                if (client == null)
-                {
-                    clientId = clients.Count() + 1;
-                    clients.Add(new ClientInfo(ep, clientId));
-                    var serverData = $"{clients.Count()}?";
-
-                    for (var i = 1; clients.Count() > i; i++)
-                    {
-                        var conn = clients.Find(c => c.id.Equals(i));
-                        if (conn != null)
-                        {
-                            serverData += $"client{i}:{conn.position.X}:{conn.position.Y}";
-
-                        }
-                    }
-
-                    Console.WriteLine($"{ep} has joined the server as Client ID: {clientId}");
-
-                    return packetSent.ServerSendPacket("Join", clientId, 0, 0, serverData);
-                }
-                else
-                {
-                    hasErrored = true;
-                    return packetSent.ServerSendPacket("Error", clientId, 0, 0, "Client is already connected on this IP address and port");
-                }
-            }
-            else
-            {
-
-                hasErrored = true;
-                return packetSent.ServerSendPacket("Error", 0, 0, 0, "Server full");
-            }
-        }
-
-        /// <summary>
-        /// Remove client from server client list
-        /// </summary>
-        public byte[] ClientLeave(IPEndPoint ep)
-        {
-            var client = clients.Find(c => c.ep.Equals(ep));
-            var clientId = 0;
-
-            if (client != null)
-            {
-                clientId = client.id;
-                clients.Remove(client);
-
-                Console.WriteLine($"Client ID: {clientId} has disconnected from the server");
-
-                return packetSent.ServerSendPacket("Leave", clientId, 0, 0, clients.Count().ToString());
-            }
-            else
-            {
-                hasErrored = true;
-                return packetSent.ServerSendPacket("Error", clientId, 0, 0, "Error on leaving server");
-            }
-        }
-
-        /// <summary>
-        /// Handle move data
-        /// </summary>
-        public byte[] ClientMove(IPEndPoint ep)
-        {
-            var client = clients.Find(c => c.ep.Equals(ep));
-            var clientId = 0;
-
-            if (client != null)
-            {
-                clientId = client.id;
-                client.position = new Vector2(packetRecv.posX, packetRecv.posY);
-
-                return packetSent.ServerSendPacket("Move", clientId, packetRecv.posX, packetRecv.posY, "");
-            }
-            else
-            {
-                hasErrored = true;
-                return packetSent.ServerSendPacket("Error", clientId, 0, 0, "Error on move");
-            }
-
-        }
-
-        /// <summary>
-        /// Handle place data
-        /// </summary>
-        public byte[] ClientPlace(IPEndPoint ep)
-        {
-            var client = clients.Find(c => c.ep.Equals(ep));
-            var clientId = 0;
-            var position = new Vector2(packetRecv.posX, packetRecv.posY);
-
-            if (client != null)
-            {
-                if (!tiles.Contains(position))
-                {
-                    clientId = client.id;
-                    tiles.Add(position);
-                    return packetSent.ServerSendPacket("Place", clientId, (int)position.X, (int)position.Y, "");
-                }
-                else
-                {
-                    hasErrored = true;
-                    return packetSent.ServerSendPacket("Error", clientId, 0, 0, "Tile already placed here");
-                }
-            }
-            else
-            {
-                hasErrored = true;
-                return packetSent.ServerSendPacket("Error", clientId, 0, 0, "Error on place");
-            }
-
-        }
-
-        /// <summary>
-        /// Handle errors
-        /// </summary>
-        public void ClientError(IPEndPoint ep)
-        {
-            var client = clients.Find(c => c.ep.Equals(ep));
-            Console.WriteLine($"Client ID: {client.id}, ERROR: {packetRecv.payload}");
         }
     }
 }

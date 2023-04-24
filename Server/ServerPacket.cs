@@ -47,23 +47,28 @@ public class ServerPacket
 
         // Get cmd index number
         int cmdVal = (int)(Command)Enum.Parse(typeof(Command), command, true);
+        this.cmd = cmdVal;
 
         // Add the command
         byteStream.AddRange(BitConverter.GetBytes(cmdVal));
 
         // Add client ID
         byteStream.AddRange(BitConverter.GetBytes(id));
+        this.clientId = id;
 
         // Add coordinates X
         byteStream.AddRange(BitConverter.GetBytes(x));
+        this.posX = x;
 
         // Add coordinates Y
         byteStream.AddRange(BitConverter.GetBytes(y));
+        this.posY = y;
 
         // Add payload
         if (data != null)
         {
             byteStream.AddRange(Encoding.UTF8.GetBytes(data));
+            this.payload = data;
         }
         else
             byteStream.AddRange(BitConverter.GetBytes(0));
