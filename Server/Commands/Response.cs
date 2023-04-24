@@ -12,71 +12,82 @@ namespace Server.Commands
     public class Response : CommandManager.ICommand
     {
         private UdpReceiveResult res;
+        public List<ClientInfo> clients;
         private ServerPacket packetRecv;
-        private ServerPacket packetSend;
-
-        public Dictionary<IPEndPoint, int> conns; // change to an array?? (or a better suited type) with the last known position of all sprites
+        public ServerPacket packetSend;
+        public IPEndPoint remoteEp;
         public byte[] data;
-        public Response(UdpReceiveResult res)
-        {
-            this.res = res;
-            conns = new Dictionary<IPEndPoint, int>();
-            data = new byte[128];
-            packetRecv = new ServerPacket();
-            packetSend = new ServerPacket();
 
+        private JoinResponse joinResponse;
+        private LeaveResponse leaveResponse;
+        private MoveResponse moveResponse;
+        private PlaceResponse placeResponse;
+        private ErrorResponse errorResponse;
+
+        public Response(UdpReceiveResult res, List<ClientInfo> clients)
+        {
+            packetRecv = new ServerPacket();
             packetRecv.ServerRecvPacket(res.Buffer);
+            data = new byte[0];
+
+            packetSend = new ServerPacket();
+            remoteEp = res.RemoteEndPoint;
+
+            this.clients = clients;
+
+            joinResponse = new JoinResponse(remoteEp, clients);
+            leaveResponse = new LeaveResponse(remoteEp, clients);
+            moveResponse = new MoveResponse(remoteEp, clients, packetRecv);
+            placeResponse = new PlaceResponse(remoteEp, clients, packetRecv);    
+            errorResponse = new ErrorResponse(remoteEp, clients, packetRecv);
         }
 
         public void Execute()
         {
             switch (packetRecv.cmd)
             {
+                default:
+                case 0:
+                    break;
+
                 case 1:
 
-                    if (!conns.ContainsKey(res.RemoteEndPoint))
-                    {
-                        conns.Add(res.RemoteEndPoint, conns.Count() + 1);
-                        var clientId = conns.GetValueOrDefault(res.RemoteEndPoint);
-                        //packetSend.ServerSendPacket("Join", clientId, conns.Count.ToString());
-                    }
-                    else
-                    {
-
-                        //packetSend.ServerSendPacket("Error", 0, "Client already connected");
-                    }
-
+                    joinResponse.Execute();
+                    packetSend = joinResponse.packetSend;
+                    data = joinResponse.data;
                     break;
 
                 case 2:
 
-                    if (conns.ContainsKey(res.RemoteEndPoint))
-                    {
-                        conns.Remove(res.RemoteEndPoint);
-                        //packetSend.ServerSendPacket("Leave", packetRecv.clientId, conns.Count.ToString());
-
-                    }
-                    else
-                    {
-                        //packetSend.ServerSendPacket("Error", 0, "Client does not exisit on this server");
-                    }
-
+                    leaveResponse.Execute();
+                    packetSend = leaveResponse.packetSend;
+                    data = leaveResponse.data;
                     break;
+
                 case 3:
 
-                    //packetSend.ServerSendPacket("Move", packetRecv.clientId, packetRecv.payload);
+                    moveResponse.Execute();
+                    packetSend = moveResponse.packetSend;
+                    data = moveResponse.data;
                     break;
 
                 case 4:
 
-                    //packetSend.ServerSendPacket("Place", packetRecv.clientId, packetRecv.payload);
+                    placeResponse.Execute();
+                    packetSend = placeResponse.packetSend;
+                    data = placeResponse.data;
                     break;
 
-                default:
+                case 5:
+
+                    errorResponse.Execute();
+                    packetSend = errorResponse.packetSend;
+                    data = errorResponse.data;
                     break;
+
             }
-
-            //data = packetSend.sendData;
         }
+
+
     }
 }

@@ -144,7 +144,12 @@ namespace LYA.Screens
 
 						// Draw Multiplayer Astros
 						foreach (var sprite in astroSprites)
-								sprite.Draw();
+						{
+								if (sprite!=null)
+								{
+										sprite.Draw();
+								}
+						}
 
 						// Draw Astro
 						if (Globals.testing)
@@ -174,7 +179,7 @@ namespace LYA.Screens
 				public override void Update( GameTime gameTime )
 				{
 						// If multiplayer
-						if (Globals.IsMulti&&tmpCount!=0)
+						if (Globals.IsMulti&&clientManager.clients.Count()!=0)
 						{
 								// Add exisitng players on the server
 								if (!playersAdded)
@@ -191,41 +196,39 @@ namespace LYA.Screens
 										playersAdded=true;
 								}
 
-								// Player count has changed
-								if (tmpCount!=clientManager.clients.Count())
+								// Add if client has joined
+								var clientJoin =clientManager.clients.Find( c => c.isAdded.Equals( false ) );
+
+								if (clientJoin!=null)
 								{
-										// If player count has increased
-										if (tmpCount<clientManager.clients.Count())
-										{
-												var client=clientManager.clients.Find( c => c.isAdded.Equals( false ) );
-
-												astroSprites.AddToFront( new Astro( astroIdleTex, client.id ));
-
-												client.isAdded=true;
-										}
-										// If player count has decreased
-										else
-										{
-												foreach (var sprite in astroSprites)
-												{
-														var client=clientManager.clients.Find( c => c.hasLeft.Equals( true ) );
-
-														if (sprite.clientId==client.id)
-														{
-																astroSprites.Remove( sprite );
-																clientManager.clients.Remove( client );
-																break;
-														}
-												}
-										}
+										astroSprites.AddToFront( new Astro( astroIdleTex, clientJoin.id ) );
+										clientJoin.isAdded=true;
 								}
+
+								// Find client who has left
+								var clientLeft =clientManager.clients.Find( c => c.hasLeft.Equals( true ) );
 
 								// Update astroSprites
 								foreach (var sprite in astroSprites)
 								{
-										var client=clientManager.clients.Find( c => c.id.Equals( sprite.clientId ) );
-										sprite.Position=client.position;
-										sprite.Update();
+										if (sprite!=null)
+										{
+												var client=clientManager.clients.Find( c => c.id.Equals( sprite.clientId ) );
+
+												// Remove if client has left
+												if (clientLeft!= null && sprite.clientId==clientLeft.id)
+												{
+														astroSprites.Remove( sprite );
+														clientManager.clients.Remove( clientLeft );
+												}
+
+												// Update all clients
+												if (client!=null)
+												{
+														sprite.Position=client.position;
+														sprite.Update();
+												}
+										}
 								}
 
 								// Add new tile to world
@@ -238,8 +241,9 @@ namespace LYA.Screens
 												if (clientManager.tileCoords.Value==sprite.Position)
 												{
 														emptyPos=false;
-														break;
 												}
+
+												sprite.Update();
 										}
 
 										if (emptyPos)
@@ -247,6 +251,12 @@ namespace LYA.Screens
 												tileSprites.Add( new Tile( foundationTex ) { Position=clientManager.tileCoords.Value } );
 										}
 								}
+						}
+
+						// Update UI Sprites
+						foreach (var sprite in uiSprites)
+						{
+								sprite.Update();
 						}
 
 						// Update the camera
@@ -264,21 +274,6 @@ namespace LYA.Screens
 						}
 
 						CommandManager.Commands( astro, foundationTex, tileSprites );
-
-						// Update UI Sprites
-						foreach (var sprite in uiSprites)
-						{
-								sprite.Update();
-						}
-
-						// Update tile Sprites
-						foreach (var sprite in tileSprites)
-						{
-								sprite.Update();
-						}
-
-						// Temp player count set
-						tmpCount=clientManager.clients.Count();
 				}
 		}
 }

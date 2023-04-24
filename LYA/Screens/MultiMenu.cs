@@ -144,11 +144,6 @@ namespace LYA.Screens
 												// Start game
 												Globals.ScreenManager.LoadScreen( new OuterSpace( Game, clientManager ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
 										}
-										else
-										{
-												var errBox = Dialog.CreateMessageBox("Error", "Server Address Not Found");
-												errBox.ShowModal( desktop );
-										}
 								}
 								catch
 								{
