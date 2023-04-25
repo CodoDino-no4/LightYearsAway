@@ -152,7 +152,7 @@ namespace LYAServer
         {
             foreach (var client in clients)
             {
-                if (sender != client.ep)
+                if (!sender.Equals(client.ep))
                 {
                     _ = await udpServer.SendAsync(data, client.ep);
                 }
