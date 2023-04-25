@@ -20,6 +20,7 @@ namespace LYA.Screens
 				private Desktop desktop;
 				private Grid grid;
 				private Panel panel;
+				private TextButton serverBtn;
 				private string ipAddress;
 				private string port;
 
@@ -110,19 +111,13 @@ namespace LYA.Screens
 
 						// Buttons
 
-						var serverBtn = new TextButton
+						serverBtn = new TextButton
 						{
 								GridColumn = 3,
 								GridRow = 3,
 								Text = "Start Integrated Server",
 								HorizontalAlignment = HorizontalAlignment.Center,
 						};
-
-						if (clientManager.proc!=null)
-						{
-								serverBtn.Text="Integrated Server Running";
-								serverBtn.Enabled=false;
-						}
 
 						serverBtn.Click+=( s, a ) =>
 						{
@@ -146,7 +141,7 @@ namespace LYA.Screens
 
 										if (clientManager.isInit)
 										{
-												grid.Widgets.Add( DrawLabel( "success", "SUCCESS", 2, 5 ) );
+												grid.Widgets.Add( DrawLabel( "success", "SUCCESS", 2, 6 ) );
 
 												// Start game
 												Globals.ScreenManager.LoadScreen( new OuterSpace( Game, clientManager ), new FadeTransition( GraphicsDevice, Color.Black, 4 ) );
@@ -215,7 +210,11 @@ namespace LYA.Screens
 
 				public override void Update( GameTime gameTime )
 				{
-
+						if (clientManager.proc!=null)
+						{
+								serverBtn.Text="Integrated Server Running";
+								serverBtn.Enabled=false;
+						}
 				}
 		}
 }
