@@ -89,30 +89,17 @@ namespace LYA.Networking
 						}
 				}
 
-				public void StartIntegratedServer()
+				public void StartIntegratedServer(string port)
 				{
 						Task.Run( () =>
 						{
+								string args = $"{port} Integrated";
+								string fullPath = AppContext.BaseDirectory + "LYAServer.exe";
+
 								// Setup server exe
 								start=new ProcessStartInfo();
 								start.CreateNoWindow=true;
-								//bool isRoot = false;
-
-								//string[] initalPath = AppContext.BaseDirectory.Split(Path.DirectorySeparatorChar);
-								//Debug.WriteLine(AppContext.BaseDirectory);
-								//string rootPath = "";
-								//foreach (var dir in initalPath)
-								//{
-								//		rootPath+=$"{dir}\\";
-
-								//		if (dir=="SpaceRaftMono")
-								//		{
-								//				isRoot=true;
-								//				break;
-								//		}
-								//}
-
-								string fullPath = AppContext.BaseDirectory + "LYAServer.exe";
+								start.Arguments=args;
 								start.FileName=fullPath;
 
 								proc=Process.Start( start );
@@ -121,7 +108,6 @@ namespace LYA.Networking
 
 						Thread.Sleep( 2000 );
 				}
-
 				public void JoinServer()
 				{
 						try
