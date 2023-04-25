@@ -15,7 +15,7 @@ namespace LYAServer
     {
         // Socket setup
         private UdpClient udpServer;
-        private const int PORT = 11000;
+        private int PORT;
 
         // Game world data
         private List<Vector2> tiles;
@@ -42,8 +42,12 @@ namespace LYAServer
         /// <summary>
         /// Initalise the server
         /// </summary>
-        public void Init()
+        public void Init(string port)
         {
+            if (port.All(char.IsDigit))
+            {
+                PORT = Int32.Parse(port);
+            }
             recvBuff = new byte[128];
 
             clients = new List<ClientInfo>();

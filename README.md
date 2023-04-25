@@ -24,6 +24,7 @@ The server can be ran as an integrated server or standalone.
 
 * Start LYA.exe
 * Click `Multiplayer`
+* Enter the port number the server should run on
 * Click `Start Integrated Server`
 * Wait for the server to initialise
 
@@ -36,6 +37,7 @@ The server can be ran as an integrated server or standalone.
 * Start LYA.exe
 * Click `Play` to play as single player
 * Click `Multiplayer` to play as multiplayer
+* Start an integrated server or type in the server details to connect to an exisitng server
 
 ### Tests
 

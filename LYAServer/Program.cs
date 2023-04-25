@@ -3,7 +3,8 @@
     public class Program
     {
         private static ManualResetEvent _quitEvent = new ManualResetEvent(false);
-        public static void Main()
+        private static string port;
+        public static void Main(string[] args)
         {
             try
             {
@@ -15,7 +16,15 @@
 
                 var server = new BasicServer();
 
-                server.Init();
+                if (!args.Contains("Integrated"))
+                {
+                    Console.WriteLine("Enter the port the server should run on:");
+                    port = Console.ReadLine();
+                }
+                else {
+                    port = args[0];
+                }
+                server.Init(port);
                 server.StartLoop();
 
                 _quitEvent.WaitOne();
