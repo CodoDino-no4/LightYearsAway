@@ -1,10 +1,5 @@
 ﻿using LYA.Networking;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LYA.Testing
 {
@@ -21,8 +16,6 @@ namespace LYA.Testing
 						{
 								// Setup server exe
 								ProcessStartInfo start = new ProcessStartInfo();
-								
-								bool isRoot = false;
 
 								string[] initalPath = AppContext.BaseDirectory.Split(Path.DirectorySeparatorChar);
 								string rootPath = "";
@@ -32,7 +25,6 @@ namespace LYA.Testing
 
 										if (dir=="SpaceRaftMono")
 										{
-												isRoot=true;
 												break;
 										}
 								}

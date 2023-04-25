@@ -103,7 +103,7 @@ namespace LYA.Screens
 								Random rand = new Random();
 								var pos = rand.Next( 0, testPositions.Count() );
 
-								autoAstro=new AutoAstro( astroIdleTex, 0, 40, testPositions[pos] );
+								autoAstro=new AutoAstro( astroIdleTex, 0, 40, testPositions[ pos ] );
 						}
 
 						astro=new Astro( astroIdleTex, Globals.ClientId );
@@ -189,7 +189,7 @@ namespace LYA.Screens
 												if (client.id!=Globals.ClientId)
 												{
 														astroSprites.AddToFront( new Astro( astroIdleTex, client.id ) { Position=client.position } );
-														client.isAdded = true;
+														client.isAdded=true;
 												}
 										}
 
@@ -216,7 +216,7 @@ namespace LYA.Screens
 												var client=clientManager.clients.Find( c => c.id.Equals( sprite.clientId ) );
 
 												// Remove if client has left
-												if (clientLeft!= null && sprite.clientId==clientLeft.id)
+												if (clientLeft!=null&&sprite.clientId==clientLeft.id)
 												{
 														astroSprites.Remove( sprite );
 														clientManager.clients.Remove( clientLeft );

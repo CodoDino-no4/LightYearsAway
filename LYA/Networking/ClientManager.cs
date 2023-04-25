@@ -1,12 +1,10 @@
 ﻿using LYA.Helpers;
 using LYA.Screens;
 using Microsoft.Xna.Framework;
-using MonoGame.Extended;
 using MonoGame.Extended.Screens.Transitions;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 
 namespace LYA.Networking
 {
@@ -23,7 +21,7 @@ namespace LYA.Networking
 				// Recieved and decoded coordinates
 				public KeyValuePair<int, Vector2> tileCoords;
 				public List<ClientInfo> clients;
-		
+
 				// Has initalised and joined server
 				public bool isInit;
 
@@ -39,7 +37,7 @@ namespace LYA.Networking
 				public ClientManager( Game game )
 				{
 						Game=(LYA) game;
-						clients = new List<ClientInfo>();
+						clients=new List<ClientInfo>();
 				}
 
 				public void Init( IPAddress ip, int port )
@@ -86,7 +84,7 @@ namespace LYA.Networking
 								{
 										// Get player id and the player current position
 										string[] data = newClient.Split(":");
-										clients.Add( new ClientInfo( Int32.Parse(data[ 0 ] )) {position = new Vector2( Int32.Parse( data[ 1 ] ), Int32.Parse( data[ 2 ] ) ) } );
+										clients.Add( new ClientInfo( Int32.Parse( data[ 0 ] ) ) { position=new Vector2( Int32.Parse( data[ 1 ] ), Int32.Parse( data[ 2 ] ) ) } );
 								}
 						}
 				}
@@ -96,7 +94,7 @@ namespace LYA.Networking
 						Task.Run( () =>
 						{
 								// Setup server exe
-								start = new ProcessStartInfo();
+								start=new ProcessStartInfo();
 								start.CreateNoWindow=true;
 								//bool isRoot = false;
 
@@ -138,7 +136,7 @@ namespace LYA.Networking
 								if (packetRecv.cmd==1)
 								{
 										Globals.ClientId=packetRecv.clientId;
-										clients.Add( new ClientInfo( Globals.ClientId ) { isAdded = true } );
+										clients.Add( new ClientInfo( Globals.ClientId ) { isAdded=true } );
 
 										if (Globals.ClientId>1)
 										{

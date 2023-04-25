@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LYAServer.Commands
 {
@@ -32,7 +27,7 @@ namespace LYAServer.Commands
             packetSend = new ServerPacket();
         }
 
-        public void Execute() 
+        public void Execute()
         {
             var client = clients.Find(c => c.ep.Equals(remoteEp));
             var clientId = 0;
@@ -56,7 +51,7 @@ namespace LYAServer.Commands
             {
                 data = packetSend.ServerSendPacket("Error", clientId, 0, 0, "Error on place");
             }
-        }  
+        }
 
     }
 }

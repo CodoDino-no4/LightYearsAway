@@ -43,8 +43,8 @@ namespace LYA.Sprites
 				private int maxPoint;
 
 				//Timer
-				Timer timer;
-				Random rand;
+				private Timer timer;
+				private Random rand;
 
 				public AutoAstro( Texture2D texture, int clientId, int maxPoint, Vector2 startPos ) : base( texture, clientId )
 				{
@@ -56,8 +56,8 @@ namespace LYA.Sprites
 						upDone=false;
 						placeDone=false;
 
-						this.startPos = startPos;
-						this.maxPoint = maxPoint;
+						this.startPos=startPos;
+						this.maxPoint=maxPoint;
 
 						rand=new Random();
 						var interval = rand.Next( 2000, 4000 );

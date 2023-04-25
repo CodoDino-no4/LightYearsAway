@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net;
 
 namespace LYAServer.Commands
 {
@@ -28,7 +22,7 @@ namespace LYAServer.Commands
             packetSend = new ServerPacket();
         }
 
-        public void Execute() 
+        public void Execute()
         {
             // Max players: 4
             if (clients.Count() < 4)
@@ -70,5 +64,5 @@ namespace LYAServer.Commands
                 data = packetSend.ServerSendPacket("Error", 0, 0, 0, "Server full");
             }
         }
-    }  
+    }
 }

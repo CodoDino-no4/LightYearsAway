@@ -62,7 +62,7 @@ namespace LYA.Screens
 						serverBtn.Click+=( s, a ) =>
 						{
 								Tests.ServerInit();
-								Thread.Sleep(2000);
+								Thread.Sleep( 2000 );
 						};
 
 						var testPlayerBtn = new TextButton
