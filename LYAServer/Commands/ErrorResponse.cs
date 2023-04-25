@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net;
 
-namespace Server.Commands
+namespace LYAServer.Commands
 {
     /// <summary>
     /// Handle errors
@@ -25,17 +20,17 @@ namespace Server.Commands
             this.remoteEp = remoteEp;
             this.clients = clients;
 
-            this.packetRecv = packetRecv;
+            packetRecv = packetRecv;
             data = new byte[0];
             packetSend = new ServerPacket();
         }
 
-        public void Execute() 
+        public void Execute()
         {
             var client = clients.Find(c => c.ep.Equals(remoteEp));
             Console.WriteLine($"Client ID: {client.id}, ERROR: {packetRecv.payload}");
             data = packetSend.ServerSendPacket("Error", client.id, 0, 0, packetRecv.payload);
-        }  
+        }
 
     }
 }

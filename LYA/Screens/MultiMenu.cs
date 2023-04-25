@@ -1,13 +1,11 @@
 ﻿using LYA.Helpers;
 using LYA.Networking;
-using LYA.Testing;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Screens;
 using MonoGame.Extended.Screens.Transitions;
 using Myra;
 using Myra.Graphics2D.UI;
-using System.Diagnostics;
 using System.Net;
 
 namespace LYA.Screens
@@ -114,7 +112,7 @@ namespace LYA.Screens
 
 						serverBtn.Click+=( s, a ) =>
 						{
-								if (clientManager.proc == null)
+								if (clientManager.proc==null)
 								{
 										clientManager.StartIntegratedServer();
 										serverBtn.Text="Integrated Server Running";

@@ -1,4 +1,4 @@
-﻿using Server.Commands;
+﻿using LYAServer.Commands;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
@@ -6,7 +6,7 @@ using System.Numerics;
 using System.Timers;
 using Timer = System.Timers.Timer;
 
-namespace Server
+namespace LYAServer
 {
     /// <summary>
     /// Server class to initalise and start a data transmission loop

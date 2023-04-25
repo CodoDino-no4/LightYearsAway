@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net;
 
-namespace Server.Commands
+namespace LYAServer.Commands
 {
     /// <summary>
     /// Add client to server client list
@@ -28,7 +22,7 @@ namespace Server.Commands
             packetSend = new ServerPacket();
         }
 
-        public void Execute() 
+        public void Execute()
         {
             // Max players: 4
             if (clients.Count() < 4)
@@ -70,5 +64,5 @@ namespace Server.Commands
                 data = packetSend.ServerSendPacket("Error", 0, 0, 0, "Server full");
             }
         }
-    }  
+    }
 }

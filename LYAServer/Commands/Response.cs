@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Server.Commands
+namespace LYAServer.Commands
 {
     public class Response : CommandManager.ICommand
     {
@@ -38,7 +32,7 @@ namespace Server.Commands
             joinResponse = new JoinResponse(remoteEp, clients);
             leaveResponse = new LeaveResponse(remoteEp, clients);
             moveResponse = new MoveResponse(remoteEp, clients, packetRecv);
-            placeResponse = new PlaceResponse(remoteEp, clients, packetRecv);    
+            placeResponse = new PlaceResponse(remoteEp, clients, packetRecv);
             errorResponse = new ErrorResponse(remoteEp, clients, packetRecv);
         }
 

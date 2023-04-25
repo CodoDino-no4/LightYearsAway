@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <UseWPF>False</UseWPF>
-    <StartupObject>Server.Program</StartupObject>
+    <StartupObject>LYAServer.Program</StartupObject>
     <SignAssembly>False</SignAssembly>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
     <ApplicationIcon>Icon.ico</ApplicationIcon>

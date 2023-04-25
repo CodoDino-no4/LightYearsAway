@@ -1,4 +1,4 @@
-﻿namespace Server
+﻿namespace LYAServer
 {
     public class Program
     {

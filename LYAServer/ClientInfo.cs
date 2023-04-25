@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Numerics;
 
-namespace Server
+namespace LYAServer
 {
     /// <summary>
     /// Store the clients connected to the server
