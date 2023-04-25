@@ -98,22 +98,23 @@ namespace LYA.Networking
 								// Setup server exe
 								start = new ProcessStartInfo();
 								start.CreateNoWindow=true;
-								bool isRoot = false;
+								//bool isRoot = false;
 
-								string[] initalPath = AppContext.BaseDirectory.Split(Path.DirectorySeparatorChar);
-								string rootPath = "";
-								foreach (var dir in initalPath)
-								{
-										rootPath+=$"{dir}\\";
+								//string[] initalPath = AppContext.BaseDirectory.Split(Path.DirectorySeparatorChar);
+								//Debug.WriteLine(AppContext.BaseDirectory);
+								//string rootPath = "";
+								//foreach (var dir in initalPath)
+								//{
+								//		rootPath+=$"{dir}\\";
 
-										if (dir=="SpaceRaftMono")
-										{
-												isRoot=true;
-												break;
-										}
-								}
+								//		if (dir=="SpaceRaftMono")
+								//		{
+								//				isRoot=true;
+								//				break;
+								//		}
+								//}
 
-								string fullPath = rootPath + "Server\\bin\\Debug\\net7.0-windows\\Server.exe";
+								string fullPath = AppContext.BaseDirectory + "LYAServer.exe";
 								start.FileName=fullPath;
 
 								proc=Process.Start( start );

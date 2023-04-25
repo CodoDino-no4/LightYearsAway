@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.Commands
+namespace LYAServer.Commands
 {
     /// <summary>
     /// Remove client from server client list

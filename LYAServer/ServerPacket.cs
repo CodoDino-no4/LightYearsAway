@@ -1,5 +1,7 @@
 ﻿using System.Text;
 
+namespace LYAServer 
+{ 
 public class ServerPacket
 {
     /// <summary>
@@ -105,4 +107,6 @@ public class ServerPacket
 
         payload = Encoding.UTF8.GetString(dataSegment);
     }
+}
+
 }

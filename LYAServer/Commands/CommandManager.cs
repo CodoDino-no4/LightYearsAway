@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.Commands
+namespace LYAServer.Commands
 {
     public static class CommandManager
     {

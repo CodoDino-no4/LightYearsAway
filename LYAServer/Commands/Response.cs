@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LYAServer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -7,7 +8,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.Commands
+namespace LYAServer.Commands
 {
     public class Response : CommandManager.ICommand
     {

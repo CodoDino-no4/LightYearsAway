@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.Commands
+namespace LYAServer.Commands
 {
     /// <summary>
     /// Add client to server client list
