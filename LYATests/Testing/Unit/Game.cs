@@ -34,7 +34,7 @@ namespace LYA.Testing.Unit
             // Setup server exe
             ProcessStartInfo start = new ProcessStartInfo();
 
-            string fullPath = AppContext.BaseDirectory + "Server.exe";
+            string fullPath = AppContext.BaseDirectory + "LYAServer.exe";
             start.FileName = fullPath;
 
             proc = Process.Start(start);
