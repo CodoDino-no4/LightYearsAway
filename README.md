@@ -18,22 +18,29 @@ Built by
 
 ### Server
 
-<!-- Copy the `.env.template` file and rename it to `.env` adding the necessary data required to run the application.
+The server can be ran as an integrated server or standalone. 
 
-Install the server packages via running `yarn install`.
+#### To run the integrated server:
 
-Once the packages have installed, run the server `yarn start`. -->
+* Start LYA.exe
+* Click `Multiplayer`
+* Click `Start Integrated Server`
+* Wait for the server to initialise
+
+#### To run the standalone server
+
+* Start LYAServer.exe
 
 ### Client
 
-<!-- Copy the `.env.template` file and rename it to `.env` adding the necessary data required to run the application.
-
-Install the client packages via running `yarn install`.
-
-Once the packages have installed, run the client `yarn start`. -->
+* Start LYA.exe
+* Click `Play` to play as single player
+* Click `Multiplayer` to play as multiplayer
 
 ### Tests
 
-<!-- Run the cypress test suite headlessly `yarn run cy:run`.
+#### To run the Unit Tests:
 
-Run the test suite with the GUI `yarn run cy:open`. -->
+* Open the `LYATests.csproj` file in Visual Studio 2022
+* Open the Test Explorer
+* Run the unit tests file by file
