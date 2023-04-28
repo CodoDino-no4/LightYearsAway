@@ -5,6 +5,9 @@ namespace LYA.Testing
 {
 		public static class Tests
 		{
+				/// <summary>
+				/// Test assist functions
+				/// </summary>
 				private static Process proc;
 				private static string IP = "192.168.1.101";
 				private static string PORT = "11000";

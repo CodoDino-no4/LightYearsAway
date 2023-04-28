@@ -2,6 +2,9 @@
 
 namespace LYA.Commands
 {
+		/// <summary>
+		/// Handles move right
+		/// </summary>
 		public class MoveRight : CommandManager.ICommand
 		{
 				public Astro astro;

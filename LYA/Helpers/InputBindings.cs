@@ -3,21 +3,12 @@ using Microsoft.Xna.Framework.Input;
 
 namespace LYA.Helpers
 {
+		/// <summary>
+		/// Bindings for keyboard/mouse/gamepad 
+		/// </summary>
 		public static class InputBindings
 		{
 				private static AnyCondition keyList = new AnyCondition();
-
-				//private static KeyboardCondition bind = new KeyboardCondition(Keys.Up);
-
-				public static bool Input()
-				{
-						if (keyList!=null)
-						{
-								return true;
-						}
-
-						return false;
-				}
 
 				public static ICondition Up()
 				{

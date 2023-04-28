@@ -2,6 +2,9 @@
 
 namespace LYA.Commands
 {
+		/// <summary>
+		/// Handles move down
+		/// </summary>
 		public class MoveDown : CommandManager.ICommand
 		{
 				public Astro astro;

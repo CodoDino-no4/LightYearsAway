@@ -8,6 +8,9 @@ using System.Net.Sockets;
 
 namespace LYA.Networking
 {
+		/// <summary>
+		/// Manages the networking functions
+		/// </summary>
 		public class ClientManager
 		{
 				// Socket Setup
@@ -34,12 +37,18 @@ namespace LYA.Networking
 				public Process proc;
 				private ProcessStartInfo start;
 
+				/// <summary>
+				/// Instantiates the class
+				/// </summary>
 				public ClientManager( Game game )
 				{
 						Game=(LYA) game;
 						clients=new List<ClientInfo>();
 				}
 
+				/// <summary>
+				/// Initialises the socket
+				/// </summary>
 				public void Init( IPAddress ip, int port )
 				{
 						isInit=false;
@@ -73,6 +82,9 @@ namespace LYA.Networking
 
 				}
 
+				/// <summary>
+				/// Gets the exisitng client data from the packet recieved from the server
+				/// </summary>
 				public void GetExistingClients( string payload )
 				{
 						string newClients = payload.Split("?").Last();
@@ -89,7 +101,10 @@ namespace LYA.Networking
 						}
 				}
 
-				public void StartIntegratedServer(string port)
+				/// <summary>
+				/// Runs the server as a background task
+				/// </summary>
+				public void StartIntegratedServer( string port )
 				{
 						Task.Run( () =>
 						{
@@ -108,6 +123,9 @@ namespace LYA.Networking
 
 						Thread.Sleep( 2000 );
 				}
+				/// <summary>
+				/// Join the server and initalise game world
+				/// </summary>
 				public void JoinServer()
 				{
 						try
@@ -156,6 +174,9 @@ namespace LYA.Networking
 						Globals.IsMulti=true;
 				}
 
+				/// <summary>
+				/// Actions to complete before client closes the connection
+				/// </summary>
 				public void LeaveServer()
 				{
 						try
@@ -174,6 +195,9 @@ namespace LYA.Networking
 						}
 				}
 
+				/// <summary>
+				/// The main netwroking loop
+				/// </summary>
 				public void MessageLoop()
 				{
 						_=Task.Run( async () =>

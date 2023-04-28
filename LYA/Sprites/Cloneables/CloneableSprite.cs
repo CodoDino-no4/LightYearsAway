@@ -2,6 +2,9 @@
 
 namespace LYA.Sprites.Cloneables
 {
+		/// <summary>
+		/// Cloneable sprites
+		/// </summary>
 		public class CloneableSprite : BaseSprite, ICloneable
 		{
 				public CloneableSprite Parent;

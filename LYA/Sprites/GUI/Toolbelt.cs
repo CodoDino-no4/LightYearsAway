@@ -5,6 +5,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LYA.Sprites.GUI
 {
+		/// <summary>
+		/// Toolbelt sprites
+		/// </summary>
 		public class Toolbelt : BaseSprite
 		{
 				public List<Tool> tools;

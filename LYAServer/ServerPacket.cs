@@ -2,6 +2,9 @@
 
 namespace LYAServer
 {
+    /// <summary>
+    /// Creates a standardised packet
+    /// </summary>
     public class ServerPacket
     {
         /// <summary>
@@ -14,7 +17,7 @@ namespace LYAServer
             Leave,  // A Client leaves the server
             Move,   // Astro movement
             Place,  // Place a tile
-            Error, // Error message
+            Error,  // Error message
 
         }
 

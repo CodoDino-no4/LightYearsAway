@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LYA.Sprites.Cloneables
 {
+		/// <summary>
+		/// Tile sprite
+		/// </summary>
 		public class Tile : CloneableSprite
 		{
 				public enum Type

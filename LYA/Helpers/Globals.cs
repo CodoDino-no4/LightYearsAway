@@ -6,6 +6,9 @@ using MonoGame.Extended.Screens;
 
 namespace LYA.Helpers
 {
+		/// <summary>
+		/// Global variables
+		/// </summary>
 		public static class Globals
 		{
 				public static ContentManager Content

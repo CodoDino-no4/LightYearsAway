@@ -4,6 +4,9 @@ using Microsoft.Xna.Framework;
 
 namespace LYA.Managers
 {
+		/// <summary>
+		/// Manages the background sprites
+		/// </summary>
 		public class BGManager
 		{
 				private readonly List<BaseSprite> bgLayers;

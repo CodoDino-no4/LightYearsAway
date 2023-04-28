@@ -3,6 +3,9 @@ using System.Net.Sockets;
 
 namespace LYAServer.Commands
 {
+    /// <summary>
+    /// Handles response data
+    /// </summary>
     public class Response : CommandManager.ICommand
     {
         private UdpReceiveResult res;

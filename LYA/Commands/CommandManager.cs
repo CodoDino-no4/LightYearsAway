@@ -7,6 +7,9 @@ using MonoGame.Extended.Collections;
 
 namespace LYA.Commands
 {
+		/// <summary>
+		/// Command base class
+		/// </summary>
 		public static class CommandManager
 		{
 				public interface ICommand
@@ -14,7 +17,10 @@ namespace LYA.Commands
 						protected void Execute();
 				}
 
-				public static Vector2 PlayerCameraMovement( Astro astro )
+				/// <summary>
+				/// Calculates the players position based on input
+				/// </summary>
+				public static Vector2 PlayerMovement( Astro astro )
 				{
 						// Execute Command
 						var move = new MoveCommands(astro);
@@ -23,6 +29,9 @@ namespace LYA.Commands
 						return astro.Position;
 				}
 
+				/// <summary>
+				/// Handles placing a tile
+				/// </summary>
 				public static void PlaceTile( Astro astro, Texture2D tileTex, Bag<Tile> sprites )
 				{
 						// Execute command
@@ -33,6 +42,9 @@ namespace LYA.Commands
 						}
 				}
 
+				/// <summary>
+				/// Executes all commands implemented
+				/// </summary>
 				public static void Commands( Astro astro, Texture2D tileTex, Bag<Tile> sprites )
 				{
 						PlaceTile( astro, tileTex, sprites );

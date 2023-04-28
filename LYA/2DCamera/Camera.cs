@@ -5,6 +5,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LYA._Camera
 {
+		/// <summary>
+		/// Camera initalisation and functions
+		/// </summary>
 		public class Camera
 		{
 				public Matrix Transform
@@ -23,12 +26,18 @@ namespace LYA._Camera
 
 				private Vector2 position;
 
+				/// <summary>
+				/// Instantiate the class
+				/// </summary>
 				public Camera()
 				{
 						//start at 0
 						position=Vector2.Zero;
 				}
 
+				/// <summary>
+				/// Updates the camera position based on the players position
+				/// </summary>
 				public void UpdateCameraInput( Vector2 pos )
 				{
 						position.X=pos.X-Globals.ScreenSize.Width/2;
@@ -52,7 +61,10 @@ namespace LYA._Camera
 
 				}
 
-				// Tweening function, interpolation over multiple frames.
+
+				/// <summary>
+				/// Tweening function, interpolation over multiple frames
+				/// </summary>
 				public float Interpolate( float start, float target, float speed, float snapNear )
 				{
 						float result = MathHelper.Lerp(start, target, speed);
@@ -76,7 +88,9 @@ namespace LYA._Camera
 						}
 				}
 
-				// Gets the current visible area Transform
+				/// <summary>
+				/// Gets the current visible area Transform
+				/// </summary>
 				public Matrix GetView()
 				{
 						Transform=
@@ -88,7 +102,9 @@ namespace LYA._Camera
 						return Transform;
 				}
 
-				// Gets the background Transform
+				/// <summary>
+				/// Gets the background Transform
+				/// </summary>
 				public Matrix GetBgTransform( Texture2D t )
 				{
 						return
@@ -98,17 +114,25 @@ namespace LYA._Camera
 								Matrix.CreateScale( 1f/Globals.ScreenSize.Width, 1f/Globals.ScreenSize.Height, 1f );
 				}
 
-				// Gets the UI Scale
+				/// <summary>
+				/// Gets the UI Scale
+				/// </summary>
 				public Matrix GetUIScale()
 				{
 						return Matrix.CreateScale( uiScale, uiScale, 1f );
 				}
 
+				/// <summary>
+				/// Scale to exponential function
+				/// </summary>
 				public float ScaleToExp( float scale )
 				{
 						return -MathF.Log( scale );
 				}
 
+				/// <summary>
+				/// Exponential to scale function
+				/// </summary>
 				public float ExpToScale( float exp )
 				{
 						return MathF.Exp( -exp );

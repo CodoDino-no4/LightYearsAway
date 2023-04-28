@@ -4,6 +4,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LYA.Sprites
 {
+		/// <summary>
+		/// Base class for all sprites to extend from
+		/// </summary>
 		public class BaseSprite
 		{
 

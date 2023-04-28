@@ -6,6 +6,9 @@ using MonoGame.Extended.Collections;
 
 namespace LYA.Commands
 {
+		/// <summary>
+		/// Handles placement of a tile
+		/// </summary>
 		public class PlaceCommand : CommandManager.ICommand
 		{
 				private Tile tile;

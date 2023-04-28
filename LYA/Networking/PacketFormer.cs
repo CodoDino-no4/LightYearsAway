@@ -2,9 +2,14 @@
 
 namespace LYA.Networking
 {
+		/// <summary>
+		/// Creates a standardised packet
+		/// </summary>
 		public class PacketFormer
 		{
-				// Command types
+				/// <summary>
+				/// Valid command types
+				/// </summary>
 				private enum Command
 				{
 						Null,   // Default
@@ -31,12 +36,16 @@ namespace LYA.Networking
 				// Datastream
 				public byte[] sendData;
 
-				//Creates an instance of packetSent
+				/// <summary>
+				/// Instantiate the class
+				/// </summary>
 				public PacketFormer()
 				{
 				}
 
-				// Converts data into an array of bytes
+				/// <summary>
+				/// Converts data into a byte stream
+				/// </summary>
 				public byte[] ClientSendPacket( string command, int id, int x, int y, string data )
 				{
 						// Set Packet data
@@ -70,7 +79,9 @@ namespace LYA.Networking
 						return sendData;
 				}
 
-				// converts the bytes into a Packet
+				/// <summary>
+				/// Converts byte stream into packet data
+				/// </summary>
 				public void ClientRecvPacket( byte[] data )
 				{
 						// Decode the cmd

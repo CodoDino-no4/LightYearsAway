@@ -4,10 +4,15 @@
     {
         private static ManualResetEvent _quitEvent = new ManualResetEvent(false);
         private static string port;
+
+        /// <summary>
+        /// Runs the program
+        /// </summary>
         public static void Main(string[] args)
         {
             try
             {
+                // Keep console running until a cancel event occurs
                 Console.CancelKeyPress += (sender, eArgs) =>
                 {
                     _quitEvent.Set();
@@ -21,9 +26,11 @@
                     Console.WriteLine("Enter the port the server should run on:");
                     port = Console.ReadLine();
                 }
-                else {
+                else
+                {
                     port = args[0];
                 }
+
                 server.Init(port);
                 server.StartLoop();
 
@@ -31,9 +38,8 @@
             }
             catch (Exception e)
             {
-                Console.Write(e);
+                Console.Write(e.Message);
                 Console.Write("Press Enter to close window ...");
-                Console.Read();
             }
         }
     }

@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LYA.Sprites.Cloneables
 {
+		/// <summary>
+		/// Junk sprite
+		/// </summary>
 		public class Junk : CloneableSprite
 		{
 				private Random rand;

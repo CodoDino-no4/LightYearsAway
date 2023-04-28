@@ -4,6 +4,9 @@ using Microsoft.Xna.Framework;
 
 namespace LYA.Commands
 {
+		/// <summary>
+		/// Handles direction of movement based on input
+		/// </summary>
 		public class MoveCommands : CommandManager.ICommand
 		{
 				public Astro astro;

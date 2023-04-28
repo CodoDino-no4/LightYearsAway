@@ -11,7 +11,7 @@ using System.Net;
 namespace LYA.Screens
 {
 		/// <summary>
-		/// Main Menu Game Screen
+		/// Test Menu Game Screen
 		/// </summary>
 		public class TestMenu : GameScreen
 		{

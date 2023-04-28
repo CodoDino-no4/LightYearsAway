@@ -260,7 +260,7 @@ namespace LYA.Screens
 						}
 
 						// Update the camera
-						camera.UpdateCameraInput( CommandManager.PlayerCameraMovement( astro ) );
+						camera.UpdateCameraInput( CommandManager.PlayerMovement( astro ) );
 
 						// Update BG Sprites
 						bgManager.Update();

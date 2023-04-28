@@ -10,6 +10,9 @@ using Timer = System.Timers.Timer;
 
 namespace LYA.Sprites
 {
+		/// <summary>
+		/// An automated astro to assist with testing
+		/// </summary>
 		public class AutoAstro : Astro
 		{
 				public enum State

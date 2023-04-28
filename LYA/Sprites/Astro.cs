@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LYA.Sprites
 {
+		/// <summary>
+		/// Astro sprite
+		/// </summary>
 		public class Astro : BaseSprite
 		{
 				public enum State

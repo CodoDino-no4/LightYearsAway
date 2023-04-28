@@ -111,17 +111,17 @@ namespace LYA.Screens
 
 						// Buttons
 
-						serverBtn = new TextButton
+						serverBtn=new TextButton
 						{
-								GridColumn = 3,
-								GridRow = 3,
-								Text = "Start Integrated Server",
-								HorizontalAlignment = HorizontalAlignment.Center,
+								GridColumn=3,
+								GridRow=3,
+								Text="Start Integrated Server",
+								HorizontalAlignment=HorizontalAlignment.Center,
 						};
 
 						serverBtn.Click+=( s, a ) =>
 						{
-								clientManager.StartIntegratedServer( serverPort.Text );					
+								clientManager.StartIntegratedServer( serverPort.Text );
 						};
 
 						var connBtn = new TextButton
