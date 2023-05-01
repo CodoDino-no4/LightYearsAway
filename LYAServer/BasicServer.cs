@@ -36,9 +36,6 @@ namespace LYAServer
         // Response Command
         private Response response;
 
-        // Logging REMOVE BEFORE COMPLETION
-        private string path = "C:/Users/Alz/Documents/log.txt";
-
         /// <summary>
         /// Initalise the server
         /// </summary>
@@ -118,16 +115,7 @@ namespace LYAServer
                             Debug.WriteLine("The client is unreachable");
                         }
 
-                        if (!File.Exists(path))
-                        {
-                            FileStream fs = File.Create(path);
-                        }
-
-                        File.AppendAllText(path, ex.Message);
-                        Console.WriteLine("added to file...");
-
                         Console.Write("Press Enter to close window ...");
-                        Console.Read();
 
                     }
                 };
